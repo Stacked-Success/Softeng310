@@ -44,7 +44,7 @@ public class Main extends Application {
      */
     @Override
     public void start(final Stage stage) throws IOException {
-        scenes.put(SceneName.MENU, loadFxml("GameScreen"));
+        scenes.put(SceneName.MENU, loadFxml("HomeScreen"));
         Parent root = scenes.get(SceneName.MENU);
         scene = new Scene(root, 1400, 800);
         stage.setScene(scene);
