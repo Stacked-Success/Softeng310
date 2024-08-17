@@ -8,9 +8,9 @@ import javafx.scene.input.KeyEvent;
 // This class defines the game instance, controlling the game loop for the current game.
 public class GameInstance {
 
-  public boolean isGameOver;
-  public int score;
-  public int line;
+  private boolean isGameOver;
+  private int score;
+  private int line;
 
   private GameControls gameControls;
   private GameBoard gameBoard;
