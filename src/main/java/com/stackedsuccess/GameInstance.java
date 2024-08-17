@@ -73,10 +73,10 @@ public class GameInstance {
       if (updatesTetrimino(action) && !isPaused) {
         gameBoard.getCurrentTetrimino().updateTetrimino(gameBoard, action);
       } else {
-        switch (action) {
-          case PAUSE -> togglePause();
-          case HOLD -> gameBoard.holdTetrimino();
-          default -> {}
+        if (action == Action.PAUSE) {
+          togglePause();
+        } else if (action == Action.HOLD) {
+          gameBoard.holdTetrimino();
         }
       }
     }
