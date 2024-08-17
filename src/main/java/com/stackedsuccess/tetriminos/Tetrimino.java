@@ -89,14 +89,31 @@ public abstract class Tetrimino {
 
   /** Rotate tetrimino layout clockwise. */
   private void rotateClockwise(GameBoard gameBoard) {
+    int[][] rotatedLayout = getRotatedLayout();
+    int[] adjustedPosition = adjustPositionForBounds(rotatedLayout, gameBoard);
+    int newX = adjustedPosition[0];
+    int newY = adjustedPosition[1];
+
+    if (!hasCollisions(rotatedLayout, newX, newY, gameBoard)) {
+      xPos = newX;
+      yPos = newY;
+      layout = rotatedLayout;
+    }
+  }
+
+  /** Rotate tetrimino layout counter-clockwise. */
+  private int[][] getRotatedLayout() {
     int[][] rotatedLayout = new int[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         rotatedLayout[width - j - 1][i] = layout[i][j];
       }
     }
+    return rotatedLayout;
+  }
 
-    // Check for out of bounds and adjust position
+  /** Adjust rotation of tetrimino if it would have gone out of bounds */
+  private int[] adjustPositionForBounds(int[][] rotatedLayout, GameBoard gameBoard) {
     int newX = xPos;
     int newY = yPos;
     for (int i = 0; i < rotatedLayout.length; i++) {
@@ -113,23 +130,23 @@ public abstract class Tetrimino {
         }
       }
     }
+    return new int[] {newX, newY};
+  }
 
-    // Check for collisions and adjust position
+  /** Check if rotated tetrimino layout has collisions with existing cells on the game board */
+  private boolean hasCollisions(int[][] rotatedLayout, int newX, int newY, GameBoard gameBoard) {
     for (int i = 0; i < rotatedLayout.length; i++) {
       for (int j = 0; j < rotatedLayout[i].length; j++) {
         if (rotatedLayout[i][j] != 0) {
           int tempX = newX + j;
           int tempY = newY + i;
           if (gameBoard.isCellOccupied(tempX, tempY)) {
-            return;
+            return true;
           }
         }
       }
     }
-
-    xPos = newX;
-    yPos = newY;
-    layout = rotatedLayout;
+    return false;
   }
 
   /** Rotate tetrimino layout counter-clockwise. */
