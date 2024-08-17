@@ -9,6 +9,7 @@ import javafx.scene.input.KeyEvent;
 public class GameInstance {
   public boolean isGameOver;
   public int score;
+  public int line;
 
   private GameControls gameControls;
   private GameBoard gameBoard;
@@ -20,6 +21,7 @@ public class GameInstance {
 
   public GameInstance() {
     score = 0;
+    line = 0;
     gameDelay = 10;
     isPaused = false;
     isGameOver = false;

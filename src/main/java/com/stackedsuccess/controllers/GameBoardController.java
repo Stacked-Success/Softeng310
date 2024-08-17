@@ -23,12 +23,14 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
 
   @FXML Label scoreLabel;
   @FXML Label levelLabel;
+  @FXML Label lineLabel;
 
   @FXML ImageView holdPieceView;
   @FXML ImageView nextPieceView;
 
   private GameInstance gameInstance = new GameInstance();
   private int score = 0;
+  private int line = 0;
   private ArrayList<Node> previousGhostTetrominos = new ArrayList<>();
 
   /**
@@ -42,6 +44,7 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
 
     scoreLabel.setText("Score:" + score);
     levelLabel.setText("Level: 1");
+    lineLabel.setText("Line: " + line);
     displayGrid.gridLinesVisibleProperty().set(true);
     gameInstance.setTetriminoUpdateListener(this);
     Platform.runLater(
@@ -242,6 +245,15 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
    */
   public void updateLevel(int level) {
     Platform.runLater(() -> levelLabel.setText("Level: " + level));
+  }
+
+  /**
+   * Updates the level displayed on the game board.
+   *
+   * @param level the current level
+   */
+  public void updateLine(int level) {
+    Platform.runLater(() -> lineLabel.setText("Line: " + level));
   }
 
   /**
