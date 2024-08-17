@@ -13,7 +13,6 @@ public abstract class Tetrimino {
   protected int xPos;
   protected int yPos;
 
-
   /**
    * Updates tetrimino based on given action and game board state.
    *
@@ -33,10 +32,14 @@ public abstract class Tetrimino {
         if (!gameBoard.checkCollision(xPos, yPos + 1)) yPos++;
         break;
       case ROTATE_CLOCKWISE:
-        if(!hasHardDropped){ rotateClockwise(gameBoard);}
+        if (!hasHardDropped) {
+          rotateClockwise(gameBoard);
+        }
         break;
       case ROTATE_COUNTERCLOCKWISE:
-        if(!hasHardDropped) {rotateCounterClockwise(gameBoard);}
+        if (!hasHardDropped) {
+          rotateCounterClockwise(gameBoard);
+        }
         break;
       case HARD_DROP:
         while (!gameBoard.checkCollision(xPos, yPos + 1)) yPos++;
@@ -124,27 +127,16 @@ public abstract class Tetrimino {
     for (int i = 0; i < rotatedLayout.length; i++) {
       for (int j = 0; j < rotatedLayout[i].length; j++) {
         if (rotatedLayout[i][j] != 0) {
-          int[] adjustedPosition = adjustForSingleCell(xPos + j, yPos + i, gameBoard);
-          newX = adjustedPosition[0];
-          newY = adjustedPosition[1];
+          int tempX = newX + j;
+          int tempY = newY + i;
+
+          if (tempX < 0) newX++;
+          if (tempX >= gameBoard.getWidth()) newX--;
+          if (tempY < 0) newY++;
+          if (tempY >= gameBoard.getHeight()) newY--;
         }
       }
     }
-    return new int[] {newX, newY};
-  }
-
-  /** Helper method to adjust position for a single cell if it is out of bounds */
-  private int[] adjustForSingleCell(int tempX, int tempY, GameBoard gameBoard) {
-    int newX = xPos;
-    int newY = yPos;
-
-    if (gameBoard.isOutOfBounds(tempX, tempY)) {
-      if (tempX < 0) newX++;
-      if (tempX >= gameBoard.getWidth()) newX--;
-      if (tempY < 0) newY++;
-      if (tempY >= gameBoard.getHeight()) newY--;
-    }
-
     return new int[] {newX, newY};
   }
 
@@ -155,7 +147,11 @@ public abstract class Tetrimino {
         if (rotatedLayout[i][j] != 0) {
           int tempX = newX + j;
           int tempY = newY + i;
-          if (gameBoard.isCellOccupied(tempX, tempY)) {
+          if (tempX < 0
+              || tempX >= gameBoard.getWidth()
+              || tempY < 0
+              || tempY >= gameBoard.getHeight()
+              || gameBoard.isCellOccupied(tempX, tempY)) {
             return true;
           }
         }
@@ -208,5 +204,4 @@ public abstract class Tetrimino {
   public boolean getHasHardDropped() {
     return hasHardDropped;
   }
-
 }
