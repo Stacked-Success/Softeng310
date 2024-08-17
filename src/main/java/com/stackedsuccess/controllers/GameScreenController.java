@@ -36,7 +36,6 @@ public class GameScreenController {
   private void setWindowCloseHandler(Stage stage) {
     stage.setOnCloseRequest(
         event -> {
-          System.out.println("Game ended due to window close. ");
           game.isGameOver = true;
 
           // TODO: Remove when more scenes added.

@@ -209,7 +209,6 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
   private void setWindowCloseHandler(Stage stage) {
     stage.setOnCloseRequest(
         event -> {
-          System.out.println("Game ended due to window close. ");
           gameInstance.isGameOver = true;
 
           // TODO: Remove when more scenes added.
@@ -270,7 +269,6 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
    */
   @FXML
   public void gameOver() {
-    System.out.println("Game over!");
     System.exit(0);
   }
 }

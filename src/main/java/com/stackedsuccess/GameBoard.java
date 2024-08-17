@@ -153,11 +153,9 @@ public class GameBoard {
    * @param linesCleared the number of lines cleared
    */
   private void updateLevel() {
-    System.out.println("Lines cleared: " + linesCleared);
     if (linesCleared >= 10) {
       linesCleared -= 10;
       level++;
-      System.out.println("Level increased to: " + level);
       controller.updateLevel(level);
     }
   }
@@ -251,7 +249,6 @@ public class GameBoard {
       currentTetrimino = nextTetrimino;
       nextTetrimino = TetriminoFactory.createRandomTetrimino();
     } else {
-      System.out.println("Holding tetrimino");
       Tetrimino temp = holdTetrimino;
       holdTetrimino = currentTetrimino;
       currentTetrimino = temp;
