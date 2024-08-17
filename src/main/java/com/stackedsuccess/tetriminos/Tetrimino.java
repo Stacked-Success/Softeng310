@@ -129,14 +129,21 @@ public abstract class Tetrimino {
         if (rotatedLayout[i][j] != 0) {
           int tempX = newX + j;
           int tempY = newY + i;
-
-          if (tempX < 0) newX++;
-          if (tempX >= gameBoard.getWidth()) newX--;
-          if (tempY < 0) newY++;
-          if (tempY >= gameBoard.getHeight()) newY--;
+          int[] adjustedPosition = adjustForBounds(tempX, tempY, newX, newY, gameBoard);
+          newX = adjustedPosition[0];
+          newY = adjustedPosition[1];
         }
       }
     }
+    return new int[] {newX, newY};
+  }
+
+  /** Helper method to adjust position for bounds */
+  private int[] adjustForBounds(int tempX, int tempY, int newX, int newY, GameBoard gameBoard) {
+    if (tempX < 0) newX++;
+    if (tempX >= gameBoard.getWidth()) newX--;
+    if (tempY < 0) newY++;
+    if (tempY >= gameBoard.getHeight()) newY--;
     return new int[] {newX, newY};
   }
 
