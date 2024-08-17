@@ -52,7 +52,7 @@ public class GameBoard {
     frameCount++;
     // Stagger automatic tetrimino movement based on frame count
     if (frameCount % 100 == 0) {
-      if (!checkCollision(currentTetrimino.xPos, currentTetrimino.yPos + 1)) {
+      if (!checkCollision(currentTetrimino.getXPos(), currentTetrimino.getYPos() + 1)) {
         currentTetrimino.updateTetrimino(this, Action.MOVE_DOWN);
       } else {
         placeTetrimino(currentTetrimino);
@@ -113,8 +113,8 @@ public class GameBoard {
       for (int layoutX = 0; layoutX < tetrimino.getWidth(); layoutX++) {
         if (layout[layoutY][layoutX] != 0) {
 
-          int spawnX = tetrimino.xPos + layoutX;
-          int spawnY = tetrimino.yPos + layoutY;
+          int spawnX = tetrimino.getXPos() + layoutX;
+          int spawnY = tetrimino.getYPos() + layoutY;
           // Check for collision at the spawn location
           if (isCellOccupied(spawnX, spawnY)) {
             controller.gameOver();
@@ -253,8 +253,8 @@ public class GameBoard {
       holdTetrimino = currentTetrimino;
       currentTetrimino = temp;
 
-      currentTetrimino.xPos = board[0].length / 2 - currentTetrimino.getWidth() / 2;
-      currentTetrimino.yPos = 0;
+      currentTetrimino.setXPos(board[0].length / 2 - currentTetrimino.getWidth() / 2);
+      currentTetrimino.setYPos(0);
     }
 
     holdUsed = true;

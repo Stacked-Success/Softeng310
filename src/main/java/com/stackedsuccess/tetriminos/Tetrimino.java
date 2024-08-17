@@ -8,8 +8,8 @@ public abstract class Tetrimino {
   protected int width;
   protected int height;
 
-  public int xPos;
-  public int yPos;
+  protected int xPos;
+  protected int yPos;
 
   /**
    * Updates tetrimino based on given action and game board state.
@@ -135,5 +135,41 @@ public abstract class Tetrimino {
   /** Rotate tetrimino layout counter-clockwise. */
   private void rotateCounterClockwise(GameBoard gameBoard) {
     for (int i = 0; i < 3; i++) rotateClockwise(gameBoard);
+  }
+
+  /**
+   * Get-type function.
+   *
+   * @return x position of the tetrimino
+   */
+  public int getXPos() {
+    return xPos;
+  }
+
+  /**
+   * Get-type function.
+   *
+   * @return y position of the tetrimino
+   */
+  public int getYPos() {
+    return yPos;
+  }
+
+  /**
+   * Set-type function.
+   *
+   * @param xPos the x position to set
+   */
+  public void setXPos(int xPos) {
+    this.xPos = xPos;
+  }
+
+  /**
+   * Set-type function.
+   *
+   * @param yPos the y position to set
+   */
+  public void setYPos(int yPos) {
+    this.yPos = yPos;
   }
 }
