@@ -209,7 +209,7 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
   private void setWindowCloseHandler(Stage stage) {
     stage.setOnCloseRequest(
         event -> {
-          gameInstance.isGameOver = true;
+          gameInstance.setGameOver(true);
 
           // TODO: Remove when more scenes added.
           System.exit(0);
