@@ -81,7 +81,8 @@ public class GameBoard {
    */
   public boolean checkCollision(int x, int y) {
     int[][] layout = currentTetrimino.getTetriminoLayout();
-    int newX, newY;
+    int newX;
+    int newY;
 
     for (int layoutY = 0; layoutY < currentTetrimino.getHeight(); layoutY++) {
       for (int layoutX = 0; layoutX < currentTetrimino.getWidth(); layoutX++) {
