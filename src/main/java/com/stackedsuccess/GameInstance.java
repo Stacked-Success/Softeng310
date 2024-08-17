@@ -1,6 +1,7 @@
 package com.stackedsuccess;
 
 import com.stackedsuccess.tetriminos.Tetrimino;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.scene.input.KeyEvent;
@@ -10,7 +11,6 @@ public class GameInstance {
 
   private boolean isGameOver;
   private int score;
-  private int line;
 
   private GameControls gameControls;
   private GameBoard gameBoard;
@@ -22,7 +22,6 @@ public class GameInstance {
 
   public GameInstance() {
     score = 0;
-    line = 0;
     gameDelay = 10;
     isPaused = false;
     isGameOver = false;
@@ -55,7 +54,10 @@ public class GameInstance {
           @Override
           public void run() {
             if (!isPaused && !isGameOver) {
-              gameBoard.update();
+              try {
+                gameBoard.update();
+              } catch (IOException e) {
+              }
               currentTetrimino = gameBoard.getCurrentTetrimino();
               notifyTetriminoUpdate();
             }

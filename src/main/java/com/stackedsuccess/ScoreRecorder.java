@@ -4,11 +4,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class ScoreRecorder {
-    private static final String scoreFile = "score.txt";
+  private static final String scoreFile = "score.txt";
 
-    public static void saveScore(String score) {
-        FileWriter writer = new FileWriter(scoreFile)) {
-            writer.write(score);
-    }
+  public static void saveScore(String score) throws IOException {
+    FileWriter writer = new FileWriter(scoreFile);
+    writer.write(score);
+    writer.close();
+  }
 }
-
