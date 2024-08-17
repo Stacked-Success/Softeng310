@@ -116,20 +116,31 @@ public abstract class Tetrimino {
   private int[] adjustPositionForBounds(int[][] rotatedLayout, GameBoard gameBoard) {
     int newX = xPos;
     int newY = yPos;
+
     for (int i = 0; i < rotatedLayout.length; i++) {
       for (int j = 0; j < rotatedLayout[i].length; j++) {
         if (rotatedLayout[i][j] != 0) {
-          int tempX = xPos + j;
-          int tempY = yPos + i;
-          if (gameBoard.isOutOfBounds(tempX, tempY)) {
-            if (tempX < 0) newX++;
-            if (tempX >= gameBoard.getWidth()) newX--;
-            if (tempY < 0) newY++;
-            if (tempY >= gameBoard.getHeight()) newY--;
-          }
+          int[] adjustedPosition = adjustForSingleCell(xPos + j, yPos + i, gameBoard);
+          newX = adjustedPosition[0];
+          newY = adjustedPosition[1];
         }
       }
     }
+    return new int[] {newX, newY};
+  }
+
+  /** Helper method to adjust position for a single cell if it is out of bounds */
+  private int[] adjustForSingleCell(int tempX, int tempY, GameBoard gameBoard) {
+    int newX = xPos;
+    int newY = yPos;
+
+    if (gameBoard.isOutOfBounds(tempX, tempY)) {
+      if (tempX < 0) newX++;
+      if (tempX >= gameBoard.getWidth()) newX--;
+      if (tempY < 0) newY++;
+      if (tempY >= gameBoard.getHeight()) newY--;
+    }
+
     return new int[] {newX, newY};
   }
 
