@@ -247,12 +247,12 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
   }
 
   /**
-   * Updates the level displayed on the game board.
+   * Updates the line displayed on the game board.
    *
-   * @param level the current level
+   * @param line the current level
    */
-  public void updateLine(int level) {
-    Platform.runLater(() -> lineLabel.setText("Line: " + level));
+  public void updateLine(int line) {
+    Platform.runLater(() -> lineLabel.setText("Line: " + line));
   }
 
   /**
