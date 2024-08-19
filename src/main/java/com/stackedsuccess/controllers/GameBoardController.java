@@ -3,6 +3,7 @@ package com.stackedsuccess.controllers;
 import com.stackedsuccess.GameInstance;
 import com.stackedsuccess.ScoreRecorder;
 import com.stackedsuccess.tetriminos.Tetrimino;
+import java.io.IOException;
 import java.util.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -21,20 +22,19 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
     @FXML Pane holdPiece;
     @FXML GridPane gameGrid;
     @FXML GridPane displayGrid;
-  
-  @FXML Label scoreLabel;
-  @FXML Label levelLabel;
-  @FXML Label lineLabel;
+
+    @FXML Label scoreLabel;
+    @FXML Label levelLabel;
+    @FXML Label lineLabel;
 
     @FXML ImageView holdPieceView;
     @FXML ImageView nextPieceView;
 
-
-  private GameInstance gameInstance = new GameInstance();
-  private int score = 0;
-  private int line = 0;
-  private ArrayList<Node> previousGhostTetrominos = new ArrayList<>();
-
+    private GameInstance gameInstance = new GameInstance();
+    private int score = 0;
+    private int line = 0;
+    private ArrayList<Node> previousGhostTetrominos = new ArrayList<>();
+    private static Map<String, String> allTetriminoStyles = new HashMap<>();
 
     /**
      * Initialises the game board controller, setting up the game grid and starting the game instance.
@@ -45,18 +45,19 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
     @FXML
     public void initialize() {
 
-    scoreLabel.setText("Score:" + score);
-    levelLabel.setText("Level: 1");
-    lineLabel.setText("Line: " + line);
-    displayGrid.gridLinesVisibleProperty().set(true);
-    gameInstance.setTetriminoUpdateListener(this);
-    Platform.runLater(
-        () -> {
-          gameInstance.start();
-          gameInstance.getGameBoard().setController(this); // Set the controller
-          setWindowCloseHandler(getStage());
-        });
-  }
+        scoreLabel.setText("0");
+        levelLabel.setText("1");
+        lineLabel.setText("0");
+        displayGrid.gridLinesVisibleProperty().set(true);
+        gameInstance.setTetriminoUpdateListener(this);
+        initTetriminoStyles();
+        Platform.runLater(
+                () -> {
+                    gameInstance.start();
+                    gameInstance.getGameBoard().setController(this); // Set the controller
+                    setWindowCloseHandler(getStage());
+                });
+    }
 
     /**
      * Listener for tetrimino updates, updates the game grid with the new tetrimino layout.
@@ -84,7 +85,7 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
             for (int col = 0; col < layout[row].length; col++) {
                 if (layout[row][col] != 0) {
                     Pane pane = new Pane();
-                    pane.setStyle("-fx-background-color: black;");
+                    pane.setStyle("-fx-background-color: " + getTetriminoStyle(tetrimino));
                     gameGrid.add(pane, tetrimino.getXPos() + col, tetrimino.getYPos() + row);
                 }
             }
@@ -105,7 +106,7 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
                         for (int col = 0; col < layout[row].length; col++) {
                             if (layout[row][col] != 0) {
                                 Pane pane = new Pane();
-                                pane.setStyle("-fx-background-color: black;");
+                                pane.setStyle("-fx-background-color: " + getTetriminoStyle(tetrimino));
                                 displayGrid.add(pane, tetrimino.getXPos() + col, tetrimino.getYPos() + row);
                             }
                         }
@@ -237,18 +238,17 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
      * @param score the current score
      */
     public void updateScore(int score) {
-        Platform.runLater(() -> scoreLabel.setText("Score: " + score));
+        Platform.runLater(() -> scoreLabel.setText(String.valueOf(score)));
     }
 
-
-  /**
-   * Updates the line displayed on the game board.
-   *
-   * @param line the current level
-   */
-  public void updateLine(int line) {
-    Platform.runLater(() -> lineLabel.setText("Line: " + line));
-  }
+    /**
+     * Updates the line displayed on the game board.
+     *
+     * @param line the current level
+     */
+    public void updateLine(int line) {
+        Platform.runLater(() -> lineLabel.setText(String.valueOf(line)));
+    }
 
     /**
      * Updates the level displayed on the game board.
@@ -256,9 +256,8 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
      * @param level the current level
      */
     public void updateLevel(int level) {
-        Platform.runLater(() -> levelLabel.setText("Level: " + level));
+        Platform.runLater(() -> levelLabel.setText(String.valueOf(level)));
     }
-
 
     /**
      * Sets the view of the next tetromino to be loaded.
@@ -279,16 +278,44 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
         Image image = new Image("/images/" + tetrimino.getClass().getSimpleName() + ".png");
         holdPieceView.setImage(image);
     }
-  
-  /**
-   * Method for handling game over event, when tetriminos spawn and collide into each other. Exits
-   * the game when called
-   */
-  @FXML
-  public void gameOver() {
-    //Save score before exiting
-    ScoreRecorder.saveScore(scoreLabel.getText());
 
-    System.exit(0);
-  }
+    /** Method for checking which tetrimino shape is in play, and setting the style accordingly
+     *
+     * @param tetrimino the tetrimino on screen
+     * @return tetriminoStyle the style of the tetrimino
+     */
+    public String getTetriminoStyle(Tetrimino tetrimino) {
+        String className = tetrimino.getClass().getSimpleName();
+        String borderStyle = "-fx-border-color: black; -fx-border-width: 2px;";
+        String tetriminoStyle = allTetriminoStyles.get(className);
+        return tetriminoStyle + ";" + borderStyle;
+    }
+
+    /** Method for initialising the hashmap of Tetrimino colours
+     *
+     */
+    private void initTetriminoStyles() {
+        allTetriminoStyles.clear();
+        allTetriminoStyles.put("IShape", "#ff7e00");
+        allTetriminoStyles.put("JShape", "#2c349c");
+        allTetriminoStyles.put("LShape", "#ec1c24");
+        allTetriminoStyles.put("OShape", "#24b44c");
+        allTetriminoStyles.put("SShape", "#a424f4");
+        allTetriminoStyles.put("TShape", "#fcf404");
+        allTetriminoStyles.put("ZShape", "#04b4ec");
+    }
+
+    /**
+     * Method for handling game over event, when tetriminos spawn and collide into each other. Exits
+     * the game when called
+     *
+     * @throws IOException
+     */
+    @FXML
+    public void gameOver() throws IOException {
+        // Save score before exiting
+        ScoreRecorder.saveScore(scoreLabel.getText());
+
+        System.exit(0);
+    }
 }
