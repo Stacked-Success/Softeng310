@@ -6,8 +6,10 @@ import com.stackedsuccess.tetriminos.Tetrimino;
 import java.io.IOException;
 import java.util.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,6 +31,8 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
 
     @FXML ImageView holdPieceView;
     @FXML ImageView nextPieceView;
+
+    @FXML Button escapeButton;
 
     private GameInstance gameInstance = new GameInstance();
     private int score = 0;
@@ -318,4 +322,12 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
 
         System.exit(0);
     }
+
+    /**
+     * Method for when pressing the pause button, this will pause the current game instance
+     *
+     * @throws IOException
+     */
+    @FXML
+    public void onEscapeButton(ActionEvent event) throws IOException {}
 }
