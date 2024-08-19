@@ -325,12 +325,4 @@ public class GameBoardController implements GameInstance.TetriminoUpdateListener
 
         System.exit(0);
     }
-
-    /**
-     * Method for when pressing the pause button, this will pause the current game instance
-     *
-     * @throws IOException
-     */
-    @FXML
-    public void onEscapeButton(ActionEvent event) throws IOException {}
 }
