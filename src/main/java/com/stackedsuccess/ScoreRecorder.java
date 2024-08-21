@@ -57,7 +57,9 @@ public class ScoreRecorder {
     try (BufferedReader buffread = new BufferedReader(new FileReader(SCOREFILE))) {
       String line;
       while ((line = buffread.readLine()) != null) {
-        scores.add(Integer.parseInt(line));
+        if (!line.trim().isEmpty()) { // Skip empty lines
+          scores.add(Integer.parseInt(line));
+        }
       }
     }
     return scores;
