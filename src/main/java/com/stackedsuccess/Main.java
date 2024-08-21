@@ -51,8 +51,9 @@ public class Main extends Application {
     scenes.put(SceneName.MENU, loadFxml("HomeScreen"));
     scenes.put(SceneName.GAMEBOARD, loadFxml("GameBoard"));
     // BYPASSING MENU FOR TESTING
-    Parent root = scenes.get(SceneName.GAMEBOARD);
+    Parent root = scenes.get(SceneName.MENU);
     scene = new Scene(root, 1300, 900);
+    scene.getStylesheets().add(getClass().getResource("/css/homescreen.css").toExternalForm());
     stage.setScene(scene);
     stage.setTitle("Stacked Success");
     stage.show();
