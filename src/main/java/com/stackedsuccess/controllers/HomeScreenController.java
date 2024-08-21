@@ -1,32 +1,29 @@
 package com.stackedsuccess.controllers;
 
-import com.stackedsuccess.GameInstance;
 import com.stackedsuccess.Main;
-import com.stackedsuccess.Main.SceneName;
-
+import com.stackedsuccess.SceneManager;
+import com.stackedsuccess.SceneManager.AppUI;
+import java.io.IOException;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
 
 public class HomeScreenController {
 
-    public void exitGame() {
-        System.exit(0);
-    }
+  public void exitGame() {
+    System.exit(0);
+  }
 
-    public void startGame() {
-        GameInstance gameInstance = new GameInstance();
-        gameInstance.start();
-        Stage stage = (Stage) Main.getPrimaryStage(); // Assumes there's a method in Main to get the primary stage
-        Parent gameBoard = Main.getScene(SceneName.GAMEBOARD);
-        Scene scene = new Scene(gameBoard);
-        stage.setScene(scene);
-        gameBoard.requestFocus(); // Ensures the game board has focus for key events
-    }
+  public void startGame() throws IOException {
+    SceneManager.addScene(AppUI.GAME, loadFxml("GameBoard"));
+    Main.setUi(AppUI.GAME);
+  }
 
-    public void onKeyPressed(KeyEvent event) {
-        // Your code here
-    }
+  public static Parent loadFxml(final String fxml) throws IOException {
+    return new FXMLLoader(Main.class.getResource("/fxml/" + fxml + ".fxml")).load();
+  }
 
+  public void onKeyPressed(KeyEvent event) {
+    // Your code here
+  }
 }
