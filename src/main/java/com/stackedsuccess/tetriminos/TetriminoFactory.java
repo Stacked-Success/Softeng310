@@ -19,13 +19,13 @@ public class TetriminoFactory {
   public static Tetrimino createRandomTetrimino() {
     int type = random.nextInt(7) + 1;
     return switch (type) {
-      case IShape.VALUE -> new IShape();
-      case JShape.VALUE -> new JShape();
-      case LShape.VALUE -> new LShape();
-      case OShape.VALUE -> new OShape();
-      case SShape.VALUE -> new SShape();
-      case TShape.VALUE -> new TShape();
-      case ZShape.VALUE -> new ZShape();
+      case IShape.spawnValue -> new IShape();
+      case JShape.spawnValue -> new JShape();
+      case LShape.spawnValue -> new LShape();
+      case OShape.spawnValue -> new OShape();
+      case SShape.spawnValue -> new SShape();
+      case TShape.spawnValue -> new TShape();
+      case ZShape.spawnValue -> new ZShape();
       default -> throw new AssertionError();
     };
   }

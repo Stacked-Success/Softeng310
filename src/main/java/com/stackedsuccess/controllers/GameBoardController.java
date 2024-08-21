@@ -266,25 +266,25 @@ public class GameBoardController {
     ColorAdjust colorAdjust = new ColorAdjust();
 
     switch (blockValue) {
-      case IShape.VALUE:
+      case IShape.spawnValue:
         colorAdjust.setHue(-0.5);
         break;
-      case JShape.VALUE:
+      case JShape.spawnValue:
         colorAdjust.setHue(-0.3);
         break;
-      case LShape.VALUE:
+      case LShape.spawnValue:
         colorAdjust.setHue(-0.15);
         break;
-      case OShape.VALUE:
+      case OShape.spawnValue:
         colorAdjust.setHue(0);
         break;
-      case SShape.VALUE:
+      case SShape.spawnValue:
         colorAdjust.setHue(0.15);
         break;
-      case TShape.VALUE:
+      case TShape.spawnValue:
         colorAdjust.setHue(0.3);
         break;
-      case ZShape.VALUE:
+      case ZShape.spawnValue:
         colorAdjust.setHue(0.5);
         break;
       case solidBlockValue:

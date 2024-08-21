@@ -1,13 +1,14 @@
 package com.stackedsuccess.tetriminos;
 
 public class OShape extends Tetrimino {
-  public static final int VALUE = 4;
+  public static final int spawnValue = 4;
 
   public OShape() {
-    layout = new int[][] {
+    layout =
+        new int[][] {
           {0, 0, 0, 0},
-          {0, VALUE, VALUE, 0},
-          {0, VALUE, VALUE, 0},
+          {0, spawnValue, spawnValue, 0},
+          {0, spawnValue, spawnValue, 0},
           {0, 0, 0, 0}
         };
     width = 4;
