@@ -6,8 +6,8 @@ import com.stackedsuccess.GameBoard;
 public abstract class Tetrimino {
   protected static int value;
 
-  public static int DEFAULT_SPAWN_X = 3;
-  public static int DEFAULT_SPAWN_Y = 2;
+  public static final int DEFAULT_SPAWN_X = 3;
+  public static final int DEFAULT_SPAWN_Y = 2;
 
   protected int xPos;
   protected int yPos;
