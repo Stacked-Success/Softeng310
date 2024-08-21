@@ -109,11 +109,7 @@ public class GameBoardController {
   @FXML
   public void gameOver() throws IOException {
     gameInstance.setGameOver(true);
-
-    // Save if score is a high score
-    if (ScoreRecorder.isHighScore(scoreLabel.getText())) {
-      ScoreRecorder.saveScore(scoreLabel.getText());
-    }
+    ScoreRecorder.saveScore(scoreLabel.getText());
 
     playGameOverAnimation();
   }
