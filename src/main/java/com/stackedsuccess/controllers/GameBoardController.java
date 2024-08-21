@@ -73,6 +73,11 @@ public class GameBoardController {
         () -> {
           gameInstance.start();
           gameInstance.getGameBoard().setController(this);
+          nextPieceView.setImage(
+              new Image(
+                  "/images/"
+                      + gameInstance.getGameBoard().getNextTetrimino().getClass().getSimpleName()
+                      + ".png"));
           setWindowCloseHandler(getStage());
         });
   }
