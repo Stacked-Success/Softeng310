@@ -49,7 +49,7 @@ public class GameBoardController {
   private final Image highlightImage =
       new Image("file:src/main/resources/images/highlight.png", 42, 42, true, false);
 
-  private final int solidBlockValue = -2;
+  private static final int solidBlockValue = -2;
 
   private final GameInstance gameInstance = new GameInstance();
 
