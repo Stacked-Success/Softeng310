@@ -33,6 +33,20 @@ public class ScoreRecorder {
   }
 
   /**
+   * Get the high score as a string.
+   *
+   * @return the high score as a string
+   * @throws IOException
+   */
+  public static String getHighScore() throws IOException {
+    List<Integer> scores = getAllScores();
+    if (scores.isEmpty()) {
+      return "0";
+    }
+    return String.valueOf(scores.get(0));
+  }
+
+  /**
    * Get all scores from the file.
    *
    * @return a list of all scores
