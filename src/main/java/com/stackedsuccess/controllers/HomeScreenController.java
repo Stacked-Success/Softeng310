@@ -44,7 +44,7 @@ public class HomeScreenController {
                 scores.add(line);
             }
         } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception as needed
+            throw new IllegalArgumentException("Issue regarding Score file", e);
         }
         return scores;
     }
