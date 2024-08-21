@@ -86,7 +86,10 @@ public class ScoreRecorder {
     File scoreFile = new File(SCOREFILE);
     if (!scoreFile.exists()) {
       try {
-        scoreFile.createNewFile();
+        boolean isFileCreated = scoreFile.createNewFile();
+        if (!isFileCreated) {
+          // File creation failed
+        }
       } catch (IOException e) {
         throw new IllegalArgumentException("Creating score file", e);
       }
