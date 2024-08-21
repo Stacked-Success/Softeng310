@@ -49,7 +49,7 @@ public class GameBoardController {
   private final Image highlightImage =
       new Image("file:src/main/resources/images/highlight.png", 42, 42, true, false);
 
-  private static final int solidBlockValue = -2;
+  private static final int SOLID_BLOCK_VALUE = -2;
 
   private final GameInstance gameInstance = new GameInstance();
 
@@ -266,28 +266,28 @@ public class GameBoardController {
     ColorAdjust colorAdjust = new ColorAdjust();
 
     switch (blockValue) {
-      case IShape.spawnValue:
+      case IShape.SPAWN_Value:
         colorAdjust.setHue(-0.5);
         break;
-      case JShape.spawnValue:
+      case JShape.SPAWN_Value:
         colorAdjust.setHue(-0.3);
         break;
-      case LShape.spawnValue:
+      case LShape.SPAWN_Value:
         colorAdjust.setHue(-0.15);
         break;
-      case OShape.spawnValue:
+      case OShape.SPAWN_Value:
         colorAdjust.setHue(0);
         break;
-      case SShape.spawnValue:
+      case SShape.SPAWN_Value:
         colorAdjust.setHue(0.15);
         break;
-      case TShape.spawnValue:
+      case TShape.SPAWN_Value:
         colorAdjust.setHue(0.3);
         break;
-      case ZShape.spawnValue:
+      case ZShape.SPAWN_Value:
         colorAdjust.setHue(0.5);
         break;
-      case solidBlockValue:
+      case SOLID_BLOCK_VALUE:
         colorAdjust.setSaturation(-1);
         break;
       default:
@@ -321,7 +321,7 @@ public class GameBoardController {
             new KeyFrame(
                 Duration.millis(delay),
                 event -> {
-                  displayGrid.add(getBlock(solidBlockValue), curCol, curRow);
+                  displayGrid.add(getBlock(SOLID_BLOCK_VALUE), curCol, curRow);
                 });
         animationTimeline.getKeyFrames().add(keyFrame);
       }

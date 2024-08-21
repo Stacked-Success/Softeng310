@@ -1,13 +1,13 @@
 package com.stackedsuccess.tetriminos;
 
 public class LShape extends Tetrimino {
-  public static final int spawnValue = 3;
+  public static final int SPAWN_Value = 3;
 
   public LShape() {
     layout =
         new int[][] {
-          {0, 0, spawnValue},
-          {spawnValue, spawnValue, spawnValue},
+          {0, 0, SPAWN_Value},
+          {SPAWN_Value, SPAWN_Value, SPAWN_Value},
           {0, 0, 0}
         };
     width = 3;
