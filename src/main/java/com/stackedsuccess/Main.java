@@ -34,6 +34,7 @@ public class Main extends Application {
    */
   public static void setUi(AppUI newUi) {
     scene.setRoot(SceneManager.getScene(newUi));
+    scene.getRoot().requestFocus();
   }
 
   /**
