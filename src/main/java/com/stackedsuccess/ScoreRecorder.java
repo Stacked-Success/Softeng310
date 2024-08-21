@@ -83,12 +83,12 @@ public class ScoreRecorder {
 
   /** Create a score file if it does not exist. */
   public static void createScoreFile() {
-    File scoreFile = new File("score.txt");
+    File scoreFile = new File(SCOREFILE);
     if (!scoreFile.exists()) {
       try {
         scoreFile.createNewFile();
       } catch (IOException e) {
-        e.printStackTrace();
+        throw new IllegalArgumentException("Creating score file", e);
       }
     }
   }
