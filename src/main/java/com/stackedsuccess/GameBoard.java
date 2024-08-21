@@ -119,7 +119,7 @@ public class GameBoard {
    * @return if the spawn location is occupied
    */
   public boolean isSpawnLocationOccupied() {
-    return checkCollision(Tetrimino.DEFAULT_SPAWN_X, Tetrimino.DEFAULT_SPAWN_Y);
+    return checkCollision(Tetrimino.defaultSpawnX, Tetrimino.defaultSpawnY);
   }
 
   /** Forces the game loop to update once, primarily used to place tetrimino pieces instantly. */

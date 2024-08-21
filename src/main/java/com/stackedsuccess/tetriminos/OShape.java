@@ -13,7 +13,7 @@ public class OShape extends Tetrimino {
         };
     width = 4;
     height = 4;
-    xPos = Tetrimino.DEFAULT_SPAWN_X;
-    yPos = Tetrimino.DEFAULT_SPAWN_Y - 1;
+    xPos = Tetrimino.defaultSpawnX;
+    yPos = Tetrimino.defaultSpawnY - 1;
   }
 }
