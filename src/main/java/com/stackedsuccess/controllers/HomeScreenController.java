@@ -86,6 +86,7 @@ public class HomeScreenController {
     FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/GameBoard.fxml"));
     Parent root = loader.load();
     GameBoardController controller = loader.getController();
+
     // Set the initial level
     controller.updateLevel(initialLevel);
     SceneManager.addScene(AppUI.GAME, root);

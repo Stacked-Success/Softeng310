@@ -22,6 +22,7 @@ public class GameBoard {
 
   private int score = 0;
   private int level = 1;
+  private int baseLevel = 1;
   private int totalLinesCleared = 0;
   private int gameSpeed;
 
@@ -133,6 +134,11 @@ public class GameBoard {
    */
   public boolean isSpawnLocationOccupied() {
     return checkCollision(Tetrimino.DEFAULT_SPAWN_X, Tetrimino.DEFAULT_SPAWN_Y);
+  }
+
+  public void setBaseLevel(int baseLevel) {
+    this.baseLevel = baseLevel;
+    updateLevel();
   }
 
   /** Forces the game loop to update once, primarily used to place tetrimino pieces instantly. */
@@ -257,8 +263,9 @@ public class GameBoard {
    * by one level</p>
    */
   private void updateLevel() {
-    level = (totalLinesCleared / 10) + 1;
+    level = (totalLinesCleared / 10) + baseLevel;
     controller.updateLevel(level);
+    changeGameSpeed();
   }
 
   /**

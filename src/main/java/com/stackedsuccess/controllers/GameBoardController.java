@@ -170,7 +170,6 @@ public class GameBoardController {
    * updates their styles and opacity to make them visible. If the game is not paused, it sends the
    * pause screen elements to the back and makes them transparent.
    */
-
   private void togglePauseScreen(){
     if(gameInstance.isPaused()){
       basePane.requestFocus();
@@ -254,6 +253,7 @@ public class GameBoardController {
     Platform.runLater(() -> levelLabel.setText(String.valueOf(level)));
   }
 
+  public void setBaseLevel(int baseLevel) { Platform.runLater(() -> gameInstance.getGameBoard().setBaseLevel(baseLevel));}
   /**
    * Sets the view of the next tetromino to be loaded.
    *
