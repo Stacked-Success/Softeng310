@@ -75,7 +75,6 @@ public class GameBoardController {
    * <p>This method is annotated with `@FXML` to indicate that it is called during the loading of the
    * FXML file, and it runs initialisation tasks after the FXML components have been loaded.
    */
-
   @FXML
   public void initialize() {
     //resets score, line, and level to initial state
