@@ -66,6 +66,8 @@ public class GameBoardController {
 
   private final GameInstance gameInstance = new GameInstance();
 
+  private TutorialController tutorialController;
+
   /**
    * Initialises the game board controller by setting up the game grid and starting the game instance.
    *
@@ -95,6 +97,10 @@ public class GameBoardController {
                       + ".png"));
           setWindowCloseHandler(getStage());
         });
+
+        tutorialController = new TutorialController();
+        tutorialController.setDestinationAppUI(AppUI.GAME);
+        tutorialController.setHasTutorialBeenViewed(true);
   }
 
   /**
@@ -520,11 +526,9 @@ public class GameBoardController {
   @FXML
   public void goToTutorial() throws IOException {
     FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
+    loader.setController(tutorialController);
     Parent root = loader.load();
-    SceneManager.addScene(AppUI.TUTORIAL, root);
-    Main.setUi(AppUI.TUTORIAL);
-
-    //Tells the tutorial what screen to return to when it is completed
-    TutorialController.destinationAppUI = AppUI.GAME;
+    SceneManager.addScene(AppUI.GAME_TUTORIAL, root);
+    Main.setUi(AppUI.GAME_TUTORIAL);
   }
 }

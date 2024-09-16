@@ -16,10 +16,10 @@ public class TutorialController {
 
     //Used to check if the tutorial has been viewed
     //If not the tutorial will be displayed when the game is started
-    public static boolean hasTutorialBeenViewed = false;
-    public static boolean createGame = false;
-    public static AppUI destinationAppUI;
-    public static Runnable onTutorialCompleted;
+    private boolean hasTutorialBeenViewed = false;
+    private boolean createGame = false;
+    private AppUI destinationAppUI = AppUI.MAIN_MENU;
+    private Runnable onTutorialCompleted;
 
 
     public void initialize() {
@@ -69,6 +69,38 @@ public class TutorialController {
             //Return to the desired screen
             Main.setUi(destinationAppUI);
         }
+    }
+
+    public boolean getHasTutorialBeenViewed() {
+        return hasTutorialBeenViewed;
+    }
+
+    public void setHasTutorialBeenViewed(boolean hasTutorialBeenViewed) {
+        this.hasTutorialBeenViewed = hasTutorialBeenViewed;
+    }
+
+    public boolean getCreateGame() {
+        return createGame;
+    }
+
+    public void setCreateGame(boolean createGame) {
+        this.createGame = createGame;
+    }
+
+    public AppUI getDestinationAppUI() {
+        return destinationAppUI;
+    }
+
+    public void setDestinationAppUI(AppUI destinationAppUI) {
+        this.destinationAppUI = destinationAppUI;
+    }
+
+    public Runnable getOnTutorialCompleted() {
+        return onTutorialCompleted;
+    }
+
+    public void setOnTutorialCompleted(Runnable onTutorialCompleted) {
+        this.onTutorialCompleted = onTutorialCompleted;
     }
     
 }

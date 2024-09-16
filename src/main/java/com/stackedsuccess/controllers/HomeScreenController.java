@@ -24,6 +24,8 @@ public class HomeScreenController {
   @FXML private ListView<String> pastScores;
   @FXML private Button tutorialBtn;
 
+  private TutorialController tutorialController;
+
   /**
    * Initialises the Home Screen controller by setting up the home screen.
    *
@@ -37,6 +39,8 @@ public class HomeScreenController {
     List<String> scores = loadScoresFromFile("score.txt");
     pastScores.getItems().addAll(scores);
     pastScoresButton.setFocusTraversable(false);
+    tutorialController = new TutorialController();
+    tutorialController.setDestinationAppUI(AppUI.MAIN_MENU);
   }
 
   /**
@@ -77,28 +81,31 @@ public class HomeScreenController {
    * @throws IOException
    */
   public void startGame() throws IOException {
-    if (TutorialController.hasTutorialBeenViewed) {
+    if (tutorialController.getHasTutorialBeenViewed()) {
       //Start a new game
       loadGame();
     } else {
-      //Load the tutorial
-      FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
-      Parent root = loader.load();
-      SceneManager.addScene(AppUI.TUTORIAL, root);
-      Main.setUi(AppUI.TUTORIAL);
 
       //Tell the turorial that it needs to create a new game when the user is finished
-      TutorialController.createGame = true;
-      TutorialController.destinationAppUI = AppUI.GAME;
+      tutorialController.setCreateGame(true);
+
+      //Load the tutorial
+      FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
+      loader.setController(tutorialController);
+      Parent root = loader.load();
+      SceneManager.addScene(AppUI.HOME_TUTORIAL, root);
+      Main.setUi(AppUI.HOME_TUTORIAL);
+
 
       //Creates the game when the tutorial is completed
-      TutorialController.onTutorialCompleted = () -> {
+      Runnable onTutorialCompleted = () -> {
         try {
           loadGame();
         } catch (IOException e) {
           // Do nothing for now
         }
       };
+      tutorialController.setOnTutorialCompleted(onTutorialCompleted);
 
     }
   }
@@ -172,11 +179,9 @@ public class HomeScreenController {
   @FXML
   public void goToTutorial() throws IOException {
     FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
+    loader.setController(tutorialController);
     Parent root = loader.load();
-    SceneManager.addScene(AppUI.TUTORIAL, root);
-    Main.setUi(AppUI.TUTORIAL);
-
-    //Set the tutorial to return to the main menu when it is completed
-    TutorialController.destinationAppUI = AppUI.MAIN_MENU;
+    SceneManager.addScene(AppUI.HOME_TUTORIAL, root);
+    Main.setUi(AppUI.HOME_TUTORIAL);
   }
 }
