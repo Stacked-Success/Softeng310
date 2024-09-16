@@ -58,6 +58,10 @@
     -fx-background-color: #FFC107; /* Yellow background */
 }
 
+.button#tutorial {
+    -fx-background-color: #9C27B0; /* Purple background */
+}
+
 /* Hover effects for specific Buttons */
 .button#startGame:hover {
     -fx-background-color: #388E3C; /* Darker green for start button hover */
