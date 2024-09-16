@@ -96,7 +96,7 @@ public class HomeScreenController {
         try {
           loadGame();
         } catch (IOException e) {
-          e.printStackTrace();
+          // Do nothing for now
         }
       };
 
