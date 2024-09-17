@@ -55,6 +55,8 @@ public class GameBoardController {
   @FXML Button gameOverExitButton;
   @FXML Button gameOverRestartButton;
 
+  @FXML private Button tutorialBtn;
+
   private final Image blockImage =
       new Image("file:src/main/resources/images/block.png", 42, 42, true, false);
   private final Image highlightImage =
@@ -63,6 +65,8 @@ public class GameBoardController {
   private static final int SOLID_BLOCK_VALUE = -2;
 
   private final GameInstance gameInstance = new GameInstance();
+
+  private TutorialController tutorialController;
 
   /**
    * Initialises the game board controller by setting up the game grid and starting the game instance.
@@ -93,6 +97,10 @@ public class GameBoardController {
                       + ".png"));
           setWindowCloseHandler(getStage());
         });
+
+        tutorialController = new TutorialController();
+        tutorialController.setDestinationAppUI(AppUI.GAME);
+        tutorialController.setHasTutorialBeenViewed(true);
   }
 
   /**
@@ -507,5 +515,20 @@ public class GameBoardController {
    */
   public static Parent loadFxml(final String fxml) throws IOException {
     return new FXMLLoader(Main.class.getResource("/fxml/" + fxml + ".fxml")).load();
+  }
+
+    /**
+   * Opens the tutorial screen when the tutorial button is clicked
+   *
+   * <p>This method is linked to the tutorial button. When the button is clicked, the application will switch to the tutorial screen</p>
+   * @throws IOException 
+   */
+  @FXML
+  public void goToTutorial() throws IOException {
+    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
+    loader.setController(tutorialController);
+    Parent root = loader.load();
+    SceneManager.addScene(AppUI.GAME_TUTORIAL, root);
+    Main.setUi(AppUI.GAME_TUTORIAL);
   }
 }
