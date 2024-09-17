@@ -22,9 +22,6 @@ public class HomeScreenController {
 
   @FXML private Button pastScoresButton;
   @FXML private ListView<String> pastScores;
-  @FXML private Button tutorialBtn;
-
-  private TutorialController tutorialController;
 
   /**
    * Initialises the Home Screen controller by setting up the home screen.
@@ -39,8 +36,6 @@ public class HomeScreenController {
     List<String> scores = loadScoresFromFile("score.txt");
     pastScores.getItems().addAll(scores);
     pastScoresButton.setFocusTraversable(false);
-    tutorialController = new TutorialController();
-    tutorialController.setDestinationAppUI(AppUI.MAIN_MENU);
   }
 
   /**
@@ -75,43 +70,6 @@ public class HomeScreenController {
 
   /**
    * Starts a new game by loading the game board UI and initialising the game at the selected difficulty level.
-   * 
-   * <p>This method checks if the tutorial has been viewed. If it has, it loads a new game. If not, it loads the tutorial.
-   * The game is then started when the tutorial is completed.</p>
-   * @throws IOException
-   */
-  public void startGame() throws IOException {
-    if (tutorialController.getHasTutorialBeenViewed()) {
-      //Start a new game
-      loadGame();
-    } else {
-
-      //Tell the turorial that it needs to create a new game when the user is finished
-      tutorialController.setCreateGame(true);
-
-      //Load the tutorial
-      FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
-      loader.setController(tutorialController);
-      Parent root = loader.load();
-      SceneManager.addScene(AppUI.HOME_TUTORIAL, root);
-      Main.setUi(AppUI.HOME_TUTORIAL);
-
-
-      //Creates the game when the tutorial is completed
-      Runnable onTutorialCompleted = () -> {
-        try {
-          loadGame();
-        } catch (IOException e) {
-          // Do nothing for now
-        }
-      };
-      tutorialController.setOnTutorialCompleted(onTutorialCompleted);
-
-    }
-  }
-
-  /**
-   * loads a new game by loading the game board UI and initialising the game at the selected difficulty level.
    *
    * <p>This method retrieves the initial difficulty level from the slider of 1-20, loads the game board
    * from the corresponding FXML file, and updates the game board controller with the selected level.
@@ -120,7 +78,7 @@ public class HomeScreenController {
    * @throws IOException If there is an issue loading the FXML file for the game board.
    */
   @FXML
-  public void loadGame() throws IOException {
+  public void startGame() throws IOException {
     // Get the level from the slider
     int initialLevel = (int) difficultySlider.getValue();
 
@@ -168,20 +126,5 @@ public class HomeScreenController {
     } else {
       pastScores.setVisible(true);
     }
-  }
-
-  /**
-   * Opens the tutorial screen when the tutorial button is clicked
-   *
-   * <p>This method is linked to the tutorial button. When the button is clicked, the application will switch to the tutorial screen</p>
-   * @throws IOException 
-   */
-  @FXML
-  public void goToTutorial() throws IOException {
-    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
-    loader.setController(tutorialController);
-    Parent root = loader.load();
-    SceneManager.addScene(AppUI.HOME_TUTORIAL, root);
-    Main.setUi(AppUI.HOME_TUTORIAL);
   }
 }

@@ -55,19 +55,14 @@
                   <Font name="Arial" size="84.0" />
                </font>
             </Label>
-            <Button fx:id="tutorialBtn" layoutX="585.0" layoutY="533.0" mnemonicParsing="false" onMouseClicked="#goToTutorial" prefHeight="49.0" prefWidth="180.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Tutorial" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="Arial Bold" size="24.0" />
-               </font>
-            </Button>
          </children>
       </Pane>
-      <Button fx:id="gameOverRestartButton" layoutX="54.0" layoutY="567.0" mnemonicParsing="false" onAction="#onClickRestart" prefHeight="40.0" prefWidth="222.0" style="-fx-background-color: #ffffff;" text="Restart / Main Menu">
+      <Button fx:id="gameOverRestartButton" disable="true" layoutX="54.0" layoutY="567.0" mnemonicParsing="false" onAction="#onClickRestart" prefHeight="40.0" prefWidth="222.0" style="-fx-background-color: #ffffff;" text="Restart / Main Menu" visible="false">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="gameOverExitButton" layoutX="55.0" layoutY="665.0" mnemonicParsing="false" onAction="#onClickExit" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #ffffff;" text="EXIT">
+      <Button fx:id="gameOverExitButton" disable="true" layoutX="55.0" layoutY="665.0" mnemonicParsing="false" onAction="#onClickExit" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #ffffff;" text="EXIT" visible="false">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
