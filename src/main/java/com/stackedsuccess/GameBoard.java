@@ -1,6 +1,5 @@
 package com.stackedsuccess;
 
-import com.stackedsuccess.controllers.GameBoardController;
 import com.stackedsuccess.tetriminos.*;
 import java.io.IOException;
 

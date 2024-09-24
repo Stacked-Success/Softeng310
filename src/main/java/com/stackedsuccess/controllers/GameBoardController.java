@@ -119,6 +119,7 @@ public class GameBoardController implements GameStateManager {
    */
 
   @FXML
+  @Override
   public void updateDisplay(int[][] board) {
     int[][] updatedBoard = addMovingPieces(board);
 
@@ -150,6 +151,7 @@ public class GameBoardController implements GameStateManager {
    */
 
   @FXML
+  @Override       
   public void gameOver() throws IOException {
     gameInstance.setGameOver(true);
     //saves the players score into the score.txt file
@@ -243,6 +245,7 @@ public class GameBoardController implements GameStateManager {
    *
    * @param score the current score
    */
+  @Override       
   public void updateScore(int score) {
     Platform.runLater(() -> scoreLabel.setText(String.valueOf(score)));
   }
@@ -252,6 +255,7 @@ public class GameBoardController implements GameStateManager {
    *
    * @param line the current level
    */
+  @Override       
   public void updateLine(int line) {
     Platform.runLater(() -> lineLabel.setText(String.valueOf(line)));
   }
@@ -261,6 +265,7 @@ public class GameBoardController implements GameStateManager {
    *
    * @param level the current level
    */
+  @Override       
   public void updateLevel(int level) {
     Platform.runLater(() -> levelLabel.setText(String.valueOf(level)));
   }
@@ -271,6 +276,7 @@ public class GameBoardController implements GameStateManager {
    *
    * @param tetrimino the tetrimino to be displayed in the next piece view
    */
+  @Override       
   public void setNextPieceView(Tetrimino tetrimino) {
     Image image = new Image("/images/" + tetrimino.getClass().getSimpleName() + ".png");
     nextPieceView.setImage(image);
@@ -281,6 +287,7 @@ public class GameBoardController implements GameStateManager {
    *
    * @param tetrimino the tetrimino to be displayed in the hold image view
    */
+  @Override       
   public void setHoldPieceView(Tetrimino tetrimino) {
     Image image = new Image("/images/" + tetrimino.getClass().getSimpleName() + ".png");
     holdPieceView.setImage(image);
