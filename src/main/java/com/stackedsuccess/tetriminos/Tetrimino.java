@@ -16,6 +16,14 @@ public abstract class Tetrimino {
   protected int width;
   protected int height;
 
+  public Tetrimino(int[][] layout, int width, int height) {
+    this.layout = layout;
+    this.width = width;
+    this.height = height;
+    this.xPos = DEFAULT_SPAWN_X;
+    this.yPos = (width == 3) ? DEFAULT_SPAWN_Y : DEFAULT_SPAWN_Y - 1;
+}
+
   /**
    * Updates tetrimino based on given action and game board state.
    *
