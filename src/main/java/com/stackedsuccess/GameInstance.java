@@ -20,6 +20,7 @@ public class GameInstance {
 
   private Tetrimino currentTetrimino;
   private TetriminoUpdateListener tetriminoUpdateListener;
+  private final GameStateManager gameStateManager;
 
   /**
    * Constructs a new instance of the game with default initial settings.
@@ -27,11 +28,12 @@ public class GameInstance {
    * <p>This constructor initialises the game state by setting the initial score,
    * game delay, and flags for pause and game over status</p>
    */
-  public GameInstance() {
+  public GameInstance(GameStateManager gameStateManager) {
     score = 0;
     gameDelay = 10;
     isPaused = false;
     isGameOver = false;
+    this.gameStateManager = gameStateManager;
   }
 
   /**
@@ -71,7 +73,7 @@ public class GameInstance {
    * the game state, handles Tetrimino movements, and checks whether the game is paused or over.</p>
    */
   public void start() {
-    gameBoard = new GameBoard();
+    gameBoard = new GameBoard(gameStateManager);
     currentTetrimino = gameBoard.getCurrentTetrimino();
     gameControls = new GameControls();
 

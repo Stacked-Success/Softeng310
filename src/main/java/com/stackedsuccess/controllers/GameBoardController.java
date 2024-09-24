@@ -3,6 +3,7 @@ package com.stackedsuccess.controllers;
 import com.stackedsuccess.Action;
 import com.stackedsuccess.GameControls;
 import com.stackedsuccess.GameInstance;
+import com.stackedsuccess.GameStateManager;
 import com.stackedsuccess.Main;
 import com.stackedsuccess.SceneManager;
 import com.stackedsuccess.SceneManager.AppUI;
@@ -30,7 +31,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class GameBoardController {
+public class GameBoardController implements GameStateManager {
 
   @FXML Pane basePane;
   @FXML Pane holdPiece;
@@ -64,7 +65,11 @@ public class GameBoardController {
 
   private static final int SOLID_BLOCK_VALUE = -2;
 
-  private final GameInstance gameInstance = new GameInstance();
+  private final GameInstance gameInstance;
+
+  public GameBoardController() {
+    this.gameInstance = new GameInstance(this); 
+  }
 
   private TutorialController tutorialController;
 
@@ -88,7 +93,6 @@ public class GameBoardController {
     Platform.runLater(
         () -> {
           gameInstance.start();
-          gameInstance.getGameBoard().setController(this);
           //updates the image of the next piece
           nextPieceView.setImage(
               new Image(
