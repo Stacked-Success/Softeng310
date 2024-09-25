@@ -1,6 +1,5 @@
 package com.stackedsuccess;
 
-import com.stackedsuccess.controllers.GameBoardController;
 import com.stackedsuccess.tetriminos.*;
 import java.io.IOException;
 
@@ -26,7 +25,7 @@ public class GameBoard {
   private int totalLinesCleared = 0;
   private int gameSpeed;
 
-  private GameBoardController controller;
+  private final GameStateManager gameStateManager;
 
   /**
    * Initialises a new instance of the Game Board class with the default board dimensions.
@@ -34,8 +33,9 @@ public class GameBoard {
    * <p>This constructor sets up the game board by creating a 2D array with the default width and height.
    * It then calls the initializeBoard() method to prepare the board for gameplay.</p>
    */
-  public GameBoard() {
+  public GameBoard(GameStateManager gameStateManager) {
     //creates the boards default dimensions
+    this.gameStateManager = gameStateManager;
     board = new int[DEFAULT_BOARD_HEIGHT][DEFAULT_BOARD_WIDTH];
     this.width = DEFAULT_BOARD_WIDTH;
     this.height = DEFAULT_BOARD_HEIGHT;
@@ -58,24 +58,6 @@ public class GameBoard {
   }
 
   /**
-   * Set the link to a controller for the game board.
-   *
-   * @param controller the controller to set
-   */
-  public void setController(GameBoardController controller) {
-    this.controller = controller;
-  }
-
-  /**
-   * Get the current score.
-   *
-   * @return the current score
-   */
-  public GameBoardController getController() {
-    return controller;
-  }
-
-  /**
    * Updates the state of the game board. This method is called once per frame.
    * It handles the timing of tetrimino movement and updates the display.
    *
@@ -83,7 +65,7 @@ public class GameBoard {
    */
   public void update() throws IOException {
     frameCount++;
-    controller.updateDisplay(board);
+    gameStateManager.updateDisplay(board);
 
     // Stagger automatic tetrimino movement based on frame count
     // Moves the tetrimino down if the framecount is a multiple of the gamespeed
@@ -189,7 +171,7 @@ public class GameBoard {
     // If the tetrimino is placed visually outside the board, the game will end.
     if (isSpawnLocationOccupied()) currentTetrimino.setYPos(0);
 
-    controller.setNextPieceView(nextTetrimino);
+    gameStateManager.setNextPieceView(nextTetrimino); 
   }
 
   /**
@@ -225,7 +207,7 @@ public class GameBoard {
     for (int x = 0; x < width; x++) {
       for (int y = 0; y <= 1; y++) {
         if (board[y][x] != 0) {
-          controller.gameOver();
+          gameStateManager.gameOver();
           return true;
         }
       }
@@ -252,7 +234,7 @@ public class GameBoard {
     calculateScore(newLinesCleared);
     totalLinesCleared += newLinesCleared;
 
-    controller.updateLine(totalLinesCleared);
+    gameStateManager.updateLine(totalLinesCleared);
     updateLevel();
     changeGameSpeed();
   }
@@ -264,7 +246,7 @@ public class GameBoard {
    */
   private void updateLevel() {
     level = (totalLinesCleared / 10) + baseLevel;
-    controller.updateLevel(level);
+    gameStateManager.updateLevel(level);
     changeGameSpeed();
   }
 
@@ -291,7 +273,7 @@ public class GameBoard {
       default:
         break;
     }
-    controller.updateScore(score);
+    gameStateManager.updateScore(score);
   }
 
   /**
@@ -364,8 +346,8 @@ public class GameBoard {
       currentTetrimino.resetPosition();
     }
 
-    controller.setHoldPieceView(holdTetrimino);
-    controller.setNextPieceView(nextTetrimino);
+    gameStateManager.setHoldPieceView(holdTetrimino);
+    gameStateManager.setNextPieceView(nextTetrimino);
 
     holdUsed = true;
   }

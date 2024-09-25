@@ -3,10 +3,12 @@ package com.stackedsuccess.controllers;
 import com.stackedsuccess.Action;
 import com.stackedsuccess.GameControls;
 import com.stackedsuccess.GameInstance;
+import com.stackedsuccess.GameStateManager;
 import com.stackedsuccess.Main;
 import com.stackedsuccess.SceneManager;
 import com.stackedsuccess.SceneManager.AppUI;
 import com.stackedsuccess.ScoreRecorder;
+import com.stackedsuccess.TetriminoImageManager;
 import com.stackedsuccess.tetriminos.*;
 import java.io.IOException;
 import java.util.*;
@@ -30,7 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class GameBoardController {
+public class GameBoardController implements GameStateManager {
 
   @FXML Pane basePane;
   @FXML Pane holdPiece;
@@ -57,14 +59,16 @@ public class GameBoardController {
 
   @FXML private Button tutorialBtn;
 
-  private final Image blockImage =
-      new Image("file:src/main/resources/images/block.png", 42, 42, true, false);
-  private final Image highlightImage =
-      new Image("file:src/main/resources/images/highlight.png", 42, 42, true, false);
-
   private static final int SOLID_BLOCK_VALUE = -2;
 
-  private final GameInstance gameInstance = new GameInstance();
+  private final GameInstance gameInstance;
+  private final TetriminoImageManager imageManager;
+  
+
+  public GameBoardController() {
+    this.gameInstance = new GameInstance(this); 
+    this.imageManager = new TetriminoImageManager();
+  }
 
   private TutorialController tutorialController;
 
@@ -88,13 +92,8 @@ public class GameBoardController {
     Platform.runLater(
         () -> {
           gameInstance.start();
-          gameInstance.getGameBoard().setController(this);
           //updates the image of the next piece
-          nextPieceView.setImage(
-              new Image(
-                  "/images/"
-                      + gameInstance.getGameBoard().getNextTetrimino().getClass().getSimpleName()
-                      + ".png"));
+          nextPieceView.setImage(imageManager.getTetriminoImage(gameInstance.getGameBoard().getNextTetrimino().getClass()));
           setWindowCloseHandler(getStage());
         });
 
@@ -115,6 +114,7 @@ public class GameBoardController {
    */
 
   @FXML
+  @Override
   public void updateDisplay(int[][] board) {
     int[][] updatedBoard = addMovingPieces(board);
 
@@ -146,6 +146,7 @@ public class GameBoardController {
    */
 
   @FXML
+  @Override       
   public void gameOver() throws IOException {
     gameInstance.setGameOver(true);
     //saves the players score into the score.txt file
@@ -239,6 +240,7 @@ public class GameBoardController {
    *
    * @param score the current score
    */
+  @Override       
   public void updateScore(int score) {
     Platform.runLater(() -> scoreLabel.setText(String.valueOf(score)));
   }
@@ -248,6 +250,7 @@ public class GameBoardController {
    *
    * @param line the current level
    */
+  @Override       
   public void updateLine(int line) {
     Platform.runLater(() -> lineLabel.setText(String.valueOf(line)));
   }
@@ -257,6 +260,7 @@ public class GameBoardController {
    *
    * @param level the current level
    */
+  @Override       
   public void updateLevel(int level) {
     Platform.runLater(() -> levelLabel.setText(String.valueOf(level)));
   }
@@ -267,8 +271,9 @@ public class GameBoardController {
    *
    * @param tetrimino the tetrimino to be displayed in the next piece view
    */
+  @Override       
   public void setNextPieceView(Tetrimino tetrimino) {
-    Image image = new Image("/images/" + tetrimino.getClass().getSimpleName() + ".png");
+    Image image = imageManager.getTetriminoImage(tetrimino.getClass());
     nextPieceView.setImage(image);
   }
 
@@ -277,8 +282,9 @@ public class GameBoardController {
    *
    * @param tetrimino the tetrimino to be displayed in the hold image view
    */
+  @Override       
   public void setHoldPieceView(Tetrimino tetrimino) {
-    Image image = new Image("/images/" + tetrimino.getClass().getSimpleName() + ".png");
+    Image image = imageManager.getTetriminoImage(tetrimino.getClass());
     holdPieceView.setImage(image);
   }
 
@@ -362,12 +368,12 @@ public class GameBoardController {
    * @return ImageView of a game element
    */
   private ImageView getBlock(int blockValue) {
+    ImageView tetriminoBlock;
     if (blockValue == -1) {
-      return new ImageView(highlightImage);
-    }
-
-    ImageView tetriminoBlock = new ImageView(blockImage);
-    ColorAdjust colorAdjust = new ColorAdjust();
+        tetriminoBlock = new ImageView(imageManager.getHighlightImage());
+    } else {
+        tetriminoBlock = new ImageView(imageManager.getBlockImage());
+        ColorAdjust colorAdjust = new ColorAdjust();
 
     switch (blockValue) {
       case IShape.SPAWN_VALUE:
@@ -399,8 +405,10 @@ public class GameBoardController {
     }
 
     tetriminoBlock.setEffect(colorAdjust);
-    return tetriminoBlock;
   }
+
+  return tetriminoBlock;
+}
 
   /** Reset game scoring labels to default; for initialising the game */
   private void resetLabels() {
