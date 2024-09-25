@@ -1,7 +1,10 @@
 package com.stackedsuccess;
 
-import com.stackedsuccess.SceneManager.AppUI;
 import java.io.IOException;
+
+import com.stackedsuccess.managers.SceneManager;
+import com.stackedsuccess.managers.SceneManager.AppUI;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

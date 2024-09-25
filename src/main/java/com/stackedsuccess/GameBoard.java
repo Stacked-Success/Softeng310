@@ -1,5 +1,6 @@
 package com.stackedsuccess;
 
+import com.stackedsuccess.managers.GameStateManager;
 import com.stackedsuccess.tetriminos.*;
 import java.io.IOException;
 

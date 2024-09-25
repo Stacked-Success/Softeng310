@@ -169,6 +169,7 @@ If you have any inquiries related to this project or face any issues contact us 
 * [README Template](https://github.com/othneildrew/Best-README-Template?tab=readme-ov-file)
 * [Image Shields](https://shields.io)
 * [Project Image Attributions](https://github.com/Stacked-Success/Softeng310/blob/main/src/main/resources/images/attribution.md)
+* [Project Sound Effect Attributions](https://github.com/Stacked-Success/Softeng310/blob/main/src/main/resources/sounds/attribution.md)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

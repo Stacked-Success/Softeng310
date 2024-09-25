@@ -1,17 +1,14 @@
 package com.stackedsuccess.controllers;
 
-import com.stackedsuccess.Action;
-import com.stackedsuccess.GameControls;
 import com.stackedsuccess.GameInstance;
-import com.stackedsuccess.GameStateManager;
 import com.stackedsuccess.Main;
-import com.stackedsuccess.SceneManager;
-import com.stackedsuccess.SceneManager.AppUI;
+import com.stackedsuccess.managers.GameStateManager;
+import com.stackedsuccess.managers.SceneManager;
+import com.stackedsuccess.managers.TetriminoImageManager;
+import com.stackedsuccess.managers.SceneManager.AppUI;
 import com.stackedsuccess.ScoreRecorder;
-import com.stackedsuccess.TetriminoImageManager;
 import com.stackedsuccess.tetriminos.*;
 import java.io.IOException;
-import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;

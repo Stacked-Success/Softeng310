@@ -1,11 +1,8 @@
 package com.stackedsuccess.controllers;
 
 import com.stackedsuccess.Main;
-import com.stackedsuccess.SceneManager;
-import com.stackedsuccess.SceneManager.AppUI;
-
+import com.stackedsuccess.managers.SceneManager.AppUI;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 

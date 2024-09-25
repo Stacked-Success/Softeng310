@@ -84,7 +84,13 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
             <version>17.0.12</version>
-        </dependency>        
+        </dependency>     
+        
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>17.0.12</version>
+        </dependency>
 
     </dependencies>
 

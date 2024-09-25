@@ -1,8 +1,10 @@
 package com.stackedsuccess.controllers;
 
 import com.stackedsuccess.Main;
-import com.stackedsuccess.SceneManager;
-import com.stackedsuccess.SceneManager.AppUI;
+import com.stackedsuccess.managers.SceneManager;
+import com.stackedsuccess.managers.SceneManager.AppUI;
+import com.stackedsuccess.managers.SoundManager;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -24,7 +26,13 @@ public class HomeScreenController {
   @FXML private ListView<String> pastScores;
   @FXML private Button tutorialBtn;
 
+  private final SoundManager soundManager;
   private TutorialController tutorialController;
+
+  public HomeScreenController() {
+    soundManager = new SoundManager();
+}
+
 
   /**
    * Initialises the Home Screen controller by setting up the home screen.
@@ -41,6 +49,8 @@ public class HomeScreenController {
     pastScoresButton.setFocusTraversable(false);
     tutorialController = new TutorialController();
     tutorialController.setDestinationAppUI(AppUI.MAIN_MENU);
+    soundManager.playBackgroundMusic("mainmenu");
+
   }
 
   /**
