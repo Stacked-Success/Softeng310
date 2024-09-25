@@ -8,6 +8,7 @@ import com.stackedsuccess.Main;
 import com.stackedsuccess.SceneManager;
 import com.stackedsuccess.SceneManager.AppUI;
 import com.stackedsuccess.ScoreRecorder;
+import com.stackedsuccess.TetriminoImageManager;
 import com.stackedsuccess.tetriminos.*;
 import java.io.IOException;
 import java.util.*;
@@ -58,17 +59,15 @@ public class GameBoardController implements GameStateManager {
 
   @FXML private Button tutorialBtn;
 
-  private final Image blockImage =
-      new Image("file:src/main/resources/images/block.png", 42, 42, true, false);
-  private final Image highlightImage =
-      new Image("file:src/main/resources/images/highlight.png", 42, 42, true, false);
-
   private static final int SOLID_BLOCK_VALUE = -2;
 
   private final GameInstance gameInstance;
+  private final TetriminoImageManager imageManager;
+  
 
   public GameBoardController() {
     this.gameInstance = new GameInstance(this); 
+    this.imageManager = new TetriminoImageManager();
   }
 
   private TutorialController tutorialController;
@@ -94,11 +93,7 @@ public class GameBoardController implements GameStateManager {
         () -> {
           gameInstance.start();
           //updates the image of the next piece
-          nextPieceView.setImage(
-              new Image(
-                  "/images/"
-                      + gameInstance.getGameBoard().getNextTetrimino().getClass().getSimpleName()
-                      + ".png"));
+          nextPieceView.setImage(imageManager.getTetriminoImage(gameInstance.getGameBoard().getNextTetrimino().getClass()));
           setWindowCloseHandler(getStage());
         });
 
@@ -278,7 +273,7 @@ public class GameBoardController implements GameStateManager {
    */
   @Override       
   public void setNextPieceView(Tetrimino tetrimino) {
-    Image image = new Image("/images/" + tetrimino.getClass().getSimpleName() + ".png");
+    Image image = imageManager.getTetriminoImage(tetrimino.getClass());
     nextPieceView.setImage(image);
   }
 
@@ -289,7 +284,7 @@ public class GameBoardController implements GameStateManager {
    */
   @Override       
   public void setHoldPieceView(Tetrimino tetrimino) {
-    Image image = new Image("/images/" + tetrimino.getClass().getSimpleName() + ".png");
+    Image image = imageManager.getTetriminoImage(tetrimino.getClass());
     holdPieceView.setImage(image);
   }
 
@@ -373,12 +368,12 @@ public class GameBoardController implements GameStateManager {
    * @return ImageView of a game element
    */
   private ImageView getBlock(int blockValue) {
+    ImageView tetriminoBlock;
     if (blockValue == -1) {
-      return new ImageView(highlightImage);
-    }
-
-    ImageView tetriminoBlock = new ImageView(blockImage);
-    ColorAdjust colorAdjust = new ColorAdjust();
+        tetriminoBlock = new ImageView(imageManager.getHighlightImage());
+    } else {
+        tetriminoBlock = new ImageView(imageManager.getBlockImage());
+        ColorAdjust colorAdjust = new ColorAdjust();
 
     switch (blockValue) {
       case IShape.SPAWN_VALUE:
@@ -410,8 +405,10 @@ public class GameBoardController implements GameStateManager {
     }
 
     tetriminoBlock.setEffect(colorAdjust);
-    return tetriminoBlock;
   }
+
+  return tetriminoBlock;
+}
 
   /** Reset game scoring labels to default; for initialising the game */
   private void resetLabels() {
