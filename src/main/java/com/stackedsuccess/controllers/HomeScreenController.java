@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,13 +28,7 @@ public class HomeScreenController {
   @FXML private ListView<String> pastScores;
   @FXML private Button tutorialBtn;
 
-  private final SoundManager soundManager;
   private TutorialController tutorialController;
-
-  public HomeScreenController() {
-    soundManager = new SoundManager();
-}
-
 
   /**
    * Initialises the Home Screen controller by setting up the home screen.
@@ -49,8 +45,7 @@ public class HomeScreenController {
     pastScoresButton.setFocusTraversable(false);
     tutorialController = new TutorialController();
     tutorialController.setDestinationAppUI(AppUI.MAIN_MENU);
-    soundManager.playBackgroundMusic("mainmenu");
-
+    Platform.runLater(() -> SoundManager.getInstance().playBackgroundMusic("mainmenu"));
   }
 
   /**
@@ -143,6 +138,8 @@ public class HomeScreenController {
     controller.updateLevel(initialLevel);
     SceneManager.addScene(AppUI.GAME, root);
     Main.setUi(AppUI.GAME);
+    SoundManager.getInstance().stopBackgroundMusic("mainmenu");
+    SoundManager.getInstance().playBackgroundMusic("ingame");
   }
 
   /**
