@@ -3,7 +3,7 @@ package com.stackedsuccess.controllers;
 import com.stackedsuccess.Main;
 import com.stackedsuccess.managers.SceneManager;
 import com.stackedsuccess.managers.SceneManager.AppUI;
-import com.stackedsuccess.managers.SoundManager;
+import com.stackedsuccess.managers.sound.SoundManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

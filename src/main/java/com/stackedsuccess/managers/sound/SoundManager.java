@@ -1,4 +1,4 @@
-package com.stackedsuccess.managers;
+package com.stackedsuccess.managers.sound;
 
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
@@ -16,8 +16,8 @@ public class SoundManager {
     private static final String SOUND_PATH = "src/main/resources/sounds/";
     private static final String SOUND_EXTENSION = ".wav";
 
-    private Map<String, AudioClip> soundEffects;
-    private Map<String, MediaPlayer> mediaPlayers;
+    private Map<String, AudioClipWrapper> soundEffects;
+    private Map<String, MediaPlayerWrapper> mediaPlayers;
     private Map<String, String> mediaStates;
     private boolean isSoundEffectsMuted;
     private boolean isBackgroundMusicMuted;
@@ -78,27 +78,28 @@ public class SoundManager {
      * Loads a sound effect from a file.
      * 
      * @param soundName the name of the sound effect file (without extension)
-     * @return the AudioClip object representing the sound effect
+     * @return the AudioClipWrapper object representing the sound effect
      */
-    private AudioClip loadSoundEffect(String soundName) {
+    private AudioClipWrapper loadSoundEffect(String soundName) {
         String path = SOUND_PATH + soundName + SOUND_EXTENSION;
-        return new AudioClip(new File(path).toURI().toString());
+        AudioClip audioClip = new AudioClip(new File(path).toURI().toString());
+        return new AudioClipWrapperImpl(audioClip);
     }
 
     /**
      * Loads background music from a file.
      * 
      * @param mediaName the name of the background music file (without extension)
-     * @return the MediaPlayer object representing the background music, or null if loading fails
+     * @return the MediaPlayerWrapper object representing the background music, or null if loading fails
      */
-    private MediaPlayer loadMedia(String mediaName) {
+    private MediaPlayerWrapper loadMedia(String mediaName) {
         String path = SOUND_PATH + mediaName + SOUND_EXTENSION;
         try {
             Media media = new Media(new File(path).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             mediaPlayer.setVolume(0.7);
-            return mediaPlayer;
+            return new MediaPlayerWrapperImpl(mediaPlayer);
         } catch (Exception e) {
             return null;
         }
@@ -114,7 +115,7 @@ public class SoundManager {
             return;
         }
 
-        AudioClip soundEffect = soundEffects.get(soundKey);
+        AudioClipWrapper soundEffect = soundEffects.get(soundKey);
         if (soundEffect != null) {
             soundEffect.play();
         } else {
@@ -132,7 +133,7 @@ public class SoundManager {
             return;
         }
 
-        MediaPlayer mediaPlayer = mediaPlayers.get(mediaKey);
+        MediaPlayerWrapper mediaPlayer = mediaPlayers.get(mediaKey);
         if (mediaPlayer != null) {
             if ("playing".equals(mediaStates.get(mediaKey))) {
                 return;
@@ -154,7 +155,7 @@ public class SoundManager {
             return;
         }
 
-        MediaPlayer mediaPlayer = mediaPlayers.get(mediaKey);
+        MediaPlayerWrapper mediaPlayer = mediaPlayers.get(mediaKey);
         if (mediaPlayer != null) {
             if ("playing".equals(mediaStates.get(mediaKey))) {
                 mediaPlayer.pause();
@@ -177,7 +178,7 @@ public class SoundManager {
             return;
         }
 
-        MediaPlayer mediaPlayer = mediaPlayers.get(mediaKey);
+        MediaPlayerWrapper mediaPlayer = mediaPlayers.get(mediaKey);
         if (mediaPlayer != null) {
             if ("paused".equals(mediaStates.get(mediaKey))) {
                 mediaPlayer.play();
@@ -200,7 +201,7 @@ public class SoundManager {
             return;
         }
 
-        MediaPlayer mediaPlayer = mediaPlayers.get(mediaKey);
+        MediaPlayerWrapper mediaPlayer = mediaPlayers.get(mediaKey);
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaStates.put(mediaKey, "stopped");
@@ -217,8 +218,8 @@ public class SoundManager {
             return;
         }
 
-        for (Map.Entry<String, MediaPlayer> entry : mediaPlayers.entrySet()) {
-            MediaPlayer mediaPlayer = entry.getValue();
+        for (Map.Entry<String, MediaPlayerWrapper> entry : mediaPlayers.entrySet()) {
+            MediaPlayerWrapper mediaPlayer = entry.getValue();
             if (mediaPlayer != null && "playing".equals(mediaStates.get(entry.getKey()))) {
                 mediaPlayer.stop();
                 mediaStates.put(entry.getKey(), "stopped");
@@ -255,20 +256,20 @@ public class SoundManager {
     public synchronized void muteBackgroundMusic() {
         isBackgroundMusicMuted = true;
         for (String mediaKey : mediaPlayers.keySet()) {
-            MediaPlayer mediaPlayer = mediaPlayers.get(mediaKey);
+            MediaPlayerWrapper mediaPlayer = mediaPlayers.get(mediaKey);
             if (mediaPlayer != null && "playing".equals(mediaStates.get(mediaKey))) {
                 mediaPlayer.setVolume(0);
             }
         }
     }
-    
+
     /**
      * Unmutes all background music by restoring their volume to the default level.
      */
     public synchronized void unmuteBackgroundMusic() {
         isBackgroundMusicMuted = false;
         for (String mediaKey : mediaPlayers.keySet()) {
-            MediaPlayer mediaPlayer = mediaPlayers.get(mediaKey);
+            MediaPlayerWrapper mediaPlayer = mediaPlayers.get(mediaKey);
             if (mediaPlayer != null && "playing".equals(mediaStates.get(mediaKey))) {
                 mediaPlayer.setVolume(1);
             }
@@ -282,5 +283,23 @@ public class SoundManager {
      */
     public synchronized boolean isBackgroundMusicMuted() {
         return isBackgroundMusicMuted;
+    }
+
+    /**
+     * Returns the map of media players used for background music in the application.
+     *
+     * @return a map where the keys are music identifiers (e.g., "mainmenu", "ingame") and the values are {@link MediaPlayerWrapper} instances.
+     */
+    public Map<String, MediaPlayerWrapper> getMediaPlayers() {
+        return mediaPlayers;
+    }
+
+    /**
+     * Returns the map of sound effects used in the application.
+     * 
+     * @return a map where the keys are sound effect identifiers (e.g., "gameover", "rotate") and the values are {@link AudioClipWrapper} instances.
+     */
+    public Map<String, AudioClipWrapper> getSoundEffects() {
+        return soundEffects;
     }
 }
