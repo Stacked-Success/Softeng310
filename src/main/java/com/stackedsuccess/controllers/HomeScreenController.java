@@ -1,21 +1,27 @@
 package com.stackedsuccess.controllers;
 
 import com.stackedsuccess.Main;
-import com.stackedsuccess.SceneManager;
-import com.stackedsuccess.SceneManager.AppUI;
+import com.stackedsuccess.managers.SceneManager;
+import com.stackedsuccess.managers.SceneManager.AppUI;
+import com.stackedsuccess.managers.SoundManager;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class HomeScreenController {
   @FXML Slider difficultySlider;
@@ -23,6 +29,10 @@ public class HomeScreenController {
   @FXML private Button pastScoresButton;
   @FXML private ListView<String> pastScores;
   @FXML private Button tutorialBtn;
+  @FXML AnchorPane settingsPane;
+  @FXML AnchorPane mainPane;
+  @FXML RadioButton soundBtn;
+  @FXML RadioButton musicBtn;
 
   private TutorialController tutorialController;
 
@@ -41,7 +51,80 @@ public class HomeScreenController {
     pastScoresButton.setFocusTraversable(false);
     tutorialController = new TutorialController();
     tutorialController.setDestinationAppUI(AppUI.MAIN_MENU);
+    updateSoundButtonState();
+    updateMusicButtonState();
+    Platform.runLater(() -> SoundManager.getInstance().playBackgroundMusic("mainmenu"));
   }
+
+   /**
+   * Updates the state of the sound effects toggle button.
+   *
+   * <p>This method sets the toggle button text and selection state
+   * based on whether the sound effects are muted or not.</p>
+   */
+  private void updateSoundButtonState() {
+    if (SoundManager.getInstance().isSoundEffectsMuted()) {
+        soundBtn.setSelected(false);
+        soundBtn.setText("OFF");
+    } else {
+        soundBtn.setSelected(true);
+        soundBtn.setText("ON");
+    }
+}
+
+/**
+   * Updates the state of the background music toggle button.
+   *
+   * <p>This method sets the toggle button text and selection state
+   * based on whether the background music is muted or not.</p>
+   */
+private void updateMusicButtonState() {
+    if (SoundManager.getInstance().isBackgroundMusicMuted()) {
+        musicBtn.setSelected(false);
+        musicBtn.setText("OFF");
+    } else {
+        musicBtn.setSelected(true);
+        musicBtn.setText("ON");
+    }
+}
+
+ /**
+   * Toggles the sound effects on or off based on the current state.
+   *
+   * <p>If the sound effects are currently muted, this method unmutes them
+   * and updates the button text to "ON". If they are not muted, it mutes them
+   * and updates the button text to "OFF".</p>
+   */
+@FXML
+public void toggleSound() {
+    SoundManager soundManager = SoundManager.getInstance();
+    if (soundManager.isSoundEffectsMuted()) {
+        soundManager.unmuteSoundEffects();
+        soundBtn.setText("ON");
+    } else {
+        soundManager.muteSoundEffects();
+        soundBtn.setText("OFF");
+    }
+}
+
+ /**
+   * Toggles the background music on or off based on the current state.
+   *
+   * <p>If the background music is currently muted, this method unmutes it
+   * and updates the button text to "ON". If it is not muted, it mutes the music
+   * and updates the button text to "OFF".</p>
+   */
+@FXML
+public void toggleMusic() {
+    SoundManager soundManager = SoundManager.getInstance();
+    if (soundManager.isBackgroundMusicMuted()) {
+        soundManager.unmuteBackgroundMusic();
+        musicBtn.setText("ON");
+    } else {
+        soundManager.muteBackgroundMusic();
+        musicBtn.setText("OFF");
+    }
+}
 
   /**
    * Reads scores from a file and returns them as a list of strings.
@@ -71,6 +154,16 @@ public class HomeScreenController {
    */
   public void exitGame() {
     System.exit(0);
+  }
+
+  public void onSettings() {
+    settingsPane.setVisible(true);
+    mainPane.setDisable(true);
+  }
+
+  public void onSettingsBack() {
+    settingsPane.setVisible(false);
+    mainPane.setDisable(false);
   }
 
   /**
@@ -133,6 +226,8 @@ public class HomeScreenController {
     controller.updateLevel(initialLevel);
     SceneManager.addScene(AppUI.GAME, root);
     Main.setUi(AppUI.GAME);
+    SoundManager.getInstance().stopBackgroundMusic("mainmenu");
+    SoundManager.getInstance().playBackgroundMusic("ingame");
   }
 
   /**

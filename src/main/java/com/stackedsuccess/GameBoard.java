@@ -1,5 +1,7 @@
 package com.stackedsuccess;
 
+import com.stackedsuccess.managers.GameStateManager;
+import com.stackedsuccess.managers.SoundManager;
 import com.stackedsuccess.tetriminos.*;
 import java.io.IOException;
 
@@ -229,6 +231,7 @@ public class GameBoard {
         //moves all the rows that are above, down one
         newLinesCleared++;
         shiftRowsDown(y);
+        SoundManager.getInstance().playSoundEffect("layer");
       }
     }
     calculateScore(newLinesCleared);

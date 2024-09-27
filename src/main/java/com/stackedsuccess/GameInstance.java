@@ -1,5 +1,7 @@
 package com.stackedsuccess;
 
+import com.stackedsuccess.managers.GameStateManager;
+import com.stackedsuccess.managers.SoundManager;
 import com.stackedsuccess.tetriminos.Tetrimino;
 import java.io.IOException;
 import java.util.Timer;
@@ -108,15 +110,39 @@ public class GameInstance {
     if (action != null) {
       if (updatesTetrimino(action) && !isPaused) {
         gameBoard.getCurrentTetrimino().updateTetrimino(gameBoard, action);
+        playSoundForAction(action);
       } else {
         if (action == Action.PAUSE) {
           togglePause();
         } else if (action == Action.HOLD) {
           gameBoard.holdTetrimino();
+          SoundManager.getInstance().playSoundEffect("hold");
         }
       }
     }
   }
+
+   /**
+   * Plays the appropriate sound effect based on the action performed.
+   *
+   * <p>This method plays different sound effects depending on the action, such as
+   * rotating or dropping the Tetrimino.</p>
+   *
+   * @param action the action for which to play a sound effect
+   */
+  private void playSoundForAction(Action action) {
+    switch (action) {
+        case ROTATE_CLOCKWISE:
+        case ROTATE_COUNTERCLOCKWISE:
+        SoundManager.getInstance().playSoundEffect("rotate");
+            break;
+        case HARD_DROP:
+        SoundManager.getInstance().playSoundEffect("drop");
+            break;
+        default:
+            break;
+    }
+}
 
   /** Toggles the game to be paused, halting game updates. */
   public void togglePause() {

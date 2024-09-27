@@ -2,5 +2,4 @@
 
 This project makes use of the following images:
 
-- [exampleimage.png](https://example.com)
-- [exampleimage.jpg](https://example.com)
+- settings.png - <a href='https://pngtree.com/freepng/game-settings-interface_6014299.html'>png image from pngtree.com/</a>

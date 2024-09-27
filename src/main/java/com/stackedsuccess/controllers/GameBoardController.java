@@ -1,17 +1,15 @@
 package com.stackedsuccess.controllers;
 
-import com.stackedsuccess.Action;
-import com.stackedsuccess.GameControls;
 import com.stackedsuccess.GameInstance;
-import com.stackedsuccess.GameStateManager;
 import com.stackedsuccess.Main;
-import com.stackedsuccess.SceneManager;
-import com.stackedsuccess.SceneManager.AppUI;
+import com.stackedsuccess.managers.GameStateManager;
+import com.stackedsuccess.managers.SceneManager;
+import com.stackedsuccess.managers.TetriminoImageManager;
+import com.stackedsuccess.managers.SceneManager.AppUI;
+import com.stackedsuccess.managers.SoundManager;
 import com.stackedsuccess.ScoreRecorder;
-import com.stackedsuccess.TetriminoImageManager;
 import com.stackedsuccess.tetriminos.*;
 import java.io.IOException;
-import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -56,6 +54,7 @@ public class GameBoardController implements GameStateManager {
   @FXML Label gameOverHighScoreLabel;
   @FXML Button gameOverExitButton;
   @FXML Button gameOverRestartButton;
+  @FXML Button mainMenuBtn;
 
   @FXML private Button tutorialBtn;
 
@@ -64,10 +63,9 @@ public class GameBoardController implements GameStateManager {
   private final GameInstance gameInstance;
   private final TetriminoImageManager imageManager;
   
-
   public GameBoardController() {
-    this.gameInstance = new GameInstance(this); 
-    this.imageManager = new TetriminoImageManager();
+    gameInstance = new GameInstance(this); 
+    imageManager = new TetriminoImageManager();
   }
 
   private TutorialController tutorialController;
@@ -151,7 +149,8 @@ public class GameBoardController implements GameStateManager {
     gameInstance.setGameOver(true);
     //saves the players score into the score.txt file
     ScoreRecorder.saveScore(scoreLabel.getText());
-    playGameOverAnimation();
+    playGameOverAnimation();       
+    SoundManager.getInstance().playSoundEffect("gameover");
   }
 
   /**
@@ -184,8 +183,9 @@ public class GameBoardController implements GameStateManager {
       basePane.requestFocus();
       pauseBackground.toBack();
       pauseLabelBackground.toBack();
-      pauseBackground.setOpacity(0);
+      pauseBackground.setOpacity(0); 
       pauseLabelBackground.setOpacity(0);
+      SoundManager.getInstance().resumeBackgroundMusic("ingame");
     }
     else{
       pauseBackground.toFront();
@@ -194,6 +194,7 @@ public class GameBoardController implements GameStateManager {
       pauseButton.toFront();
       pauseBackground.setOpacity(0.5);
       pauseLabelBackground.setOpacity(1);
+      SoundManager.getInstance().pauseBackgroundMusic("ingame");
     }
   }
 
@@ -206,7 +207,7 @@ public class GameBoardController implements GameStateManager {
   @FXML
   public void onClickPauseButton() {
     togglePauseScreen();
-    gameInstance.togglePause();
+    gameInstance.togglePause();       
   }
 
   /**
@@ -231,6 +232,7 @@ public class GameBoardController implements GameStateManager {
    */
   @FXML
   void onClickRestart(ActionEvent event) throws IOException {
+    SoundManager.getInstance().stopBackgroundMusic("ingame");
     SceneManager.addScene(AppUI.MAIN_MENU, loadFxml("HomeScreen"));
     Main.setUi(AppUI.MAIN_MENU);
   }
@@ -464,6 +466,10 @@ public class GameBoardController implements GameStateManager {
         animationTimeline.getKeyFrames().add(keyFrame);
       }
     }
+    animationTimeline.setOnFinished(event -> {
+      SoundManager.getInstance().playSoundEffect("secondgameover");
+      mainMenuBtn.setVisible(true);
+  });
 
     animationTimeline.play();
   }
