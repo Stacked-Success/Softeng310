@@ -54,6 +54,7 @@ public class GameBoardController implements GameStateManager {
   @FXML Label gameOverHighScoreLabel;
   @FXML Button gameOverExitButton;
   @FXML Button gameOverRestartButton;
+  @FXML Button mainMenuBtn;
 
   @FXML private Button tutorialBtn;
 
@@ -467,6 +468,7 @@ public class GameBoardController implements GameStateManager {
     }
     animationTimeline.setOnFinished(event -> {
       SoundManager.getInstance().playSoundEffect("secondgameover");
+      mainMenuBtn.setVisible(true);
   });
 
     animationTimeline.play();

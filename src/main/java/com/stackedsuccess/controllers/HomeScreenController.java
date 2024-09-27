@@ -30,6 +30,7 @@ public class HomeScreenController {
   @FXML private ListView<String> pastScores;
   @FXML private Button tutorialBtn;
   @FXML AnchorPane settingsPane;
+  @FXML AnchorPane mainPane;
   @FXML RadioButton soundBtn;
   @FXML RadioButton musicBtn;
 
@@ -157,10 +158,12 @@ public void toggleMusic() {
 
   public void onSettings() {
     settingsPane.setVisible(true);
+    mainPane.setDisable(true);
   }
 
   public void onSettingsBack() {
     settingsPane.setVisible(false);
+    mainPane.setDisable(false);
   }
 
   /**

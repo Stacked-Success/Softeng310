@@ -50,23 +50,23 @@
       <Pane fx:id="pauseBackground" onKeyPressed="#onKeyPressed" opacity="0.0" prefHeight="900.0" prefWidth="1350.0" style="-fx-background-color: grey;" />
       <Pane fx:id="pauseLabelBackground" onKeyPressed="#onKeyPressed" opacity="0.0" prefHeight="900.0" prefWidth="1350.0">
          <children>
-            <Label fx:id="pauseLabel" alignment="CENTER" layoutX="426.0" layoutY="380.0" prefHeight="141.0" prefWidth="499.0" text="P A U S E D" textFill="#fdfad0">
+            <Label fx:id="pauseLabel" alignment="CENTER" layoutX="426.0" layoutY="250.0" prefHeight="141.0" prefWidth="499.0" text="P A U S E D" textFill="#fdfad0">
                <font>
                   <Font name="Arial" size="84.0" />
                </font>
             </Label>
-            <Button fx:id="tutorialBtn" layoutX="585.0" layoutY="533.0" mnemonicParsing="false" onMouseClicked="#goToTutorial" prefHeight="49.0" prefWidth="180.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Tutorial" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="tutorialBtn" layoutX="585.0" layoutY="450.0" mnemonicParsing="false" onMouseClicked="#goToTutorial" prefHeight="49.0" prefWidth="180.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Tutorial" textAlignment="CENTER">
                <font>
                   <Font name="Arial Bold" size="24.0" />
                </font>
             </Button>
+            <Button fx:id="gameOverRestartButton" layoutX="564.0" layoutY="570.0" mnemonicParsing="false" onAction="#onClickRestart" prefHeight="40.0" prefWidth="222.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Restart / Main Menu" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children>
       </Pane>
-      <Button fx:id="gameOverRestartButton" layoutX="54.0" layoutY="567.0" mnemonicParsing="false" onAction="#onClickRestart" prefHeight="40.0" prefWidth="222.0" style="-fx-background-color: #ffffff;" text="Restart / Main Menu">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
       <Button fx:id="gameOverExitButton" layoutX="55.0" layoutY="665.0" mnemonicParsing="false" onAction="#onClickExit" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #ffffff;" text="EXIT">
          <cursor>
             <Cursor fx:constant="HAND" />
@@ -149,7 +149,7 @@
             </Pane>
          </children>
       </VBox>
-      <Label alignment="TOP_LEFT" layoutX="19.0" layoutY="33.0" prefHeight="92.0" prefWidth="364.0" style="-fx-font-weight: BOLD;" styleClass="gen-text" text="TETRIS: STACKED SUCCESS" textFill="#525252" wrapText="true">
+      <Label alignment="TOP_LEFT" layoutX="16.0" layoutY="33.0" prefHeight="92.0" prefWidth="399.0" style="-fx-font-weight: BOLD;" styleClass="gen-text" text="STACKED SUCCESS" textFill="#525252" wrapText="true">
          <effect>
             <DropShadow color="GRAY" offsetX="5.0" offsetY="5.0" />
          </effect>
@@ -226,5 +226,10 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#484848" height="33.0" layoutX="12.0" layoutY="-3.0" stroke="TRANSPARENT" strokeType="INSIDE" width="491.0" />
          </children>
       </Pane>
+      <Button fx:id="mainMenuBtn" layoutX="563.0" layoutY="600.0" mnemonicParsing="false" onAction="#onClickRestart" prefHeight="40.0" prefWidth="222.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Main Menu" visible="false">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </Pane>
