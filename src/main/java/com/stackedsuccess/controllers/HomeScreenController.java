@@ -55,6 +55,12 @@ public class HomeScreenController {
     Platform.runLater(() -> SoundManager.getInstance().playBackgroundMusic("mainmenu"));
   }
 
+   /**
+   * Updates the state of the sound effects toggle button.
+   *
+   * <p>This method sets the toggle button text and selection state
+   * based on whether the sound effects are muted or not.</p>
+   */
   private void updateSoundButtonState() {
     if (SoundManager.getInstance().isSoundEffectsMuted()) {
         soundBtn.setSelected(false);
@@ -65,6 +71,12 @@ public class HomeScreenController {
     }
 }
 
+/**
+   * Updates the state of the background music toggle button.
+   *
+   * <p>This method sets the toggle button text and selection state
+   * based on whether the background music is muted or not.</p>
+   */
 private void updateMusicButtonState() {
     if (SoundManager.getInstance().isBackgroundMusicMuted()) {
         musicBtn.setSelected(false);
@@ -75,6 +87,13 @@ private void updateMusicButtonState() {
     }
 }
 
+ /**
+   * Toggles the sound effects on or off based on the current state.
+   *
+   * <p>If the sound effects are currently muted, this method unmutes them
+   * and updates the button text to "ON". If they are not muted, it mutes them
+   * and updates the button text to "OFF".</p>
+   */
 @FXML
 public void toggleSound() {
     SoundManager soundManager = SoundManager.getInstance();
@@ -87,6 +106,13 @@ public void toggleSound() {
     }
 }
 
+ /**
+   * Toggles the background music on or off based on the current state.
+   *
+   * <p>If the background music is currently muted, this method unmutes it
+   * and updates the button text to "ON". If it is not muted, it mutes the music
+   * and updates the button text to "OFF".</p>
+   */
 @FXML
 public void toggleMusic() {
     SoundManager soundManager = SoundManager.getInstance();

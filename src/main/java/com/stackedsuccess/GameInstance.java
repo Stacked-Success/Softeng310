@@ -122,6 +122,14 @@ public class GameInstance {
     }
   }
 
+   /**
+   * Plays the appropriate sound effect based on the action performed.
+   *
+   * <p>This method plays different sound effects depending on the action, such as
+   * rotating or dropping the Tetrimino.</p>
+   *
+   * @param action the action for which to play a sound effect
+   */
   private void playSoundForAction(Action action) {
     switch (action) {
         case ROTATE_CLOCKWISE:
