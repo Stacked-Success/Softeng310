@@ -2,7 +2,9 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -30,7 +32,7 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <Button id="settings" focusTraversable="false" layoutX="987.0" layoutY="68.0" mnemonicParsing="false" text="Settings">
+      <Button id="settings" focusTraversable="false" layoutX="987.0" layoutY="68.0" mnemonicParsing="false" onAction="#onSettings" text="Settings">
          <font>
             <Font size="20.0" />
          </font>
@@ -53,5 +55,32 @@
             <Font size="20.0" />
          </font>
       </Button>
+      <AnchorPane fx:id="settingsPane" layoutX="360.0" layoutY="160.0" prefHeight="578.0" prefWidth="677.0" visible="false">
+         <children>
+            <ImageView fitHeight="724.0" fitWidth="706.0" layoutX="-58.0" layoutY="-128.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/settings.png" />
+               </image>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </ImageView>
+            <Button id="back" layoutX="223.0" layoutY="356.0" mnemonicParsing="false" onAction="#onSettingsBack" prefHeight="54.0" prefWidth="176.0" text="Go Back">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Button>
+            <RadioButton fx:id="soundBtn" layoutX="376.0" layoutY="168.0" mnemonicParsing="false" onAction="#toggleSound" selected="true" text="ON">
+               <font>
+                   <Font name="System Bold" size="25.0" />
+               </font>
+           </RadioButton>
+           <RadioButton fx:id="musicBtn" layoutX="376.0" layoutY="250.0" mnemonicParsing="false" onAction="#toggleMusic" text="ON">
+               <font>
+                   <Font name="System Bold" size="25.0" />
+               </font>
+           </RadioButton>
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>

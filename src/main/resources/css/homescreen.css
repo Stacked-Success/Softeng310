@@ -50,6 +50,10 @@
     -fx-background-color: #f44336; /* Red background */
 }
 
+.button#back {
+    -fx-background-color: #e9ba20; /* Red background */
+}
+
 .button#settings {
     -fx-background-color: #2196F3; /* Blue background */
 }
@@ -65,6 +69,10 @@
 /* Hover effects for specific Buttons */
 .button#startGame:hover {
     -fx-background-color: #388E3C; /* Darker green for start button hover */
+}
+
+.button#back:hover {
+    -fx-background-color: #e4b20d; /* Red background */
 }
 
 .button#exitGame:hover {

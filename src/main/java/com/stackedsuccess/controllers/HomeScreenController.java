@@ -17,9 +17,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class HomeScreenController {
   @FXML Slider difficultySlider;
@@ -27,6 +29,9 @@ public class HomeScreenController {
   @FXML private Button pastScoresButton;
   @FXML private ListView<String> pastScores;
   @FXML private Button tutorialBtn;
+  @FXML AnchorPane settingsPane;
+  @FXML RadioButton soundBtn;
+  @FXML RadioButton musicBtn;
 
   private TutorialController tutorialController;
 
@@ -45,8 +50,54 @@ public class HomeScreenController {
     pastScoresButton.setFocusTraversable(false);
     tutorialController = new TutorialController();
     tutorialController.setDestinationAppUI(AppUI.MAIN_MENU);
+    updateSoundButtonState();
+    updateMusicButtonState();
     Platform.runLater(() -> SoundManager.getInstance().playBackgroundMusic("mainmenu"));
   }
+
+  private void updateSoundButtonState() {
+    if (SoundManager.getInstance().isSoundEffectsMuted()) {
+        soundBtn.setSelected(false);
+        soundBtn.setText("OFF");
+    } else {
+        soundBtn.setSelected(true);
+        soundBtn.setText("ON");
+    }
+}
+
+private void updateMusicButtonState() {
+    if (SoundManager.getInstance().isBackgroundMusicMuted()) {
+        musicBtn.setSelected(false);
+        musicBtn.setText("OFF");
+    } else {
+        musicBtn.setSelected(true);
+        musicBtn.setText("ON");
+    }
+}
+
+@FXML
+public void toggleSound() {
+    SoundManager soundManager = SoundManager.getInstance();
+    if (soundManager.isSoundEffectsMuted()) {
+        soundManager.unmuteSoundEffects();
+        soundBtn.setText("ON");
+    } else {
+        soundManager.muteSoundEffects();
+        soundBtn.setText("OFF");
+    }
+}
+
+@FXML
+public void toggleMusic() {
+    SoundManager soundManager = SoundManager.getInstance();
+    if (soundManager.isBackgroundMusicMuted()) {
+        soundManager.unmuteBackgroundMusic();
+        musicBtn.setText("ON");
+    } else {
+        soundManager.muteBackgroundMusic();
+        musicBtn.setText("OFF");
+    }
+}
 
   /**
    * Reads scores from a file and returns them as a list of strings.
@@ -76,6 +127,14 @@ public class HomeScreenController {
    */
   public void exitGame() {
     System.exit(0);
+  }
+
+  public void onSettings() {
+    settingsPane.setVisible(true);
+  }
+
+  public void onSettingsBack() {
+    settingsPane.setVisible(false);
   }
 
   /**

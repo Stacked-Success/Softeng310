@@ -16,13 +16,15 @@ public class SoundManager {
     private Map<String, AudioClip> soundEffects;
     private Map<String, MediaPlayer> mediaPlayers;
     private Map<String, String> mediaStates;
-    private boolean isMuted;
+    private boolean isSoundEffectsMuted;
+    private boolean isBackgroundMusicMuted;
 
     private SoundManager() {
         soundEffects = new HashMap<>();
         mediaPlayers = new HashMap<>();
         mediaStates = new HashMap<>();
-        isMuted = false;
+        isSoundEffectsMuted = false;
+        isBackgroundMusicMuted = false;
         loadDefaultSounds();
     }
 
@@ -44,7 +46,6 @@ public class SoundManager {
         soundEffects.put("layer", loadSoundEffect("layer"));
         soundEffects.put("secondgameover", loadSoundEffect("secondgameover"));
 
-        // Initialize all media states to "stopped"
         mediaPlayers.keySet().forEach(key -> mediaStates.put(key, "stopped"));
     }
 
@@ -67,7 +68,7 @@ public class SoundManager {
     }
 
     public synchronized void playSoundEffect(String soundKey) {
-        if (isMuted) {
+        if (isSoundEffectsMuted) {
             return;
         }
 
@@ -80,7 +81,7 @@ public class SoundManager {
     }
 
     public synchronized void playBackgroundMusic(String mediaKey) {
-        if (isMuted) {
+        if (isBackgroundMusicMuted) {
             return;
         }
 
@@ -97,6 +98,10 @@ public class SoundManager {
     }
 
     public synchronized void pauseBackgroundMusic(String mediaKey) {
+        if (isBackgroundMusicMuted) {
+            return;
+        }
+
         MediaPlayer mediaPlayer = mediaPlayers.get(mediaKey);
         if (mediaPlayer != null) {
             if ("playing".equals(mediaStates.get(mediaKey))) {
@@ -111,6 +116,10 @@ public class SoundManager {
     }
 
     public synchronized void resumeBackgroundMusic(String mediaKey) {
+        if (isBackgroundMusicMuted) {
+            return;
+        }
+
         MediaPlayer mediaPlayer = mediaPlayers.get(mediaKey);
         if (mediaPlayer != null) {
             if ("paused".equals(mediaStates.get(mediaKey))) {
@@ -125,6 +134,10 @@ public class SoundManager {
     }
 
     public synchronized void stopBackgroundMusic(String mediaKey) {
+        if (isBackgroundMusicMuted) {
+            return;
+        }
+
         MediaPlayer mediaPlayer = mediaPlayers.get(mediaKey);
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -135,6 +148,10 @@ public class SoundManager {
     }
 
     public synchronized void stopAllBackgroundMusic() {
+        if (isBackgroundMusicMuted) {
+            return;
+        }
+
         for (Map.Entry<String, MediaPlayer> entry : mediaPlayers.entrySet()) {
             MediaPlayer mediaPlayer = entry.getValue();
             if (mediaPlayer != null && "playing".equals(mediaStates.get(entry.getKey()))) {
@@ -144,29 +161,40 @@ public class SoundManager {
         }
     }
 
-    public synchronized void mute() {
-        if (!isMuted) {
-            isMuted = true;
-            for (MediaPlayer mediaPlayer : mediaPlayers.values()) {
-                if ("playing".equals(mediaStates.get(mediaPlayer))) {
-                    mediaPlayer.setVolume(0);
-                }
+    // Mute/Unmute Sound Effects
+    public synchronized void muteSoundEffects() {
+        isSoundEffectsMuted = true;
+    }
+
+    public synchronized void unmuteSoundEffects() {
+        isSoundEffectsMuted = false;
+    }
+
+    public synchronized boolean isSoundEffectsMuted() {
+        return isSoundEffectsMuted;
+    }
+
+    public synchronized void muteBackgroundMusic() {
+        isBackgroundMusicMuted = true;
+        for (String mediaKey : mediaPlayers.keySet()) {
+            MediaPlayer mediaPlayer = mediaPlayers.get(mediaKey);
+            if (mediaPlayer != null && "playing".equals(mediaStates.get(mediaKey))) {
+                mediaPlayer.setVolume(0);
+            }
+        }
+    }
+    
+    public synchronized void unmuteBackgroundMusic() {
+        isBackgroundMusicMuted = false;
+        for (String mediaKey : mediaPlayers.keySet()) {
+            MediaPlayer mediaPlayer = mediaPlayers.get(mediaKey);
+            if (mediaPlayer != null && "playing".equals(mediaStates.get(mediaKey))) {
+                mediaPlayer.setVolume(1);
             }
         }
     }
 
-    public synchronized void unmute() {
-        if (isMuted) {
-            isMuted = false;
-            for (MediaPlayer mediaPlayer : mediaPlayers.values()) {
-                if ("playing".equals(mediaStates.get(mediaPlayer))) {
-                    mediaPlayer.setVolume(1);
-                }
-            }
-        }
-    }
-
-    public synchronized boolean isMuted() {
-        return isMuted;
+    public synchronized boolean isBackgroundMusicMuted() {
+        return isBackgroundMusicMuted;
     }
 }
