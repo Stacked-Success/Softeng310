@@ -123,6 +123,7 @@ You will need the following software installed:
 * [Stacked-Success Versions](https://github.com/Stacked-Success/Softeng310/releases)
 
  **View individual versions**:
+* [Stacked-Success v1.0.3](https://github.com/Stacked-Success/Softeng310/releases/tag/v1.0.4) (Latest)
 * [Stacked-Success v1.0.3](https://github.com/Stacked-Success/Softeng310/releases/tag/v1.0.3)
 * [Stacked-Success v1.0.2](https://github.com/Stacked-Success/Softeng310/releases/tag/v1.0.2)
 * [Stacked-Success v1.0.1](https://github.com/Stacked-Success/Softeng310/releases/tag/v1.0.1)

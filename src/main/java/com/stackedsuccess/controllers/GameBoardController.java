@@ -6,7 +6,7 @@ import com.stackedsuccess.managers.GameStateManager;
 import com.stackedsuccess.managers.SceneManager;
 import com.stackedsuccess.managers.TetriminoImageManager;
 import com.stackedsuccess.managers.SceneManager.AppUI;
-import com.stackedsuccess.managers.SoundManager;
+import com.stackedsuccess.managers.sound.SoundManager;
 import com.stackedsuccess.ScoreRecorder;
 import com.stackedsuccess.tetriminos.*;
 import java.io.IOException;
