@@ -77,5 +77,12 @@ class MediaPlayerWrapperTest {
                 nonExistentMediaPlayerWrapper.play();
             });
         }
+        
+    }
+     @Test
+    void testSetVolume() {
+        double expectedVolume = 0.5;
+        mediaPlayerWrapper.setVolume(expectedVolume);
+        assertEquals(expectedVolume, mediaPlayerWrapper.getVolume(), 0.01);
     }
 }
