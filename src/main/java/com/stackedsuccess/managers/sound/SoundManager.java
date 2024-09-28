@@ -1,16 +1,13 @@
 package com.stackedsuccess.managers.sound;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Manages the sound effects and background music for the application.
- */
+/** Manages the sound effects and background music for the application. */
 public class SoundManager {
 
     private static final String SOUND_PATH = "src/main/resources/sounds/";
@@ -24,10 +21,9 @@ public class SoundManager {
 
     /**
      * Private constructor for the SoundManager singleton.
-     * 
-     * <p>This constructor initializes the sound effects and background music 
-     * maps, as well as the mute states for both. It also loads the default 
-     * sounds that are used in the application.</p>
+     *
+     * <p>This constructor initializes the sound effects and background music maps, as well as the
+     * mute states for both. It also loads the default sounds that are used in the application.
      */
     private SoundManager() {
         soundEffects = new HashMap<>();
@@ -38,16 +34,14 @@ public class SoundManager {
         loadDefaultSounds();
     }
 
-    /**
-     * Helper class to ensure a single instance of SoundManager.
-     */
+    /** Helper class to ensure a single instance of SoundManager. */
     private static class SoundManagerHelper {
         private static final SoundManager INSTANCE = new SoundManager();
     }
 
     /**
      * Returns the singleton instance of the SoundManager.
-     * 
+     *
      * @return the singleton instance of SoundManager
      */
     public static SoundManager getInstance() {
@@ -56,10 +50,9 @@ public class SoundManager {
 
     /**
      * Loads the default sound effects and background music.
-     * 
-     * <p>This method initializes the MediaPlayer objects for background music 
-     * and AudioClip objects for sound effects. It also sets the initial states 
-     * for the media players to "stopped".</p>
+     *
+     * <p>This method initializes the MediaPlayer objects for background music and AudioClip objects
+     * for sound effects. It also sets the initial states for the media players to "stopped".
      */
     private void loadDefaultSounds() {
         mediaPlayers.put("mainmenu", loadMedia("mainmenu"));
@@ -76,7 +69,7 @@ public class SoundManager {
 
     /**
      * Loads a sound effect from a file.
-     * 
+     *
      * @param soundName the name of the sound effect file (without extension)
      * @return the AudioClipWrapper object representing the sound effect
      */
@@ -88,9 +81,10 @@ public class SoundManager {
 
     /**
      * Loads background music from a file.
-     * 
+     *
      * @param mediaName the name of the background music file (without extension)
-     * @return the MediaPlayerWrapper object representing the background music, or null if loading fails
+     * @return the MediaPlayerWrapper object representing the background music, or null if loading
+     *     fails
      */
     private MediaPlayerWrapper loadMedia(String mediaName) {
         String path = SOUND_PATH + mediaName + SOUND_EXTENSION;
@@ -107,7 +101,7 @@ public class SoundManager {
 
     /**
      * Plays a sound effect.
-     * 
+     *
      * @param soundKey the key representing the sound effect to play
      */
     public synchronized void playSoundEffect(String soundKey) {
@@ -118,14 +112,12 @@ public class SoundManager {
         AudioClipWrapper soundEffect = soundEffects.get(soundKey);
         if (soundEffect != null) {
             soundEffect.play();
-        } else {
-            System.err.println("Sound effect not found: " + soundKey);
         }
     }
 
     /**
      * Plays background music.
-     * 
+     *
      * @param mediaKey the key representing the background music to play
      */
     public synchronized void playBackgroundMusic(String mediaKey) {
@@ -135,19 +127,18 @@ public class SoundManager {
 
         MediaPlayerWrapper mediaPlayer = mediaPlayers.get(mediaKey);
         if (mediaPlayer != null) {
-            if ("playing".equals(mediaStates.get(mediaKey))) {
+            String currentState = mediaStates.get(mediaKey);
+            if ("playing".equals(currentState)) {
                 return;
             }
             mediaPlayer.play();
             mediaStates.put(mediaKey, "playing");
-        } else {
-            System.err.println("Background music not found: " + mediaKey);
         }
     }
 
     /**
      * Pauses the background music.
-     * 
+     *
      * @param mediaKey the key representing the background music to pause
      */
     public synchronized void pauseBackgroundMusic(String mediaKey) {
@@ -156,21 +147,15 @@ public class SoundManager {
         }
 
         MediaPlayerWrapper mediaPlayer = mediaPlayers.get(mediaKey);
-        if (mediaPlayer != null) {
-            if ("playing".equals(mediaStates.get(mediaKey))) {
-                mediaPlayer.pause();
-                mediaStates.put(mediaKey, "paused");
-            } else {
-                System.out.println("Background music is not playing: " + mediaKey);
-            }
-        } else {
-            System.err.println("Background music not found: " + mediaKey);
+        if (mediaPlayer != null && "playing".equals(mediaStates.get(mediaKey))) {
+            mediaPlayer.pause();
+            mediaStates.put(mediaKey, "paused");
         }
     }
 
     /**
      * Resumes the background music.
-     * 
+     *
      * @param mediaKey the key representing the background music to resume
      */
     public synchronized void resumeBackgroundMusic(String mediaKey) {
@@ -179,21 +164,15 @@ public class SoundManager {
         }
 
         MediaPlayerWrapper mediaPlayer = mediaPlayers.get(mediaKey);
-        if (mediaPlayer != null) {
-            if ("paused".equals(mediaStates.get(mediaKey))) {
-                mediaPlayer.play();
-                mediaStates.put(mediaKey, "playing");
-            } else {
-                System.out.println("Background music is not paused: " + mediaKey);
-            }
-        } else {
-            System.err.println("Background music not found: " + mediaKey);
+        if (mediaPlayer != null && "paused".equals(mediaStates.get(mediaKey))) {
+            mediaPlayer.play();
+            mediaStates.put(mediaKey, "playing");
         }
     }
 
     /**
      * Stops the background music.
-     * 
+     *
      * @param mediaKey the key representing the background music to stop
      */
     public synchronized void stopBackgroundMusic(String mediaKey) {
@@ -205,14 +184,10 @@ public class SoundManager {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaStates.put(mediaKey, "stopped");
-        } else {
-            System.err.println("Background music not found: " + mediaKey);
         }
     }
 
-    /**
-     * Stops all background music currently playing.
-     */
+    /** Stops all background music currently playing. */
     public synchronized void stopAllBackgroundMusic() {
         if (isBackgroundMusicMuted) {
             return;
@@ -220,39 +195,34 @@ public class SoundManager {
 
         for (Map.Entry<String, MediaPlayerWrapper> entry : mediaPlayers.entrySet()) {
             MediaPlayerWrapper mediaPlayer = entry.getValue();
-            if (mediaPlayer != null && "playing".equals(mediaStates.get(entry.getKey()))) {
+            String mediaKey = entry.getKey();
+            if (mediaPlayer != null && "playing".equals(mediaStates.get(mediaKey))) {
                 mediaPlayer.stop();
-                mediaStates.put(entry.getKey(), "stopped");
+                mediaStates.put(mediaKey, "stopped");
             }
         }
     }
 
-    /**
-     * Mutes all sound effects.
-     */
+    /** Mutes all sound effects. */
     public synchronized void muteSoundEffects() {
         isSoundEffectsMuted = true;
     }
 
-    /**
-     * Unmutes all sound effects.
-     */
+    /** Unmutes all sound effects. */
     public synchronized void unmuteSoundEffects() {
         isSoundEffectsMuted = false;
     }
 
     /**
      * Checks if sound effects are muted.
-     * 
+     *
      * @return true if sound effects are muted, false otherwise
      */
     public synchronized boolean isSoundEffectsMuted() {
         return isSoundEffectsMuted;
     }
 
-    /**
-     * Mutes all background music by setting their volume to zero.
-     */
+    /** Mutes all background music by setting their volume to zero. */
     public synchronized void muteBackgroundMusic() {
         isBackgroundMusicMuted = true;
         for (String mediaKey : mediaPlayers.keySet()) {
@@ -263,22 +233,20 @@ public class SoundManager {
         }
     }
 
-    /**
-     * Unmutes all background music by restoring their volume to the default level.
-     */
+    /** Unmutes all background music by restoring their volume to the default level. */
     public synchronized void unmuteBackgroundMusic() {
         isBackgroundMusicMuted = false;
         for (String mediaKey : mediaPlayers.keySet()) {
             MediaPlayerWrapper mediaPlayer = mediaPlayers.get(mediaKey);
             if (mediaPlayer != null && "playing".equals(mediaStates.get(mediaKey))) {
-                mediaPlayer.setVolume(1);
+                mediaPlayer.setVolume(0.7);
             }
         }
     }
 
     /**
      * Checks if background music is muted.
-     * 
+     *
      * @return true if background music is muted, false otherwise
      */
     public synchronized boolean isBackgroundMusicMuted() {
@@ -286,20 +254,12 @@ public class SoundManager {
     }
 
     /**
-     * Returns the map of media players used for background music in the application.
+     * Returns the map of media states for background music in the application.
      *
-     * @return a map where the keys are music identifiers (e.g., "mainmenu", "ingame") and the values are {@link MediaPlayerWrapper} instances.
+     * @return a map where the keys are music identifiers (e.g., "mainmenu", "ingame") and the values
+     *     are states (e.g., "playing", "paused", "stopped").
      */
-    public Map<String, MediaPlayerWrapper> getMediaPlayers() {
-        return mediaPlayers;
-    }
-
-    /**
-     * Returns the map of sound effects used in the application.
-     * 
-     * @return a map where the keys are sound effect identifiers (e.g., "gameover", "rotate") and the values are {@link AudioClipWrapper} instances.
-     */
-    public Map<String, AudioClipWrapper> getSoundEffects() {
-        return soundEffects;
+    public Map<String, String> getMediaStates() {
+        return mediaStates;
     }
 }
