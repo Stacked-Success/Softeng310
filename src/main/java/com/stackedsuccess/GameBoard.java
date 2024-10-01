@@ -207,7 +207,7 @@ public class GameBoard {
     if (isMarathonMode && totalLinesCleared >= marathonTargetLines) {
         gameStateManager.gameOver();
         gameInstance.stopGame(); // Stop the game once target lines are cleared
-        System.out.println("Congratulations! You completed Marathon Mode!");
+       
     }
 }
 
@@ -287,7 +287,7 @@ public class GameBoard {
         if (isMarathonMode && totalLinesCleared >= marathonTargetLines) {
             gameStateManager.gameOver();
             gameInstance.stopGame(); // Stop the game once target lines are cleared
-            System.out.println("Congratulations! You completed Marathon Mode!");
+            
         }
     }
     

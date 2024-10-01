@@ -13,7 +13,7 @@ public class GameStateManagerImpl implements GameStateManager {
     @Override
     public void gameOver() throws IOException {
         // Handle game over logic, such as displaying a game-over message
-        System.out.println("Game Over!");
+        
     }
 
     @Override
@@ -29,18 +29,18 @@ public class GameStateManagerImpl implements GameStateManager {
     @Override
     public void updateScore(int score) {
         // Update the displayed score in the game
-        System.out.println("Score: " + score);
+        
     }
 
     @Override
     public void updateLine(int line) {
         // Update the number of lines cleared on the UI
-        System.out.println("Lines Cleared: " + line);
+
     }
 
     @Override
     public void updateLevel(int level) {
         // Update the level in the UI
-        System.out.println("Level: " + level);
+        
     }
 }

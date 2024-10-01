@@ -156,9 +156,7 @@ public class GameBoardController implements GameStateManager {
           timerVbox.setVisible(false);
         }
 
-      } else {
-        System.err.println("GameInstance has not been initialized!");
-      }
+      } 
     });
 
     tutorialController = new TutorialController();

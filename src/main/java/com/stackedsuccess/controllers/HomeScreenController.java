@@ -40,7 +40,7 @@ public class HomeScreenController {
   @FXML
   AnchorPane settingsPane;
   @FXML
-  AnchorPane DifficultyPane;
+  AnchorPane difficultyPane;
   @FXML
   AnchorPane mainPane;
   @FXML
@@ -215,7 +215,7 @@ public class HomeScreenController {
   }
 
   public void onDifficulty() {
-    DifficultyPane.setVisible(true);
+    difficultyPane.setVisible(true);
     mainPane.setDisable(true);
   }
 
@@ -225,7 +225,7 @@ public class HomeScreenController {
   }
 
   public void onDifficultyBack() {
-    DifficultyPane.setVisible(false);
+    difficultyPane.setVisible(false);
     mainPane.setDisable(false);
   }
 
@@ -306,7 +306,7 @@ public class HomeScreenController {
     GameStateManager gameStateManager = controller;
 
     // Create a new GameInstance with the state manager
-    GameInstance gameInstance = new GameInstance(gameStateManager, isMarathonMode, targetLines);
+    this.gameInstance = new GameInstance(gameStateManager, isMarathonMode, targetLines);
     
 
     // Pass the GameInstance to the controller for reference

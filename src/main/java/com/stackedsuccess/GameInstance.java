@@ -37,6 +37,9 @@ public class GameInstance {
   private ScheduledExecutorService scheduler;
   private ScheduledFuture<?> scheduledTask;
 
+  
+
+
 
   
 
@@ -104,8 +107,8 @@ public class GameInstance {
             try {
                 gameBoard.update();
             } catch (IOException e) {
-                System.err.println("Failed to update game board: " + e.getMessage());
-                
+
+              //do noting: silentlly handle the exception
             }
             currentTetrimino = gameBoard.getCurrentTetrimino();
             notifyTetriminoUpdate();
@@ -237,7 +240,7 @@ public int getTargetLines() {
 public void stopGame() {
   if (scheduledTask != null && !scheduledTask.isCancelled()) {
       scheduledTask.cancel(true); // Cancel the task if it hasn't been canceled already
-      System.out.println("Scheduled task canceled.");
+    
   }
   setGameOver(true);
 }
