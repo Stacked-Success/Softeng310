@@ -105,13 +105,11 @@ public class GameInstance {
                 gameBoard.update();
             } catch (IOException e) {
                 System.err.println("Failed to update game board: " + e.getMessage());
-                e.printStackTrace();
+                
             }
             currentTetrimino = gameBoard.getCurrentTetrimino();
             notifyTetriminoUpdate();
-        } else {
-            System.out.println("Game is either paused or over, skipping update.");
-        }
+        } 
     }, 0, gameDelay, TimeUnit.MILLISECONDS);
 }
 
@@ -215,9 +213,6 @@ public class GameInstance {
     this.isGameOver = isGameOver;
     this.isPaused = isGameOver;
     
-    if (isGameOver) {
-        System.out.println("Game Over flag set to true.");
-    }
 }
 
 
