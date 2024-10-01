@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" prefHeight="900.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.stackedsuccess.controllers.HomeScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" prefHeight="900.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.stackedsuccess.controllers.HomeScreenController">
     <children>
       <AnchorPane fx:id="mainPane" layoutX="-2.0" layoutY="1.0" prefHeight="897.0" prefWidth="1298.0">
          <children>
@@ -48,12 +48,17 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button id="exitGame" focusTraversable="false" layoutX="1123.0" layoutY="68.0" mnemonicParsing="false" onAction="#exitGame" text="Exit Game">
+            <Button id="exitGame" focusTraversable="false" layoutX="1152.0" layoutY="68.0" mnemonicParsing="false" onAction="#exitGame" text="Exit Game">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button id="settings" focusTraversable="false" layoutX="987.0" layoutY="68.0" mnemonicParsing="false" onAction="#onSettings" text="Settings">
+            <Button id="settings" focusTraversable="false" layoutX="1024.0" layoutY="68.0" mnemonicParsing="false" onAction="#onSettings" text="Settings">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button id="difficulty" focusTraversable="false" layoutX="889.0" layoutY="68.0" mnemonicParsing="false" onAction="#onDifficulty" text="Difficulty">
                <font>
                   <Font size="20.0" />
                </font>
@@ -85,6 +90,33 @@
                    <Font name="System Bold" size="25.0" />
                </font>
            </RadioButton>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="difficultyPane" layoutX="370.0" layoutY="170.0" prefHeight="578.0" prefWidth="677.0" visible="false">
+         <children>
+            <ImageView fitHeight="724.0" fitWidth="706.0" layoutX="-58.0" layoutY="-128.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Difficulty.png" />
+               </image>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </ImageView>
+            <Button id="back" layoutX="223.0" layoutY="356.0" mnemonicParsing="false" onAction="#onDifficultyBack" prefHeight="54.0" prefWidth="176.0" text="Go Back">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Button>
+            <RadioButton fx:id="marathonBtn" layoutX="376.0" layoutY="168.0" mnemonicParsing="false" onAction="#toggleMarathon" selected="true" text="ON">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="basicBtn" layoutX="376.0" layoutY="250.0" mnemonicParsing="false" onAction="#toggleBasic" text="ON">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </RadioButton>
          </children>
       </AnchorPane>
     </children>

@@ -16,7 +16,8 @@ class TetriminoTest {
   @BeforeEach
   void setUp() {
     mockController = Mockito.mock(GameBoardController.class);
-    gameBoard = new GameBoard(mockController);
+    GameInstance mockInstance = Mockito.mock(GameInstance.class);
+    gameBoard = new GameBoard(mockController, mockInstance); // Use the correct constructor
   }
 
   @Test

@@ -1,6 +1,9 @@
 package com.stackedsuccess.controllers;
 
+import com.stackedsuccess.GameInstance;
 import com.stackedsuccess.Main;
+import com.stackedsuccess.managers.GameStateManager;
+import com.stackedsuccess.managers.GameStateManagerImpl;
 import com.stackedsuccess.managers.SceneManager;
 import com.stackedsuccess.managers.SceneManager.AppUI;
 import com.stackedsuccess.managers.sound.SoundManager;
@@ -23,25 +26,45 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
-public class HomeScreenController {
-  @FXML Slider difficultySlider;
 
-  @FXML private Button pastScoresButton;
-  @FXML private ListView<String> pastScores;
-  @FXML private Button tutorialBtn;
-  @FXML AnchorPane settingsPane;
-  @FXML AnchorPane mainPane;
-  @FXML RadioButton soundBtn;
-  @FXML RadioButton musicBtn;
+public class HomeScreenController {
+  @FXML
+  Slider difficultySlider;
+
+  @FXML
+  private Button pastScoresButton;
+  @FXML
+  private ListView<String> pastScores;
+  @FXML
+  private Button tutorialBtn;
+  @FXML
+  AnchorPane settingsPane;
+  @FXML
+  AnchorPane difficultyPane;
+  @FXML
+  AnchorPane mainPane;
+  @FXML
+  RadioButton soundBtn;
+  @FXML
+  RadioButton musicBtn;
+  @FXML
+  RadioButton marathonBtn;
+  @FXML
+  RadioButton basicBtn;
 
   private TutorialController tutorialController;
+  private GameInstance gameInstance;
 
   /**
    * Initialises the Home Screen controller by setting up the home screen.
    *
-   * <p>This method sets the initial focus on the difficulty slider (1) and loads past scores
-   * from a file into the list view component that displays previous game scores if the players
-   * clicks on the past scores button</p>
+   * <p>
+   * This method sets the initial focus on the difficulty slider (1) and loads
+   * past scores
+   * from a file into the list view component that displays previous game scores
+   * if the players
+   * clicks on the past scores button
+   * </p>
    */
   @FXML
   public void initialize() {
@@ -54,89 +77,117 @@ public class HomeScreenController {
     updateSoundButtonState();
     updateMusicButtonState();
     Platform.runLater(() -> SoundManager.getInstance().playBackgroundMusic("mainmenu"));
+    basicBtn.setSelected(true);
+    marathonBtn.setSelected(false);
   }
 
-   /**
+  // Method to set the GameInstance
+  public void setGameInstance(GameInstance gameInstance) {
+    this.gameInstance = gameInstance;
+}
+
+  /**
    * Updates the state of the sound effects toggle button.
    *
-   * <p>This method sets the toggle button text and selection state
-   * based on whether the sound effects are muted or not.</p>
+   * <p>
+   * This method sets the toggle button text and selection state
+   * based on whether the sound effects are muted or not.
+   * </p>
    */
   private void updateSoundButtonState() {
     if (SoundManager.getInstance().isSoundEffectsMuted()) {
-        soundBtn.setSelected(false);
-        soundBtn.setText("OFF");
+      soundBtn.setSelected(false);
+      soundBtn.setText("OFF");
     } else {
-        soundBtn.setSelected(true);
-        soundBtn.setText("ON");
+      soundBtn.setSelected(true);
+      soundBtn.setText("ON");
     }
-}
+  }
 
-/**
+  /**
    * Updates the state of the background music toggle button.
    *
-   * <p>This method sets the toggle button text and selection state
-   * based on whether the background music is muted or not.</p>
+   * <p>
+   * This method sets the toggle button text and selection state
+   * based on whether the background music is muted or not.
+   * </p>
    */
-private void updateMusicButtonState() {
+  private void updateMusicButtonState() {
     if (SoundManager.getInstance().isBackgroundMusicMuted()) {
-        musicBtn.setSelected(false);
-        musicBtn.setText("OFF");
+      musicBtn.setSelected(false);
+      musicBtn.setText("OFF");
     } else {
-        musicBtn.setSelected(true);
-        musicBtn.setText("ON");
+      musicBtn.setSelected(true);
+      musicBtn.setText("ON");
     }
-}
+  }
 
- /**
+  /**
    * Toggles the sound effects on or off based on the current state.
    *
-   * <p>If the sound effects are currently muted, this method unmutes them
+   * <p>
+   * If the sound effects are currently muted, this method unmutes them
    * and updates the button text to "ON". If they are not muted, it mutes them
-   * and updates the button text to "OFF".</p>
+   * and updates the button text to "OFF".
+   * </p>
    */
-@FXML
-public void toggleSound() {
+  @FXML
+  public void toggleSound() {
     SoundManager soundManager = SoundManager.getInstance();
     if (soundManager.isSoundEffectsMuted()) {
-        soundManager.unmuteSoundEffects();
-        soundBtn.setText("ON");
+      soundManager.unmuteSoundEffects();
+      soundBtn.setText("ON");
     } else {
-        soundManager.muteSoundEffects();
-        soundBtn.setText("OFF");
+      soundManager.muteSoundEffects();
+      soundBtn.setText("OFF");
     }
-}
+  }
 
- /**
+  /**
    * Toggles the background music on or off based on the current state.
    *
-   * <p>If the background music is currently muted, this method unmutes it
+   * <p>
+   * If the background music is currently muted, this method unmutes it
    * and updates the button text to "ON". If it is not muted, it mutes the music
-   * and updates the button text to "OFF".</p>
+   * and updates the button text to "OFF".
+   * </p>
    */
-@FXML
-public void toggleMusic() {
+  @FXML
+  public void toggleMusic() {
     SoundManager soundManager = SoundManager.getInstance();
     if (soundManager.isBackgroundMusicMuted()) {
-        soundManager.unmuteBackgroundMusic();
-        musicBtn.setText("ON");
+      soundManager.unmuteBackgroundMusic();
+      musicBtn.setText("ON");
     } else {
-        soundManager.muteBackgroundMusic();
-        musicBtn.setText("OFF");
+      soundManager.muteBackgroundMusic();
+      musicBtn.setText("OFF");
     }
-}
+  }
+
+  @FXML
+  public void toggleMarathon() {
+    marathonBtn.setSelected(true);
+    basicBtn.setSelected(false);
+  }
+
+  @FXML
+  void toggleBasic() {
+    basicBtn.setSelected(true);
+    marathonBtn.setSelected(false);
+  }
 
   /**
    * Reads scores from a file and returns them as a list of strings.
    *
    * @param filePath The path to the score file that will be read.
-   * @return A list of scores as strings, where each string represents one line from the file.
+   * @return A list of scores as strings, where each string represents one line
+   *         from the file.
    */
   private List<String> loadScoresFromFile(String filePath) {
     List<String> scores = new ArrayList<>();
     try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
       String line;
-      //reads each line from the file and adds to the score list
+      // reads each line from the file and adds to the score list
       while ((line = reader.readLine()) != null) {
         scores.add(line);
       }
@@ -149,8 +200,10 @@ public void toggleMusic() {
   /**
    * Closes the game when the close button is clicked
    *
-   * <p>This method is linked to the close button. When the
-   * button is clicked, the application will terminate</p>
+   * <p>
+   * This method is linked to the close button. When the
+   * button is clicked, the application will terminate
+   * </p>
    */
   public void exitGame() {
     System.exit(0);
@@ -161,36 +214,51 @@ public void toggleMusic() {
     mainPane.setDisable(true);
   }
 
+  public void onDifficulty() {
+    difficultyPane.setVisible(true);
+    mainPane.setDisable(true);
+  }
+
   public void onSettingsBack() {
     settingsPane.setVisible(false);
     mainPane.setDisable(false);
   }
 
+  public void onDifficultyBack() {
+    difficultyPane.setVisible(false);
+    mainPane.setDisable(false);
+  }
+
   /**
-   * Starts a new game by loading the game board UI and initialising the game at the selected difficulty level.
+   * Starts a new game by loading the game board UI and initialising the game at
+   * the selected difficulty level.
    * 
-   * <p>This method checks if the tutorial has been viewed. If it has, it loads a new game. If not, it loads the tutorial.
-   * The game is then started when the tutorial is completed.</p>
+   * <p>
+   * This method checks if the tutorial has been viewed. If it has, it loads a new
+   * game. If not, it loads the tutorial.
+   * The game is then started when the tutorial is completed.
+   * </p>
+   * 
    * @throws IOException
    */
   public void startGame() throws IOException {
     if (tutorialController.getHasTutorialBeenViewed()) {
-      //Start a new game
+      // Start a new game
       loadGame();
     } else {
 
-      //Tell the turorial that it needs to create a new game when the user is finished
+      // Tell the turorial that it needs to create a new game when the user is
+      // finished
       tutorialController.setCreateGame(true);
 
-      //Load the tutorial
+      // Load the tutorial
       FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
       loader.setController(tutorialController);
       Parent root = loader.load();
       SceneManager.addScene(AppUI.HOME_TUTORIAL, root);
       Main.setUi(AppUI.HOME_TUTORIAL);
 
-
-      //Creates the game when the tutorial is completed
+      // Creates the game when the tutorial is completed
       Runnable onTutorialCompleted = () -> {
         try {
           loadGame();
@@ -204,37 +272,69 @@ public void toggleMusic() {
   }
 
   /**
-   * loads a new game by loading the game board UI and initialising the game at the selected difficulty level.
+   * loads a new game by loading the game board UI and initialising the game at
+   * the selected difficulty level.
    *
-   * <p>This method retrieves the initial difficulty level from the slider of 1-20, loads the game board
-   * from the corresponding FXML file, and updates the game board controller with the selected level.
-   * It then switches the UI to the game screen.</p>
+   * <p>
+   * This method retrieves the initial difficulty level from the slider of 1-20,
+   * loads the game board
+   * from the corresponding FXML file, and updates the game board controller with
+   * the selected level.
+   * It then switches the UI to the game screen.
+   * </p>
    *
-   * @throws IOException If there is an issue loading the FXML file for the game board.
+   * @throws IOException If there is an issue loading the FXML file for the game
+   *                     board.
    */
   @FXML
   public void loadGame() throws IOException {
     // Get the level from the slider
     int initialLevel = (int) difficultySlider.getValue();
 
+    // Calculate target lines based on difficulty level (for Marathon Mode)
+    int targetLines = calculateTargetLines(initialLevel); // Higher difficulty means more lines to clear
+
     // loads the game board fxml file
     FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/GameBoard.fxml"));
     Parent root = loader.load();
     GameBoardController controller = loader.getController();
 
+    // Determine which mode the player selected
+    boolean isMarathonMode = marathonBtn.isSelected();
+    
+    // Create a GameStateManager implementation to handle the state updates
+    GameStateManager gameStateManager = controller;
+
+    // Create a new GameInstance with the state manager
+    this.gameInstance = new GameInstance(gameStateManager, isMarathonMode, targetLines);
+    
+
+    // Pass the GameInstance to the controller for reference
+    controller.setGameInstance(gameInstance);
+    
     // Set the initial level
     controller.updateLevel(initialLevel);
     SceneManager.addScene(AppUI.GAME, root);
     Main.setUi(AppUI.GAME);
     SoundManager.getInstance().stopBackgroundMusic("mainmenu");
     SoundManager.getInstance().playBackgroundMusic("ingame");
+
+    // Start the game instance
+    gameInstance.start();
+
+
+    
   }
 
   /**
-   * Handles key press events, focusing the difficulty slider and starting the game if the spacebar is pressed.
+   * Handles key press events, focusing the difficulty slider and starting the
+   * game if the spacebar is pressed.
    *
-   * <p>This method is triggered whenever a key is pressed. It first sets the focus to the difficulty slider.
-   * If the spacebar is pressed, it attempts to start the game</p>
+   * <p>
+   * This method is triggered whenever a key is pressed. It first sets the focus
+   * to the difficulty slider.
+   * If the spacebar is pressed, it attempts to start the game
+   * </p>
    *
    * @param event The key event triggered by the key press.
    */
@@ -253,8 +353,11 @@ public void toggleMusic() {
   /**
    * Shows the players past scores in a list view
    *
-   * <p>When the button is pressed, a list of the players previous scores that are saved are shown so that
-   * the player can check their high scores in the game</p>
+   * <p>
+   * When the button is pressed, a list of the players previous scores that are
+   * saved are shown so that
+   * the player can check their high scores in the game
+   * </p>
    */
   @FXML
   public void showPastScores() {
@@ -268,8 +371,12 @@ public void toggleMusic() {
   /**
    * Opens the tutorial screen when the tutorial button is clicked
    *
-   * <p>This method is linked to the tutorial button. When the button is clicked, the application will switch to the tutorial screen</p>
-   * @throws IOException 
+   * <p>
+   * This method is linked to the tutorial button. When the button is clicked, the
+   * application will switch to the tutorial screen
+   * </p>
+   * 
+   * @throws IOException
    */
   @FXML
   public void goToTutorial() throws IOException {
@@ -278,5 +385,16 @@ public void toggleMusic() {
     Parent root = loader.load();
     SceneManager.addScene(AppUI.HOME_TUTORIAL, root);
     Main.setUi(AppUI.HOME_TUTORIAL);
+  }
+
+  /**
+   * Calculates the target lines for Marathon Mode based on the selected
+   * difficulty.
+   *
+   * @param difficultyLevel The level of difficulty selected on the slider (1-20)
+   * @return The target number of lines for Marathon Mode.
+   */
+  private int calculateTargetLines(int difficultyLevel) {
+    return difficultyLevel + 10; // Adjust the multiplier as needed, e.g., 10 lines per difficulty level.
   }
 }

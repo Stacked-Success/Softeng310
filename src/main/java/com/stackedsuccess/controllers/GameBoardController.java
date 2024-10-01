@@ -32,82 +32,151 @@ import javafx.util.Duration;
 
 public class GameBoardController implements GameStateManager {
 
-  @FXML Pane basePane;
-  @FXML Pane holdPiece;
-  @FXML GridPane displayGrid;
+  @FXML
+  Pane basePane;
+  @FXML
+  Pane holdPiece;
+  @FXML
+  GridPane displayGrid;
 
-  @FXML Label scoreLabel;
-  @FXML Label levelLabel;
-  @FXML Label lineLabel;
+  @FXML
+  Label scoreLabel;
+  @FXML
+  Label levelLabel;
+  @FXML
+  Label lineLabel;
 
-  @FXML ImageView holdPieceView;
-  @FXML ImageView nextPieceView;
+  @FXML
+  ImageView holdPieceView;
+  @FXML
+  ImageView nextPieceView;
 
-  @FXML Button pauseButton;
-  @FXML Pane pauseBackground;
-  @FXML Pane pauseLabelBackground;
-  @FXML Label pauseLabel;
+  @FXML
+  Button pauseButton;
+  @FXML
+  Pane pauseBackground;
+  @FXML
+  Pane pauseLabelBackground;
+  @FXML
+  Label pauseLabel;
 
-  @FXML VBox gameOverBox;
-  @FXML Label gameOverLabel;
-  @FXML Label gameOverScoreLabel;
-  @FXML Label gameOverHighScoreLabel;
-  @FXML Button gameOverExitButton;
-  @FXML Button gameOverRestartButton;
-  @FXML Button mainMenuBtn;
+  @FXML
+  VBox gameOverBox;
+  @FXML
+  Label gameOverLabel;
+  @FXML
+  Label gameOverScoreLabel;
+  @FXML
+  Label gameOverHighScoreLabel;
+  @FXML
+  Button gameOverExitButton;
+  @FXML
+  Button gameOverRestartButton;
+  @FXML
+  Button mainMenuBtn;
 
-  @FXML private Button tutorialBtn;
+  @FXML
+  VBox timerVbox;
+  @FXML
+  Label timerLabel;
+
+  @FXML
+  private Button tutorialBtn;
 
   private static final int SOLID_BLOCK_VALUE = -2;
 
-  private final GameInstance gameInstance;
+  private int targetLines; // Stores the target number of lines in Marathon Mode
+  private boolean isMarathonMode; // Stores whether Marathon Mode is active
+
+  private GameInstance gameInstance;
   private final TetriminoImageManager imageManager;
-  
+
+  private Timeline gameTimer; // JavaFX Timeline to schedule timer updates
+  private int elapsedSeconds; // Track the total number of elapsed seconds
+
   public GameBoardController() {
-    gameInstance = new GameInstance(this); 
     imageManager = new TetriminoImageManager();
+  }
+
+  /**
+   * Set the GameInstance object to be used by this controller.
+   *
+   * @param gameInstance the GameInstance to control the game logic
+   */
+  public void setGameInstance(GameInstance gameInstance) {
+    this.gameInstance = gameInstance;
+    this.isMarathonMode = gameInstance.isMarathonMode(); // Store whether it is Marathon Mode
+    this.targetLines = gameInstance.getTargetLines(); // Get the target lines if Marathon Mode is active
   }
 
   private TutorialController tutorialController;
 
   /**
-   * Initialises the game board controller by setting up the game grid and starting the game instance.
+   * Initialises the game board controller by setting up the game grid and
+   * starting the game instance.
    *
-   * <p>This method resets the labels to their default state and requests focus on the base pane.
-   * It then starts the game instance, assigns the current controller to the game board, and updates
-   * the next piece view with the corresponding image of the upcoming Tetrimino. Additionally, it sets
+   * <p>
+   * This method resets the labels to their default state and requests focus on
+   * the base pane.
+   * It then starts the game instance, assigns the current controller to the game
+   * board, and updates
+   * the next piece view with the corresponding image of the upcoming Tetrimino.
+   * Additionally, it sets
    * a window close handler for the stage to manage the application closure.
    *
-   * <p>This method is annotated with `@FXML` to indicate that it is called during the loading of the
-   * FXML file, and it runs initialisation tasks after the FXML components have been loaded.
+   * <p>
+   * This method is annotated with `@FXML` to indicate that it is called during
+   * the loading of the
+   * FXML file, and it runs initialisation tasks after the FXML components have
+   * been loaded.
    */
   @FXML
   public void initialize() {
-    //resets score, line, and level to initial state
+    // resets score, line, and level to initial state
     resetLabels();
     basePane.requestFocus();
 
-    Platform.runLater(
-        () -> {
-          gameInstance.start();
-          //updates the image of the next piece
-          nextPieceView.setImage(imageManager.getTetriminoImage(gameInstance.getGameBoard().getNextTetrimino().getClass()));
-          setWindowCloseHandler(getStage());
-        });
+    Platform.runLater(() -> {
+      if (gameInstance != null) {
+        gameInstance.start();
 
-        tutorialController = new TutorialController();
-        tutorialController.setDestinationAppUI(AppUI.GAME);
-        tutorialController.setHasTutorialBeenViewed(true);
+        // Update next piece view
+        nextPieceView
+            .setImage(imageManager.getTetriminoImage(gameInstance.getGameBoard().getNextTetrimino().getClass()));
+
+        // Set window close handler
+        setWindowCloseHandler(getStage());
+
+        // Initialize lineLabel for Marathon Mode
+        if (isMarathonMode) {
+          lineLabel.setText("0/" + targetLines);
+          // start timer
+          startTimer();
+        } else {
+          timerVbox.setVisible(false);
+        }
+
+      } 
+    });
+
+    tutorialController = new TutorialController();
+    tutorialController.setDestinationAppUI(AppUI.GAME);
+    tutorialController.setHasTutorialBeenViewed(true);
   }
 
   /**
-   * Updates the visual display of the game board and the currently moving Tetrimino pieces.
+   * Updates the visual display of the game board and the currently moving
+   * Tetrimino pieces.
    *
-   * <p>This method receives the current state of the game board and updates the display to reflect
-   * the position of both stationary and moving pieces. It processes the board to include moving pieces
+   * <p>
+   * This method receives the current state of the game board and updates the
+   * display to reflect
+   * the position of both stationary and moving pieces. It processes the board to
+   * include moving pieces
    * and then updates the visual grid (the game board)
    *
-   * @param board the current state of the game board to visualise, where each cell contains a value
+   * @param board the current state of the game board to visualise, where each
+   *              cell contains a value
    *              representing the type of block or an empty space
    */
 
@@ -120,7 +189,8 @@ public class GameBoardController implements GameStateManager {
         () -> {
           displayGrid.getChildren().clear();
 
-          //iterates through every cell in the grid of the game board to update where the pieces move
+          // iterates through every cell in the grid of the game board to update where the
+          // pieces move
           for (int y = 0; y < displayGrid.getRowCount(); y++) {
             for (int x = 0; x < displayGrid.getColumnCount(); x++) {
               int blockValue = updatedBoard[y][x];
@@ -134,60 +204,77 @@ public class GameBoardController implements GameStateManager {
   }
 
   /**
-   * Handles the game over event, triggered when a Tetrimino is placed out of bounds.
+   * Handles the game over event, triggered when a Tetrimino is placed out of
+   * bounds.
    *
-   * <p>This method sets the game state to "game over," saves the player's score using the
-   * `ScoreRecorder`, and plays a game over animation, a piece is out of bounds when it is
+   * <p>
+   * This method sets the game state to "game over," saves the player's score
+   * using the
+   * `ScoreRecorder`, and plays a game over animation, a piece is out of bounds
+   * when it is
    * above the playable screen.
    *
    * @throws IOException if an I/O error occurs during score saving
    */
 
   @FXML
-  @Override       
+  @Override
   public void gameOver() throws IOException {
+    // Stop the game timer if it is running
+    if (gameTimer != null) {
+      gameTimer.stop();
+    }
+
+    gameInstance.stopGame(); // Make sure to stop the entire game instance
     gameInstance.setGameOver(true);
-    //saves the players score into the score.txt file
+
+    // Save the player's score
     ScoreRecorder.saveScore(scoreLabel.getText());
-    playGameOverAnimation();       
+    playGameOverAnimation();
     SoundManager.getInstance().playSoundEffect("gameover");
   }
 
   /**
    * Handles key press events and sends them to the game instance for processing.
    *
-   * <p>This method checks for specific key presses, such as the ESC key to toggle the pause screen,
+   * <p>
+   * This method checks for specific key presses, such as the ESC key to toggle
+   * the pause screen,
    * and passes all key events to the game instance to control the board.
    *
-   * @param event the key event that was pressed, containing information about which key was pressed
+   * @param event the key event that was pressed, containing information about
+   *              which key was pressed
    */
   @FXML
   public void onKeyPressed(KeyEvent event) {
-    //pauses the game if ESC is called
+    // pauses the game if ESC is called
     if (event.getCode() == KeyCode.ESCAPE) {
       togglePauseScreen();
     }
-    //otherwise passes the players input to the game instance
+    // otherwise passes the players input to the game instance
     gameInstance.handleInput(event);
   }
 
   /**
-   * Toggles the display of the pause screen based on the game's current paused state.
+   * Toggles the display of the pause screen based on the game's current paused
+   * state.
    *
-   * <p>If the game is currently paused, this method brings the pause screen elements to the front,
-   * updates their styles and opacity to make them visible. If the game is not paused, it sends the
+   * <p>
+   * If the game is currently paused, this method brings the pause screen elements
+   * to the front,
+   * updates their styles and opacity to make them visible. If the game is not
+   * paused, it sends the
    * pause screen elements to the back and makes them transparent.
    */
-  private void togglePauseScreen(){
-    if(gameInstance.isPaused()){
+  private void togglePauseScreen() {
+    if (gameInstance.isPaused()) {
       basePane.requestFocus();
       pauseBackground.toBack();
       pauseLabelBackground.toBack();
-      pauseBackground.setOpacity(0); 
+      pauseBackground.setOpacity(0);
       pauseLabelBackground.setOpacity(0);
       SoundManager.getInstance().resumeBackgroundMusic("ingame");
-    }
-    else{
+    } else {
       pauseBackground.toFront();
       pauseLabelBackground.toFront();
       pauseLabel.setStyle("-fx-text-fill: #fdfad0; -fx-font-size: 85px;");
@@ -201,20 +288,25 @@ public class GameBoardController implements GameStateManager {
   /**
    * Pauses or resumes the game when the pause button is clicked.
    *
-   * <p>This method toggles the visibility of the pause screen and changes the game's pause state.
-   * If the game is currently running, it will be paused; if it is paused, it will resume.
+   * <p>
+   * This method toggles the visibility of the pause screen and changes the game's
+   * pause state.
+   * If the game is currently running, it will be paused; if it is paused, it will
+   * resume.
    */
   @FXML
   public void onClickPauseButton() {
     togglePauseScreen();
-    gameInstance.togglePause();       
+    gameInstance.togglePause();
   }
 
   /**
    * Closes the game when the exit button is clicked
    *
-   * <p>This method is linked to the "Exit" button in the user interface. When the
-   * button is clicked, the application will terminate</p>
+   * <p>
+   * This method is linked to the "Exit" button in the user interface. When the
+   * button is clicked, the application will terminate
+   * </p>
    */
   @FXML
   void onClickExit(ActionEvent event) {
@@ -224,17 +316,26 @@ public class GameBoardController implements GameStateManager {
   /**
    * restarts the game when restart is clicked.
    *
-   * <p>When the restart button is clicked, it reloads the main menu scene,
-   * effectively restarting the application's UI to its initial state.</p>
+   * <p>
+   * When the restart button is clicked, it reloads the main menu scene,
+   * effectively restarting the application's UI to its initial state.
+   * </p>
    *
    * @param event The event triggered by the restart button click.
-   * @throws IOException If there is an error while loading the FXML file for the home screen.
+   * @throws IOException If there is an error while loading the FXML file for the
+   *                     home screen.
    */
   @FXML
   void onClickRestart(ActionEvent event) throws IOException {
     SoundManager.getInstance().stopBackgroundMusic("ingame");
     SceneManager.addScene(AppUI.MAIN_MENU, loadFxml("HomeScreen"));
     Main.setUi(AppUI.MAIN_MENU);
+    // Stop and reset the timer
+    if (gameTimer != null) {
+      gameTimer.stop();
+      elapsedSeconds = 0;
+      updateTimerLabel();
+    }
   }
 
   /**
@@ -242,7 +343,7 @@ public class GameBoardController implements GameStateManager {
    *
    * @param score the current score
    */
-  @Override       
+  @Override
   public void updateScore(int score) {
     Platform.runLater(() -> scoreLabel.setText(String.valueOf(score)));
   }
@@ -252,9 +353,24 @@ public class GameBoardController implements GameStateManager {
    *
    * @param line the current level
    */
-  @Override       
+  @Override
   public void updateLine(int line) {
-    Platform.runLater(() -> lineLabel.setText(String.valueOf(line)));
+    Platform.runLater(() -> {
+      if (isMarathonMode) {
+        lineLabel.setText(line + "/" + targetLines);
+        // Check if the player has reached the target number of lines
+        if (line >= targetLines) {
+          gameInstance.setGameOver(true);
+          try {
+            gameOver();
+          } catch (IOException e) {
+            throw new IllegalArgumentException("Issue regarding ScoreReader");
+          }
+        }
+      } else {
+        lineLabel.setText(String.valueOf(line));
+      }
+    });
   }
 
   /**
@@ -262,18 +378,21 @@ public class GameBoardController implements GameStateManager {
    *
    * @param level the current level
    */
-  @Override       
+  @Override
   public void updateLevel(int level) {
     Platform.runLater(() -> levelLabel.setText(String.valueOf(level)));
   }
 
-  public void setBaseLevel(int baseLevel) { Platform.runLater(() -> gameInstance.getGameBoard().setBaseLevel(baseLevel));}
+  public void setBaseLevel(int baseLevel) {
+    Platform.runLater(() -> gameInstance.getGameBoard().setBaseLevel(baseLevel));
+  }
+
   /**
    * Sets the view of the next tetromino to be loaded.
    *
    * @param tetrimino the tetrimino to be displayed in the next piece view
    */
-  @Override       
+  @Override
   public void setNextPieceView(Tetrimino tetrimino) {
     Image image = imageManager.getTetriminoImage(tetrimino.getClass());
     nextPieceView.setImage(image);
@@ -284,14 +403,15 @@ public class GameBoardController implements GameStateManager {
    *
    * @param tetrimino the tetrimino to be displayed in the hold image view
    */
-  @Override       
+  @Override
   public void setHoldPieceView(Tetrimino tetrimino) {
     Image image = imageManager.getTetriminoImage(tetrimino.getClass());
     holdPieceView.setImage(image);
   }
 
   /**
-   * Adds moving tetrimino piece and ghost piece to game board array to support visualising
+   * Adds moving tetrimino piece and ghost piece to game board array to support
+   * visualising
    * on-screen.
    *
    * @param board the game board
@@ -309,11 +429,16 @@ public class GameBoardController implements GameStateManager {
   }
 
   /**
-   * Adds the position of the current Tetrimino's ghost piece to the game board to support visualisation.
+   * Adds the position of the current Tetrimino's ghost piece to the game board to
+   * support visualisation.
    *
-   * <p>The ghost piece is a visual aid that shows where the Tetrimino will land if dropped directly
-   * from its current position. This method calculates the ghost piece's position and marks it on
-   * the game board</p>
+   * <p>
+   * The ghost piece is a visual aid that shows where the Tetrimino will land if
+   * dropped directly
+   * from its current position. This method calculates the ghost piece's position
+   * and marks it on
+   * the game board
+   * </p>
    *
    * @param board The game board to append the ghost piece's position to
    * @return The updated game board with the ghost piece's position added
@@ -339,8 +464,11 @@ public class GameBoardController implements GameStateManager {
   /**
    * Add position of current tetrimino piece to board to support visualisation.
    *
-   * <p>The current piece is a visual aid to show where your current Tetrimino is,
-   * This method calculates where the current piece is and marks it on the game board</p>
+   * <p>
+   * The current piece is a visual aid to show where your current Tetrimino is,
+   * This method calculates where the current piece is and marks it on the game
+   * board
+   * </p>
    *
    * @param board the game board to append position to
    * @return the updated game board
@@ -372,45 +500,45 @@ public class GameBoardController implements GameStateManager {
   private ImageView getBlock(int blockValue) {
     ImageView tetriminoBlock;
     if (blockValue == -1) {
-        tetriminoBlock = new ImageView(imageManager.getHighlightImage());
+      tetriminoBlock = new ImageView(imageManager.getHighlightImage());
     } else {
-        tetriminoBlock = new ImageView(imageManager.getBlockImage());
-        ColorAdjust colorAdjust = new ColorAdjust();
+      tetriminoBlock = new ImageView(imageManager.getBlockImage());
+      ColorAdjust colorAdjust = new ColorAdjust();
 
-    switch (blockValue) {
-      case IShape.SPAWN_VALUE:
-        colorAdjust.setHue(-0.5);
-        break;
-      case JShape.SPAWN_VALUE:
-        colorAdjust.setHue(-0.3);
-        break;
-      case LShape.SPAWN_VALUE:
-        colorAdjust.setHue(-0.15);
-        break;
-      case OShape.SPAWN_VALUE:
-        colorAdjust.setHue(0);
-        break;
-      case SShape.SPAWN_VALUE:
-        colorAdjust.setHue(0.15);
-        break;
-      case TShape.SPAWN_VALUE:
-        colorAdjust.setHue(0.3);
-        break;
-      case ZShape.SPAWN_VALUE:
-        colorAdjust.setHue(0.5);
-        break;
-      case SOLID_BLOCK_VALUE:
-        colorAdjust.setSaturation(-1);
-        break;
-      default:
-        throw new IllegalArgumentException("Unknown shape " + blockValue);
+      switch (blockValue) {
+        case IShape.SPAWN_VALUE:
+          colorAdjust.setHue(-0.5);
+          break;
+        case JShape.SPAWN_VALUE:
+          colorAdjust.setHue(-0.3);
+          break;
+        case LShape.SPAWN_VALUE:
+          colorAdjust.setHue(-0.15);
+          break;
+        case OShape.SPAWN_VALUE:
+          colorAdjust.setHue(0);
+          break;
+        case SShape.SPAWN_VALUE:
+          colorAdjust.setHue(0.15);
+          break;
+        case TShape.SPAWN_VALUE:
+          colorAdjust.setHue(0.3);
+          break;
+        case ZShape.SPAWN_VALUE:
+          colorAdjust.setHue(0.5);
+          break;
+        case SOLID_BLOCK_VALUE:
+          colorAdjust.setSaturation(-1);
+          break;
+        default:
+          throw new IllegalArgumentException("Unknown shape " + blockValue);
+      }
+
+      tetriminoBlock.setEffect(colorAdjust);
     }
 
-    tetriminoBlock.setEffect(colorAdjust);
+    return tetriminoBlock;
   }
-
-  return tetriminoBlock;
-}
 
   /** Reset game scoring labels to default; for initialising the game */
   private void resetLabels() {
@@ -431,23 +559,21 @@ public class GameBoardController implements GameStateManager {
         final int curRow = row;
         final int curCol = col;
         int delay = (row * 50);
-        KeyFrame keyFrame =
-            new KeyFrame(
-                Duration.millis(delay),
-                event -> {
-                  displayGrid.add(getBlock(SOLID_BLOCK_VALUE), curCol, curRow);
-                });
+        KeyFrame keyFrame = new KeyFrame(
+            Duration.millis(delay),
+            event -> {
+              displayGrid.add(getBlock(SOLID_BLOCK_VALUE), curCol, curRow);
+            });
         animationTimeline.getKeyFrames().add(keyFrame);
       }
     }
 
     // Add delay before revealing game over elements
-    KeyFrame actionsKeyFrame =
-        new KeyFrame(
-            Duration.millis(1000),
-            event -> {
-              enableGameOverElements();
-            });
+    KeyFrame actionsKeyFrame = new KeyFrame(
+        Duration.millis(1000),
+        event -> {
+          enableGameOverElements();
+        });
     animationTimeline.getKeyFrames().add(actionsKeyFrame);
 
     // Remove solid blocks
@@ -455,21 +581,20 @@ public class GameBoardController implements GameStateManager {
       for (int col = 0; col < cols; col++) {
         int delay = 2000 + (row * 50);
         int finalRow = row;
-        KeyFrame keyFrame =
-            new KeyFrame(
-                Duration.millis(delay),
-                event -> {
-                  displayGrid
-                      .getChildren()
-                      .removeIf(node -> finalRow == GridPane.getRowIndex(node));
-                });
+        KeyFrame keyFrame = new KeyFrame(
+            Duration.millis(delay),
+            event -> {
+              displayGrid
+                  .getChildren()
+                  .removeIf(node -> finalRow == GridPane.getRowIndex(node));
+            });
         animationTimeline.getKeyFrames().add(keyFrame);
       }
     }
     animationTimeline.setOnFinished(event -> {
       SoundManager.getInstance().playSoundEffect("secondgameover");
       mainMenuBtn.setVisible(true);
-  });
+    });
 
     animationTimeline.play();
   }
@@ -477,9 +602,13 @@ public class GameBoardController implements GameStateManager {
   /**
    * Handles the visibility of elements related to the game over screen.
    *
-   * <p>This method makes the game over UI elements visible and interactive when the game ends.
-   * It updates the score and high score labels to display the player's final score and the highest
-   * score recorded</p>
+   * <p>
+   * This method makes the game over UI elements visible and interactive when the
+   * game ends.
+   * It updates the score and high score labels to display the player's final
+   * score and the highest
+   * score recorded
+   * </p>
    */
   private void enableGameOverElements() {
     gameOverBox.setVisible(true);
@@ -531,11 +660,15 @@ public class GameBoardController implements GameStateManager {
     return new FXMLLoader(Main.class.getResource("/fxml/" + fxml + ".fxml")).load();
   }
 
-    /**
+  /**
    * Opens the tutorial screen when the tutorial button is clicked
    *
-   * <p>This method is linked to the tutorial button. When the button is clicked, the application will switch to the tutorial screen</p>
-   * @throws IOException 
+   * <p>
+   * This method is linked to the tutorial button. When the button is clicked, the
+   * application will switch to the tutorial screen
+   * </p>
+   * 
+   * @throws IOException
    */
   @FXML
   public void goToTutorial() throws IOException {
@@ -545,4 +678,35 @@ public class GameBoardController implements GameStateManager {
     SceneManager.addScene(AppUI.GAME_TUTORIAL, root);
     Main.setUi(AppUI.GAME_TUTORIAL);
   }
+
+  /**
+   * Starts the timer for the game when it's in Marathon Mode.
+   * 
+   */
+
+  private void startTimer() {
+    elapsedSeconds = 0; // Reset elapsed time to zero
+
+    // Create a Timeline to increment the elapsed time every second
+    gameTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+      elapsedSeconds++;
+      updateTimerLabel();
+    }));
+
+    // Set the timeline to continue indefinitely
+    gameTimer.setCycleCount(Timeline.INDEFINITE);
+    gameTimer.play();
+  }
+
+  /**
+   * update the timer Label to display the elapsed time.
+   */
+
+  private void updateTimerLabel() {
+    int minutes = elapsedSeconds / 60;
+    int seconds = elapsedSeconds % 60;
+    String timeFormatted = String.format("%02d:%02d", minutes, seconds);
+    Platform.runLater(() -> timerLabel.setText(timeFormatted));
+  }
+
 }

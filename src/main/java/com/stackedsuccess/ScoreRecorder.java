@@ -17,6 +17,8 @@ public class ScoreRecorder {
   private static final String SCOREFILE = "score.txt";
   private static final int MAX_SCORES = 12;
 
+  private static final String MARATHON_SCOREFILE = "marathon_score.txt";
+
   /**
    * Save the score to the file and update the high score if necessary.
    *
@@ -105,4 +107,9 @@ public class ScoreRecorder {
       }
     }
   }
+
+
+ 
+
 }
+

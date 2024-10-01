@@ -7,6 +7,11 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.scene.input.KeyEvent;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 
 // This class defines the game instance, controlling the game loop for the current game.
 public class GameInstance {
@@ -24,18 +29,34 @@ public class GameInstance {
   private TetriminoUpdateListener tetriminoUpdateListener;
   private final GameStateManager gameStateManager;
 
+  private boolean isMarathonMode; 
+  private int targetLines;
+
+  private Timer timer;
+
+  private ScheduledExecutorService scheduler;
+  private ScheduledFuture<?> scheduledTask;
+
+  
+
+
+
+  
+
   /**
    * Constructs a new instance of the game with default initial settings.
    *
    * <p>This constructor initialises the game state by setting the initial score,
    * game delay, and flags for pause and game over status</p>
    */
-  public GameInstance(GameStateManager gameStateManager) {
+  public GameInstance(GameStateManager gameStateManager, boolean isMarathonMode, int targetLines) {
     score = 0;
     gameDelay = 10;
     isPaused = false;
     isGameOver = false;
     this.gameStateManager = gameStateManager;
+    this.isMarathonMode = isMarathonMode; 
+    this.targetLines = targetLines;
   }
 
   /**
@@ -75,30 +96,25 @@ public class GameInstance {
    * the game state, handles Tetrimino movements, and checks whether the game is paused or over.</p>
    */
   public void start() {
-    gameBoard = new GameBoard(gameStateManager);
+    gameBoard = new GameBoard(gameStateManager, this);
     currentTetrimino = gameBoard.getCurrentTetrimino();
     gameControls = new GameControls();
 
-    // Create timer to regularly update game loop when not paused.
-    Timer timer = new Timer();
-    timer.schedule(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (!isPaused && !isGameOver) {
-              try {
+    // Create a ScheduledExecutorService to regularly update the game loop when not paused
+    scheduler = Executors.newScheduledThreadPool(1);
+    scheduledTask = scheduler.scheduleAtFixedRate(() -> {
+        if (!isPaused && !isGameOver) {
+            try {
                 gameBoard.update();
-              } catch (IOException e) {
-                // Do nothing for now
-              }
-              currentTetrimino = gameBoard.getCurrentTetrimino();
-              notifyTetriminoUpdate();
+            } catch (IOException e) {
+
+              //do noting: silentlly handle the exception
             }
-          }
-        },
-        0,
-        gameDelay);
-  }
+            currentTetrimino = gameBoard.getCurrentTetrimino();
+            notifyTetriminoUpdate();
+        } 
+    }, 0, gameDelay, TimeUnit.MILLISECONDS);
+}
 
   /**
    * Handles the key events for current game based on set controls.
@@ -199,7 +215,10 @@ public class GameInstance {
   public void setGameOver(boolean isGameOver) {
     this.isGameOver = isGameOver;
     this.isPaused = isGameOver;
-  }
+    
+}
+
+
 
   /**
    * This method checks whether the game is currently paused
@@ -209,5 +228,24 @@ public class GameInstance {
   public boolean isPaused() {
     return isPaused;
   }
+
+  public boolean isMarathonMode() {
+    return isMarathonMode;
+}
+
+public int getTargetLines() {
+    return targetLines;
+}
+
+public void stopGame() {
+  if (scheduledTask != null && !scheduledTask.isCancelled()) {
+      scheduledTask.cancel(true); // Cancel the task if it hasn't been canceled already
+    
+  }
+  setGameOver(true);
+}
+
+
+
 
 }
