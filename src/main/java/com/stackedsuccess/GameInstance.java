@@ -189,4 +189,65 @@ public class GameInstance {
   }
 
   /**
-   * Get t
+   * Get the current game score.
+   *
+   * @return current game score
+   */
+  public int getScore() {
+    return score;
+  }
+
+  /**
+   * Get game over status
+   *
+   * @return if game instance is over
+   */
+  public boolean isGameOver() {
+    return isGameOver;
+  }
+
+  /**
+   * Set game over status
+   *
+   * @param isGameOver the game over status to set
+   */
+  public void setGameOver(boolean isGameOver) {
+    this.isGameOver = isGameOver;
+    this.isPaused = isGameOver;
+    
+    if (isGameOver) {
+        System.out.println("Game Over flag set to true.");
+    }
+}
+
+
+
+  /**
+   * This method checks whether the game is currently paused
+   *
+   * @return if the game is currently paused
+   */
+  public boolean isPaused() {
+    return isPaused;
+  }
+
+  public boolean isMarathonMode() {
+    return isMarathonMode;
+}
+
+public int getTargetLines() {
+    return targetLines;
+}
+
+public void stopGame() {
+  if (scheduledTask != null && !scheduledTask.isCancelled()) {
+      scheduledTask.cancel(true); // Cancel the task if it hasn't been canceled already
+      System.out.println("Scheduled task canceled.");
+  }
+  setGameOver(true);
+}
+
+
+
+
+}
