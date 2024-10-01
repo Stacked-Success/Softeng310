@@ -26,30 +26,49 @@ public class GameBoard {
   private int baseLevel = 1;
   private int totalLinesCleared = 0;
   private int gameSpeed;
+  private int marathonTargetLines;
+  private boolean isMarathonMode = false;
 
   private final GameStateManager gameStateManager;
+  private final GameInstance gameInstance;
 
   /**
-   * Initialises a new instance of the Game Board class with the default board dimensions.
+   * Initialises a new instance of the Game Board class with the default board
+   * dimensions.
    *
-   * <p>This constructor sets up the game board by creating a 2D array with the default width and height.
-   * It then calls the initializeBoard() method to prepare the board for gameplay.</p>
+   * <p>
+   * This constructor sets up the game board by creating a 2D array with the
+   * default width and height.
+   * It then calls the initializeBoard() method to prepare the board for gameplay.
+   * </p>
    */
-  public GameBoard(GameStateManager gameStateManager) {
-    //creates the boards default dimensions
+  public GameBoard(GameStateManager gameStateManager, GameInstance gameInstance) {
     this.gameStateManager = gameStateManager;
+    this.gameInstance = gameInstance;
     board = new int[DEFAULT_BOARD_HEIGHT][DEFAULT_BOARD_WIDTH];
     this.width = DEFAULT_BOARD_WIDTH;
     this.height = DEFAULT_BOARD_HEIGHT;
     initializeBoard();
+}
+
+  /**
+   * Sets the traget number of lines to be cleared for the marathon level
+   * 
+   * @param targetLines
+   */
+  public void setMarathonTarget(int targetLines) {
+    isMarathonMode = true;
+    this.marathonTargetLines = targetLines;
   }
 
   /**
    * Sets up the initial Tetrimino pieces and initialises board-related metrics.
    *
-   * <p>This method is responsible for creating the current and next Tetrimino pieces
+   * <p>
+   * This method is responsible for creating the current and next Tetrimino pieces
    * using the Tetrimino factory. It also initialises the frame count and
-   * game speed to their starting values.</p>
+   * game speed to their starting values.
+   * </p>
    */
   private void initializeBoard() {
     currentTetrimino = TetriminoFactory.createRandomTetrimino();
@@ -101,10 +120,12 @@ public class GameBoard {
           newY = y + layoutY;
 
           // Check for out of bound collisions
-          if (isOutOfBounds(newX, newY)) return true;
+          if (isOutOfBounds(newX, newY))
+            return true;
 
           // Check for existing tetrimino cells
-          if (isCellOccupied(newX, newY)) return true;
+          if (isCellOccupied(newX, newY))
+            return true;
         }
       }
     }
@@ -125,7 +146,10 @@ public class GameBoard {
     updateLevel();
   }
 
-  /** Forces the game loop to update once, primarily used to place tetrimino pieces instantly. */
+  /**
+   * Forces the game loop to update once, primarily used to place tetrimino pieces
+   * instantly.
+   */
   public void forceUpdate() {
     forceUpdate = true;
   }
@@ -157,24 +181,35 @@ public class GameBoard {
     return width;
   }
 
-  /** Handle the placement of the current tetrimino piece in its current position. */
+  /**
+   * Handle the placement of the current tetrimino piece in its current position.
+   */
   private void handleTetriminoPlacement() throws IOException {
     holdUsed = false;
 
     placeTetrimino(currentTetrimino);
-    if (checkGameOver()) return;
+    if (checkGameOver()) {
+        return;
+    }
 
     clearFullRows();
 
     currentTetrimino = nextTetrimino;
     nextTetrimino = TetriminoFactory.createRandomTetrimino();
 
-    // If spawn location is occupied, move tetrimino visually outside of board
-    // If the tetrimino is placed visually outside the board, the game will end.
-    if (isSpawnLocationOccupied()) currentTetrimino.setYPos(0);
+    if (isSpawnLocationOccupied()) {
+        currentTetrimino.setYPos(0);
+    }
 
-    gameStateManager.setNextPieceView(nextTetrimino); 
-  }
+    gameStateManager.setNextPieceView(nextTetrimino);
+
+    // If in Marathon Mode, check if target lines have been cleared
+    if (isMarathonMode && totalLinesCleared >= marathonTargetLines) {
+        gameStateManager.gameOver();
+        gameInstance.stopGame(); // Stop the game once target lines are cleared
+        System.out.println("Congratulations! You completed Marathon Mode!");
+    }
+}
 
   /**
    * Appends a new tetrimino to the game board at its current position.
@@ -202,10 +237,15 @@ public class GameBoard {
    * Checks the top two rows of the game board to determine if any pieces are
    * out of bounds, indicating a game-over condition.
    *
-   * @return true if the game is over due to pieces in the top rows, false otherwise
+   * @return true if the game is over due to pieces in the top rows, false
+   *         otherwise
    * @throws IOException if an error occurs while handling the game over condition
    */
   private boolean checkGameOver() throws IOException {
+    if(isMarathonMode && totalLinesCleared >= marathonTargetLines) {
+      gameStateManager.gameOver();
+      return true;
+    }
     for (int x = 0; x < width; x++) {
       for (int y = 0; y <= 1; y++) {
         if (board[y][x] != 0) {
@@ -220,32 +260,44 @@ public class GameBoard {
   /**
    * Method to clear any full rows on the board
    *
-   * <p>Clears full rows on the game board and shifts the rows above downward.
+   * <p>
+   * Clears full rows on the game board and shifts the rows above downward.
    * It also updates the score, the total number of cleared lines, and adjusts
-   * the game level and speed accordingly.</p>
-   */
-  private void clearFullRows() {
-    int newLinesCleared = 0;
-    for (int y = 0; y < board.length; y++) {
-      if (isRowFull(y, board[y])) {
-        //moves all the rows that are above, down one
-        newLinesCleared++;
-        shiftRowsDown(y);
-        SoundManager.getInstance().playSoundEffect("layer");
-      }
+   * the game level and speed accordingly.
+   * </p>
+      * @throws IOException 
+      */
+      private void clearFullRows() throws IOException {
+        int newLinesCleared = 0;
+        for (int y = 0; y < board.length; y++) {
+            if (isRowFull(y, board[y])) {
+                newLinesCleared++;
+                shiftRowsDown(y);
+                SoundManager.getInstance().playSoundEffect("layer");
+            }
+        }
+        calculateScore(newLinesCleared);
+        totalLinesCleared += newLinesCleared;
+    
+        gameStateManager.updateLine(totalLinesCleared);
+        updateLevel();
+        changeGameSpeed();
+    
+        // Check if the game is over for Marathon Mode
+        if (isMarathonMode && totalLinesCleared >= marathonTargetLines) {
+            gameStateManager.gameOver();
+            gameInstance.stopGame(); // Stop the game once target lines are cleared
+            System.out.println("Congratulations! You completed Marathon Mode!");
+        }
     }
-    calculateScore(newLinesCleared);
-    totalLinesCleared += newLinesCleared;
-
-    gameStateManager.updateLine(totalLinesCleared);
-    updateLevel();
-    changeGameSpeed();
-  }
-
-  /** Updates the level based on the number of lines cleared.
+    
+  /**
+   * Updates the level based on the number of lines cleared.
    *
-   * <p>For every 10 lines that are cleared, the game will increase
-   * by one level</p>
+   * <p>
+   * For every 10 lines that are cleared, the game will increase
+   * by one level
+   * </p>
    */
   private void updateLevel() {
     level = (totalLinesCleared / 10) + baseLevel;
@@ -259,28 +311,33 @@ public class GameBoard {
    * @param linesCleared the number of lines cleared
    */
   private void calculateScore(int linesCleared) {
-    switch (linesCleared) {
-      // the different calculations of scores, whether 1,2,3, or 4 lines are cleared at once
-      case 1:
-        score += 40;
-        break;
-      case 2:
-        score += 100;
-        break;
-      case 3:
-        score += 300;
-        break;
-      case 4:
-        score += 1200;
-        break;
-      default:
-        break;
-    }
-    gameStateManager.updateScore(score);
+    if (isMarathonMode) {
+      // Factor in the difficulty level for higher score potential in Marathon Mode
+      score += linesCleared * 200 * baseLevel; // `baseLevel` reflects difficulty level
+  } else {
+      switch (linesCleared) {
+          case 1:
+              score += 40;
+              break;
+          case 2:
+              score += 100;
+              break;
+          case 3:
+              score += 300;
+              break;
+          case 4:
+              score += 1200;
+              break;
+          default:
+              break;
+      }
+  }
+  gameStateManager.updateScore(score);
   }
 
   /**
-   * Moves rows above certain row downwards and creates empty line at top of game board.
+   * Moves rows above certain row downwards and creates empty line at top of game
+   * board.
    *
    * @param fromYAxis the start y-axis for moving subsequent rows downward
    */
@@ -289,7 +346,8 @@ public class GameBoard {
       System.arraycopy(board[y - 1], 0, board[y], 0, board[0].length);
     }
 
-    for (int x = 0; x < board[0].length; x++) board[0][x] = 0;
+    for (int x = 0; x < board[0].length; x++)
+      board[0][x] = 0;
   }
 
   /**
@@ -318,23 +376,27 @@ public class GameBoard {
    * Check if the contents within a row are full of tetrimino cells.
    *
    * @param rowY the y level or row number of given row
-   * @param row the row to check
+   * @param row  the row to check
    * @return whether the row is full or not
    */
   private boolean isRowFull(int rowY, int[] row) {
     for (int x = 0; x < row.length; x++) {
-      if (!isCellOccupied(x, rowY)) return false;
+      if (!isCellOccupied(x, rowY))
+        return false;
     }
     return true;
   }
 
   /**
-   * Holds the current tetrimino and swaps it with the held tetrimino if one is already held.
-   * The user is blocked from holding another tetrimino until the current one is placed.
+   * Holds the current tetrimino and swaps it with the held tetrimino if one is
+   * already held.
+   * The user is blocked from holding another tetrimino until the current one is
+   * placed.
    */
   public void holdTetrimino() {
     // check if a player is already holding a piece
-    if (holdUsed) return;
+    if (holdUsed)
+      return;
 
     // if there is no tetrimino being currently held, store the current one
     if (holdTetrimino == null) {
@@ -342,7 +404,7 @@ public class GameBoard {
       currentTetrimino = nextTetrimino;
       nextTetrimino = TetriminoFactory.createRandomTetrimino();
     } else {
-      //if a tetriminio is already being held swap the current with the held
+      // if a tetriminio is already being held swap the current with the held
       Tetrimino temp = holdTetrimino;
       holdTetrimino = currentTetrimino;
       currentTetrimino = temp;
@@ -356,21 +418,37 @@ public class GameBoard {
   }
 
   /**
-   * Adjusts the game speed based on the current level. The game speed decreases (game gets faster) as
-   * the player progresses through the levels, with noticeable difficulty jumps at levels 10 and 15.
-   * At level 20, the game reaches a "kill screen" speed where it becomes extremely difficult to continue.
+   * Adjusts the game speed based on the current level. The game speed decreases
+   * (game gets faster) as
+   * the player progresses through the levels, with noticeable difficulty jumps at
+   * levels 10 and 15.
+   * At level 20, the game reaches a "kill screen" speed where it becomes
+   * extremely difficult to continue.
    * Essentially creating a hard cap to the game.
    */
   private void changeGameSpeed() {
-
-    if (level < 10) {
-      gameSpeed = 100 - (level * 5);
-    } else if (level < 15) {
-      gameSpeed = 50 - level;
-    } else if (level < 20) {
-      gameSpeed = 30 - level;
+    if (isMarathonMode) {
+      // Adjust speed based on the total number of lines cleared in Marathon Mode
+      if (totalLinesCleared < 20) {
+        gameSpeed = 100; // Starting speed
+      } else if (totalLinesCleared < 50) {
+        gameSpeed = 80; // Gets faster
+      } else if (totalLinesCleared < 80) {
+        gameSpeed = 50; // Increases the challenge further
+      } else {
+        gameSpeed = 30; // Maximum speed for increased challenge
+      }
     } else {
-      gameSpeed = 3;
+      // Original speed control logic for basic mode
+      if (level < 10) {
+        gameSpeed = 100 - (level * 5);
+      } else if (level < 15) {
+        gameSpeed = 50 - level;
+      } else if (level < 20) {
+        gameSpeed = 30 - level;
+      } else {
+        gameSpeed = 3;
+      }
     }
   }
 
@@ -382,4 +460,9 @@ public class GameBoard {
   public Tetrimino getNextTetrimino() {
     return nextTetrimino;
   }
+
+  public int getTotalLinesCleared() {
+    return totalLinesCleared;
+}
+
 }

@@ -17,6 +17,8 @@ public class ScoreRecorder {
   private static final String SCOREFILE = "score.txt";
   private static final int MAX_SCORES = 12;
 
+  private static final String MARATHON_SCOREFILE = "marathon_score.txt";
+
   /**
    * Save the score to the file and update the high score if necessary.
    *
@@ -105,4 +107,23 @@ public class ScoreRecorder {
       }
     }
   }
+
+
+  /**
+     * Save the marathon score to the file and update the high score if necessary.
+     *
+     * @param score the marathon score to save
+     * @throws IOException if an I/O error occurs
+     */
+    public static void saveMarathonScore(String score) throws IOException {
+      List<Integer> scores = getAllScores(); // Optionally, separate Marathon scores
+      scores.add(Integer.parseInt(score));
+      Collections.sort(scores, Collections.reverseOrder());
+      if (scores.size() > MAX_SCORES) {
+          scores.remove(scores.size() - 1);
+      }
+      writeScores(scores);
+  }
+
 }
+
