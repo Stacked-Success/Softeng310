@@ -8,6 +8,7 @@ public class SceneManager {
     MAIN_MENU,
     GAME,
     HOME_TUTORIAL,
+    SKINSHOP,
     GAME_TUTORIAL;
   }
 
