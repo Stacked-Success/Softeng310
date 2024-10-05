@@ -9,7 +9,8 @@ This project makes use of the following images:
 
 <a href="https://www.reddit.com/r/gameassets/comments/taalcm/over_10000_free_cc0_game_assets/"> - public domain (cc0) license
 
-
-fruits.png - Image by <a href="https://www.freepik.com/free-vector/flat-design-pixel-art-food-illustration_38216039.htm#page=14&query=cake%20pixel%20emojis&position=29&from_view=keyword&track=ais_hybrid&uuid=db2f5168-4f41-4b11-8f2f-857940fda277">Freepik</a>
-
 questionmark.png - <a href="https://www.vecteezy.com/free-vector/question-mark-pixel">Question Mark Pixel Vectors by Vecteezy</a>
+
+shopHome.png - <a href="https://www.freepik.com/free-vector/wooden-gold-buttons-ui-game_12760665.htm#fromView=search&page=1&position=0&uuid=71324d6c-e225-4866-8dbf-4908e1487c43">Image by upklyak on Freepik</a>
+
+background.jpg - <a href="https://www.freepik.com/free-photo/abstract-pixelated-background_29795081.htm#fromView=search&page=1&position=25&uuid=07f7dbb0-098f-421f-a4c9-b5c402dbc2ab">Image by freepik</a>

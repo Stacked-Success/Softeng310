@@ -39,10 +39,12 @@ public class SkinDisplayMaker {
 
         String displayName = themeName.replace("Skin", "");
         Text skinName = new Text(displayName);
-        skinName.setFont(new Font(16));
+        skinName.setFont(new Font(18));
+        skinName.setFill(javafx.scene.paint.Color.WHITE);
 
         Text pointsLabel = new Text(pointsIncrement + " points");
-        pointsLabel.setFont(new Font(14));
+        pointsLabel.setFont(new Font(16));
+        pointsLabel.setFill(javafx.scene.paint.Color.WHITE);
 
         int highScore;
         try {
@@ -86,9 +88,11 @@ public class SkinDisplayMaker {
 
         Text comingSoonText = new Text("Coming Soon");
         comingSoonText.setFont(new Font(16));
+        comingSoonText.setFill(javafx.scene.paint.Color.WHITE);
 
         Text pointsLabel = new Text(pointsIncrement + " points");
         pointsLabel.setFont(new Font(14));
+        pointsLabel.setFill(javafx.scene.paint.Color.WHITE);
 
         Button lockedButton = new Button("Locked");
         lockedButton.setFont(new Font(16));

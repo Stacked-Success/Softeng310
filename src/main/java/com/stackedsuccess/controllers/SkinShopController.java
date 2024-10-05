@@ -7,13 +7,13 @@ import com.stackedsuccess.managers.SkinDisplayMaker;
 import com.stackedsuccess.managers.TetriminoImageManager;
 import java.io.IOException;
 import java.util.List;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -22,6 +22,7 @@ public class SkinShopController {
   @FXML private VBox skinDisplayBox;
   @FXML private ImageView currentSkinImageView;
   @FXML private Label highScoreLabel;
+  @FXML private Label skinNameLabel;
 
   private TetriminoImageManager imageManager;
 
@@ -95,6 +96,8 @@ public class SkinShopController {
   private void onSelectSkin(String skinName) {
     imageManager.setSkinTheme(skinName);
     updateSkinPreview(skinName);
+    String displayName = skinName.replace("Skin", "");
+    skinNameLabel.setText(displayName);
     System.out.println("Switched to " + skinName);
   }
 
@@ -102,6 +105,8 @@ public class SkinShopController {
   private void setDefaultSkinPreview() {
     String currentSkin = imageManager.getCurrentSkin();
     updateSkinPreview(currentSkin);
+    String displayName = currentSkin.replace("Skin", "");
+    skinNameLabel.setText(displayName); 
   }
 
   /**
@@ -117,7 +122,7 @@ public class SkinShopController {
 
   /** Navigates back to the main menu. */
   @FXML
-  public void onBack(ActionEvent event) throws IOException {
+  public void onBack(MouseEvent event) throws IOException {
     FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/HomeScreen.fxml"));
     Parent root = loader.load();
     SceneManager.addScene(SceneManager.AppUI.MAIN_MENU, root);
