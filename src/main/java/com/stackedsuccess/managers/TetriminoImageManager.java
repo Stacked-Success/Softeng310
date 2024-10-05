@@ -11,6 +11,7 @@ public class TetriminoImageManager {
     private static TetriminoImageManager instance;
     private static final String DEFAULT_SKIN = "DefaultSkin";
     private static final String PREF_SKIN_KEY = "selectedSkin";
+    private static final String PREF_FIRST_RUN_KEY = "firstRun";
     
     private String imagePath = "file:src/main/resources/images/";
     private static final String IMAGE_EXTENSION = ".png";
@@ -28,6 +29,13 @@ public class TetriminoImageManager {
     private TetriminoImageManager() {
         tetriminoImages = new HashMap<>();
         prefs = Preferences.userNodeForPackage(TetriminoImageManager.class);
+
+        boolean isFirstRun = prefs.getBoolean(PREF_FIRST_RUN_KEY, true);
+        if (isFirstRun) {
+            prefs.putBoolean(PREF_FIRST_RUN_KEY, false);
+            prefs.put(PREF_SKIN_KEY, DEFAULT_SKIN);
+        }
+
         String savedSkin = prefs.get(PREF_SKIN_KEY, DEFAULT_SKIN);
         setSkinTheme(savedSkin);
     }
