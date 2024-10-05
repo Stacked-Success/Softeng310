@@ -11,3 +11,5 @@ This project makes use of the following images:
 
 
 fruits.png - Image by <a href="https://www.freepik.com/free-vector/flat-design-pixel-art-food-illustration_38216039.htm#page=14&query=cake%20pixel%20emojis&position=29&from_view=keyword&track=ais_hybrid&uuid=db2f5168-4f41-4b11-8f2f-857940fda277">Freepik</a>
+
+questionmark.png - <a href="https://www.vecteezy.com/free-vector/question-mark-pixel">Question Mark Pixel Vectors by Vecteezy</a>
