@@ -95,7 +95,7 @@ public class GameBoardController implements GameStateManager {
   private int elapsedSeconds; // Track the total number of elapsed seconds
 
   public GameBoardController() {
-    imageManager = new TetriminoImageManager();
+    imageManager = TetriminoImageManager.getInstance(); 
   }
 
   /**

@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" prefHeight="900.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.stackedsuccess.controllers.HomeScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" prefHeight="900.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.stackedsuccess.controllers.HomeScreenController">
     <children>
       <AnchorPane fx:id="mainPane" layoutX="-2.0" layoutY="1.0" prefHeight="897.0" prefWidth="1298.0">
          <children>
@@ -22,18 +22,18 @@
             </ImageView>
             <ListView fx:id="pastScores" layoutX="45.0" layoutY="127.0" prefHeight="277.0" prefWidth="193.0" visible="false" />
             <Slider fx:id="difficultySlider" blockIncrement="1.0" layoutX="52.0" layoutY="665.0" majorTickUnit="1.0" max="20.0" min="1.0" minorTickCount="0" prefHeight="74.0" prefWidth="659.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="48.0" />
-            <Button id="tutorial" fx:id="tutorialBtn" layoutX="225.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#goToTutorial" text="Tutorial">
+            <Button id="tutorial" fx:id="tutorialBtn" layoutX="205.0" layoutY="68.0" mnemonicParsing="false" onMouseClicked="#goToTutorial" text="Tutorial">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
       
-            <Button id="pastScores" fx:id="pastScoresButton" layoutX="64.0" layoutY="64.0" mnemonicParsing="false" onAction="#showPastScores" text="Past Scores">
+            <Button id="pastScores" fx:id="pastScoresButton" layoutX="40.0" layoutY="68.0" mnemonicParsing="false" onAction="#showPastScores" text="Past Scores">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-              <Text id="titleText" layoutX="368.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="gen-text" text="Stacked Success Presents" textAlignment="CENTER" wrappingWidth="483.88671875">
+              <Text id="titleText" layoutX="460.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="gen-text" text="Stacked Success Presents" textAlignment="CENTER" wrappingWidth="403.45648193359375">
                <font>
                   <Font size="30.0" />
                </font>
@@ -59,6 +59,11 @@
                </font>
             </Button>
             <Button id="difficulty" focusTraversable="false" layoutX="889.0" layoutY="68.0" mnemonicParsing="false" onAction="#onDifficulty" text="Difficulty">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button id="shop" focusTraversable="false" layoutX="340.0" layoutY="68.0" mnemonicParsing="false" onAction="#onShop" text="Shop">
                <font>
                   <Font size="20.0" />
                </font>

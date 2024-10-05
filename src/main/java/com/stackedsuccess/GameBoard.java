@@ -461,6 +461,16 @@ public class GameBoard {
     return nextTetrimino;
   }
 
+    /**
+   * Get the hold tetrimino piece.
+   *
+   * @return the hold tetrimino piece
+   */
+  public Tetrimino getHoldTetrimino() {
+    return holdTetrimino;
+  }
+
+
   public int getTotalLinesCleared() {
     return totalLinesCleared;
 }

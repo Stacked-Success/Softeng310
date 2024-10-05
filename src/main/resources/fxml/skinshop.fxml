@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="mainPane" prefHeight="900.0" prefWidth="1300.0" stylesheets="@../css/skincontroller.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.stackedsuccess.controllers.SkinShopController">
+    <children>
+      <ImageView fitHeight="928.0" fitWidth="1346.0" layoutX="-18.0" layoutY="-13.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/background.jpg" />
+         </image>
+         <effect>
+            <InnerShadow choke="0.35" height="255.0" radius="127.0" width="255.0">
+               <input>
+                  <Lighting>
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </input>
+            </InnerShadow>
+         </effect>
+      </ImageView>
+        <Label id="scoreLbl" fx:id="highScoreLabel" layoutX="53.0" layoutY="-25.0" prefHeight="145.0" prefWidth="428.0" style="-fx-font-size: 17px;" text="High Score: 0" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="57.0" />
+         </font></Label>
+        <HBox layoutY="170.0" prefHeight="600.0" prefWidth="1200.0">
+            <VBox alignment="CENTER" prefWidth="600.0" spacing="20.0">
+                <Label style="-fx-font-size: 18px;" text="Selected Skin:" textFill="WHITE" />
+                <ImageView fx:id="currentSkinImageView" fitHeight="300.0" fitWidth="300.0" preserveRatio="true" />
+                <Label fx:id="skinNameLabel" style="-fx-font-size: 24px;" text="Skin Name" textFill="WHITE" />
+            </VBox>
+            <ScrollPane id="scrollpane" fx:id="scrollPane" fitToHeight="true" fitToWidth="true" pannable="true" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: transparent;">
+                <content>
+                    <VBox id="vbox" fx:id="skinDisplayBox" alignment="CENTER" fillWidth="true" spacing="20.0" style="-fx-background-color: transparent;" stylesheets="@../css/skincontroller.css">
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+        </HBox>
+      <HBox id="home" layoutX="1200.0" layoutY="10.0" onMouseClicked="#onBack" prefHeight="59.0" prefWidth="56.0">
+         <children>
+            <ImageView fitHeight="84.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/shopHome.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <Label id="scoreLbl" fx:id="highScoreLabel1" layoutX="572.0" layoutY="-15.0" prefHeight="102.0" prefWidth="405.0" style="-fx-font-size: 30px;" text="Skins" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="57.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>

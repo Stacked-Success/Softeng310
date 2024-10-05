@@ -1,0 +1,53 @@
+/**
+ * Styles for the SkinShopController view.
+ */
+
+/* ScrollPane styling to make the background and scrollbars transparent */
+#scrollpane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Ensure the scrollbars inside the ScrollPane are also transparent */
+#scrollpane .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+/* Make the viewport inside the ScrollPane transparent */
+#scrollpane .viewport {
+    -fx-background-color: transparent; 
+}
+
+/* VBox styling inside the ScrollPane */
+#vbox {
+    -fx-background-color: transparent;
+}
+
+/* General styling for all labels, setting the font to "Press Start 2P" */
+.label {
+    -fx-font-family: "Press Start 2P";
+}
+
+/* Styling for all text elements, using the "Press Start 2P" font with a smaller size */
+.text {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 12px; 
+}
+
+/* Specific styling for the score label, using the "Press Start 2P" font with a smaller size */
+#scoreLbl {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 7px; 
+}
+
+/* Add a hand cursor for the "home" button */
+#home {
+    -fx-cursor: hand;
+    -fx-effect: none;
+}
+
+/* Apply a drop shadow effect when hovering over the "home" button */
+#home:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 10, 0.5, 0, 3);
+}

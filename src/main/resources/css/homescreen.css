@@ -70,6 +70,10 @@
     -fx-background-color: #9C27B0; /* Purple background */
 }
 
+.button#shop {
+    -fx-background-color: #36c1f4; /* Red background */
+}
+
 /* Hover effects for specific Buttons */
 .button#startGame:hover {
     -fx-background-color: #388E3C; /* Darker green for start button hover */
@@ -90,6 +94,15 @@
 .button#pastScores:hover {
     -fx-background-color: #FFB300; /* Darker yellow for past scores button hover */
 }
+
+.button#shop:hover {
+    -fx-background-color: #1eb7ee; /* Red background */
+}
+
+.button:hover {
+    -fx-cursor: hand;
+}
+
 
 /* Style the Slider */
 .slider {
