@@ -10,7 +10,7 @@
 }
 
 /* Ensure the scrollbars inside the ScrollPane are also transparent */
-#scrollpane .scroll-bar:vertical, #scrollpane .scroll-bar:horizontal {
+#scrollpane .scroll-bar {
     -fx-background-color: transparent;
 }
 
