@@ -1,5 +1,10 @@
 package com.stackedsuccess;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.input.KeyCode;
@@ -12,16 +17,16 @@ public class GameControls {
   public GameControls() {
     controls = new HashMap<>();
     initializeControls();
+    loadControls("controls.txt");
   }
 
   /**
    * Initialises the default key bindings for various actions in the game.
    *
-   * <p>This method assigns specific keys to actions such as moving left, right,
-   * down, performing a hard drop, rotating pieces, pausing the game, and holding
-   * a piece</p>
+   * <p>This method assigns specific keys to actions such as moving left, right, down, performing a
+   * hard drop, rotating pieces, pausing the game, and holding a piece
    */
-   private void initializeControls() {
+  private void initializeControls() {
     controls.put(Action.MOVE_LEFT, KeyCode.LEFT);
     controls.put(Action.MOVE_RIGHT, KeyCode.RIGHT);
     controls.put(Action.MOVE_DOWN, KeyCode.DOWN);
@@ -71,5 +76,44 @@ public class GameControls {
       }
     }
     return null;
+  }
+
+  /**
+   * Gets the KeyCode associated with the specified Action.
+   *
+   * @param action the Action for which to retrieve the key binding
+   * @return the KeyCode associated with the action, or null if not found
+   */
+  public KeyCode getKeyFromAction(Action action) {
+    return controls.get(action);
+  }
+
+  public void saveControls(String filePath) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+      for (Map.Entry<Action, KeyCode> entry : controls.entrySet()) {
+        writer.write(entry.getKey() + "," + entry.getValue().name());
+        writer.newLine();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void loadControls(String filePath) {
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+      String line;
+      while ((line = reader.readLine()) != null) {
+        String[] parts = line.split(",");
+        if (parts.length != 2) continue;
+        try {
+          Action action = Action.valueOf(parts[0].trim());
+          KeyCode key = KeyCode.valueOf(parts[1].trim());
+          setControl(action, key);
+        } catch (IllegalArgumentException e) {
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }

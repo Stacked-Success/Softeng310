@@ -1,5 +1,7 @@
 package com.stackedsuccess.controllers;
 
+import com.stackedsuccess.Action;
+import com.stackedsuccess.GameControls;
 import com.stackedsuccess.GameInstance;
 import com.stackedsuccess.Main;
 import com.stackedsuccess.managers.GameStateManager;
@@ -95,7 +97,7 @@ public class GameBoardController implements GameStateManager {
   private int elapsedSeconds; // Track the total number of elapsed seconds
 
   public GameBoardController() {
-    imageManager = TetriminoImageManager.getInstance(); 
+    imageManager = new TetriminoImageManager();
   }
 
   /**
@@ -248,9 +250,11 @@ public class GameBoardController implements GameStateManager {
   @FXML
   public void onKeyPressed(KeyEvent event) {
     // pauses the game if ESC is called
-    if (event.getCode() == KeyCode.ESCAPE) {
+    GameControls gameControls = new GameControls();
+    Action action = gameControls.getAction(event);
+    if (action == Action.PAUSE) {
       togglePauseScreen();
-    }
+  }
     // otherwise passes the players input to the game instance
     gameInstance.handleInput(event);
   }

@@ -9,7 +9,8 @@ public class SceneManager {
     GAME,
     HOME_TUTORIAL,
     SKINSHOP,
-    GAME_TUTORIAL;
+    GAME_TUTORIAL,
+    SETTINGS;
   }
 
   private static HashMap<AppUI, Parent> sceneMap = new HashMap<AppUI, Parent>();
