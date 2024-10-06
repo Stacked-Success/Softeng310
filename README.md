@@ -108,23 +108,7 @@ You will need the following software installed:
      cd Softeng310
      ```
 
-3. **Create new controls.txt file**:
-    <p>Create a new text file inside the Softeng310 folder and name it 'controls.txt' (case-sensitive).
-    <p>
-    On MacOS, in the terminal you can use this prompt to do so;
-
-    ```sh
-    touch controls.txt
-    ```
-
-    On Windows, you can either navigate to the folder itself using File Explorer, or use this prompt in the Command window
-
-    ```sh
-    echo. > controls.txt
-    ```
-    Next copy the contents from 'factoryControls.txt' into the new 'controls.txt'. You can do this by navigating to the Softeng310 file using Finder/File Explorer for each respective OS.
-
-4. **Run the Project**:
+3. **Run the Project**:
    ```sh
    ./mvnw clean javafx:run
    ```

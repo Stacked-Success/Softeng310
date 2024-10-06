@@ -7,10 +7,7 @@ import com.stackedsuccess.managers.GameStateManager;
 import com.stackedsuccess.managers.SceneManager;
 import com.stackedsuccess.managers.SceneManager.AppUI;
 import com.stackedsuccess.managers.sound.SoundManager;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -162,26 +159,6 @@ public class HomeScreenController {
   void toggleBasic() {
     basicBtn.setSelected(true);
     marathonBtn.setSelected(false);
-  }
-
-  /**
-   * Reads scores from a file and returns them as a list of strings.
-   *
-   * @param filePath The path to the score file that will be read.
-   * @return A list of scores as strings, where each string represents one line from the file.
-   */
-  private List<String> loadScoresFromFile(String filePath) {
-    List<String> scores = new ArrayList<>();
-    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-      String line;
-      // reads each line from the file and adds to the score list
-      while ((line = reader.readLine()) != null) {
-        scores.add(line);
-      }
-    } catch (IOException e) {
-      throw new IllegalArgumentException("Issue regarding Score file", e);
-    }
-    return scores;
   }
 
   /**

@@ -4,14 +4,11 @@ import com.stackedsuccess.managers.GameStateManager;
 import com.stackedsuccess.managers.sound.SoundManager;
 import com.stackedsuccess.tetriminos.Tetrimino;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
-import javafx.scene.input.KeyEvent;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-
+import javafx.scene.input.KeyEvent;
 
 // This class defines the game instance, controlling the game loop for the current game.
 public class GameInstance {
@@ -29,25 +26,17 @@ public class GameInstance {
   private TetriminoUpdateListener tetriminoUpdateListener;
   private final GameStateManager gameStateManager;
 
-  private boolean isMarathonMode; 
+  private boolean isMarathonMode;
   private int targetLines;
-
-  private Timer timer;
 
   private ScheduledExecutorService scheduler;
   private ScheduledFuture<?> scheduledTask;
 
-  
-
-
-
-  
-
   /**
    * Constructs a new instance of the game with default initial settings.
    *
-   * <p>This constructor initialises the game state by setting the initial score,
-   * game delay, and flags for pause and game over status</p>
+   * <p>This constructor initialises the game state by setting the initial score, game delay, and
+   * flags for pause and game over status
    */
   public GameInstance(GameStateManager gameStateManager, boolean isMarathonMode, int targetLines) {
     score = 0;
@@ -55,13 +44,11 @@ public class GameInstance {
     isPaused = false;
     isGameOver = false;
     this.gameStateManager = gameStateManager;
-    this.isMarathonMode = isMarathonMode; 
+    this.isMarathonMode = isMarathonMode;
     this.targetLines = targetLines;
   }
 
-  /**
-   * An interface for listening to updates of a Tetrimino.
-   */
+  /** An interface for listening to updates of a Tetrimino. */
   public interface TetriminoUpdateListener {
     void onTetriminoUpdate(Tetrimino tetrimino);
   }
@@ -78,9 +65,9 @@ public class GameInstance {
   /**
    * Notifies the registered listener that the current Tetrimino has been updated
    *
-   * <p>This method is called whenever the Tetrimino's state changes. It checks if a
-   * listener has been registered, and if so, it triggers the listener's
-   * onTetriminoUpdate() method, passing the updated Tetrimino as an argument.</p>
+   * <p>This method is called whenever the Tetrimino's state changes. It checks if a listener has
+   * been registered, and if so, it triggers the listener's onTetriminoUpdate() method, passing the
+   * updated Tetrimino as an argument.
    */
   private void notifyTetriminoUpdate() {
     if (tetriminoUpdateListener != null) {
@@ -93,7 +80,7 @@ public class GameInstance {
    *
    * <p>This method initialises the game board, retrieves the current Tetrimino, and sets up the
    * game controls. It also creates a timer that periodically triggers the game loop, which updates
-   * the game state, handles Tetrimino movements, and checks whether the game is paused or over.</p>
+   * the game state, handles Tetrimino movements, and checks whether the game is paused or over.
    */
   public void start() {
     gameBoard = new GameBoard(gameStateManager, this);
@@ -102,19 +89,24 @@ public class GameInstance {
 
     // Create a ScheduledExecutorService to regularly update the game loop when not paused
     scheduler = Executors.newScheduledThreadPool(1);
-    scheduledTask = scheduler.scheduleAtFixedRate(() -> {
-        if (!isPaused && !isGameOver) {
-            try {
-                gameBoard.update();
-            } catch (IOException e) {
+    scheduledTask =
+        scheduler.scheduleAtFixedRate(
+            () -> {
+              if (!isPaused && !isGameOver) {
+                try {
+                  gameBoard.update();
+                } catch (IOException e) {
 
-              //do noting: silentlly handle the exception
-            }
-            currentTetrimino = gameBoard.getCurrentTetrimino();
-            notifyTetriminoUpdate();
-        } 
-    }, 0, gameDelay, TimeUnit.MILLISECONDS);
-}
+                  // do noting: silentlly handle the exception
+                }
+                currentTetrimino = gameBoard.getCurrentTetrimino();
+                notifyTetriminoUpdate();
+              }
+            },
+            0,
+            gameDelay,
+            TimeUnit.MILLISECONDS);
+  }
 
   /**
    * Handles the key events for current game based on set controls.
@@ -138,27 +130,27 @@ public class GameInstance {
     }
   }
 
-   /**
+  /**
    * Plays the appropriate sound effect based on the action performed.
    *
-   * <p>This method plays different sound effects depending on the action, such as
-   * rotating or dropping the Tetrimino.</p>
+   * <p>This method plays different sound effects depending on the action, such as rotating or
+   * dropping the Tetrimino.
    *
    * @param action the action for which to play a sound effect
    */
   private void playSoundForAction(Action action) {
     switch (action) {
-        case ROTATE_CLOCKWISE:
-        case ROTATE_COUNTERCLOCKWISE:
+      case ROTATE_CLOCKWISE:
+      case ROTATE_COUNTERCLOCKWISE:
         SoundManager.getInstance().playSoundEffect("rotate");
-            break;
-        case HARD_DROP:
+        break;
+      case HARD_DROP:
         SoundManager.getInstance().playSoundEffect("drop");
-            break;
-        default:
-            break;
+        break;
+      default:
+        break;
     }
-}
+  }
 
   /** Toggles the game to be paused, halting game updates. */
   public void togglePause() {
@@ -215,10 +207,7 @@ public class GameInstance {
   public void setGameOver(boolean isGameOver) {
     this.isGameOver = isGameOver;
     this.isPaused = isGameOver;
-    
-}
-
-
+  }
 
   /**
    * This method checks whether the game is currently paused
@@ -229,23 +218,29 @@ public class GameInstance {
     return isPaused;
   }
 
+  /**
+   * Checks whether the game is in marathon mode.
+   *
+   * @return true if the game is in marathon mode, false otherwise
+   */
   public boolean isMarathonMode() {
     return isMarathonMode;
-}
-
-public int getTargetLines() {
-    return targetLines;
-}
-
-public void stopGame() {
-  if (scheduledTask != null && !scheduledTask.isCancelled()) {
-      scheduledTask.cancel(true); // Cancel the task if it hasn't been canceled already
-    
   }
-  setGameOver(true);
-}
 
+  /**
+   * Gets the target number of lines in marathon mode.
+   *
+   * @return the target number of lines
+   */
+  public int getTargetLines() {
+    return targetLines;
+  }
 
-
-
+  /** Stops the game, cancelling the scheduled task and setting the game over status. */
+  public void stopGame() {
+    if (scheduledTask != null && !scheduledTask.isCancelled()) {
+      scheduledTask.cancel(true); // Cancel the task if it hasn't been canceled already
+    }
+    setGameOver(true);
+  }
 }
