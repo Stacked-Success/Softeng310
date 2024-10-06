@@ -14,22 +14,38 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 public class SettingsController {
-  @FXML public Button Down;
-  @FXML public Button Right;
-  @FXML public Button Left;
-  @FXML public Button rotateR;
-  @FXML public Button rotateL;
-  @FXML public Button Hold;
-  @FXML public Button Drop;
-  @FXML private ImageView exitBtn;
-  @FXML public AnchorPane pane;
-  @FXML public Button Pause;
+  @FXML
+  public Button Down;
+  @FXML
+  public Button Right;
+  @FXML
+  public Button Left;
+  @FXML
+  public Button rotateR;
+  @FXML
+  public Button rotateL;
+  @FXML
+  public Button Hold;
+  @FXML
+  public Button Drop;
+  @FXML
+  private ImageView exitBtn;
+  @FXML
+  public AnchorPane pane;
+  @FXML
+  public Button Pause;
 
   public GameControls gameControls;
 
   private Boolean change = false;
   public Button activeButton;
 
+  /**
+   * Initializes the settings controller when the UI is loaded.
+   * Instantiates the game controls and loads the key bindings from a file.
+   * Updates the button labels to reflect the loaded key bindings.
+   * This method is automatically called after the FXML file has been loaded.
+   */
   @FXML
   public void initialize() {
     gameControls = new GameControls();
@@ -40,6 +56,11 @@ public class SettingsController {
     updateButtonLabels();
   }
 
+  /**
+   * Updates the text labels of all key binding buttons to reflect the currently
+   * assigned keys. Each
+   * button's label is set based on the action it corresponds to.
+   */
   public void updateButtonLabels() {
     setButtonLabel(Down, Action.MOVE_DOWN);
     setButtonLabel(Right, Action.MOVE_RIGHT);
@@ -51,6 +72,15 @@ public class SettingsController {
     setButtonLabel(Pause, Action.PAUSE);
   }
 
+  /**
+   * Sets the label text of a button based on the key assigned to a specific
+   * action. If a key is
+   * assigned to the action, its display name is shown; otherwise, "N/A" is
+   * displayed.
+   *
+   * @param button the button whose label is being updated
+   * @param action the action associated with the button
+   */
   private void setButtonLabel(Button button, Action action) {
     KeyCode keyCode = gameControls.getKeyFromAction(action);
     if (keyCode != null) {
@@ -60,6 +90,15 @@ public class SettingsController {
     }
   }
 
+  /**
+   * Handles the event when a key binding button is clicked. Changes the style of
+   * the clicked
+   * button, sets it as the active button, disables other buttons, and listens for
+   * a key press to
+   * rebind the action.
+   *
+   * @param event the mouse event triggered by clicking the button
+   */
   @FXML
   public void onKeyBindClicked(MouseEvent event) {
     Button clickedButton = (Button) event.getSource();
@@ -76,20 +115,36 @@ public class SettingsController {
     change = true;
   }
 
+  /**
+   * Disables all key binding buttons except the one that was clicked.
+   *
+   * @param clickedButton the button that was clicked
+   */
   private void disableOtherButtons(Button clickedButton) {
-    for (Button button : new Button[] {Down, Right, Left, rotateR, rotateL, Hold, Drop, Pause}) {
+    for (Button button : new Button[] { Down, Right, Left, rotateR, rotateL, Hold, Drop, Pause }) {
       if (button != clickedButton) {
         button.setDisable(true);
       }
     }
   }
 
+  /** Enables all key binding buttons after a key has been successfully bound. */
   private void enableAllButtons() {
-    for (Button button : new Button[] {Down, Right, Left, rotateR, rotateL, Hold, Drop, Pause}) {
+    for (Button button : new Button[] { Down, Right, Left, rotateR, rotateL, Hold, Drop, Pause }) {
       button.setDisable(false);
     }
   }
 
+  /**
+   * Handles the key press event when rebinding an action to a new key. If the new
+   * key is not
+   * already bound to another action, it binds the key to the action and updates
+   * the button's label.
+   * If the key is already bound, it shows a conflict alert.
+   *
+   * @param clickedButton the button representing the action to be rebound
+   * @param event         the key event triggered by pressing a key
+   */
   public void handleKeyPress(Button clickedButton, KeyEvent event) {
     KeyCode newKey = event.getCode();
 
@@ -122,7 +177,8 @@ public class SettingsController {
   }
 
   /**
-   * Returns a user-friendly display name for the specified KeyCode. Handles special keys like
+   * Returns a user-friendly display name for the specified KeyCode. Handles
+   * special keys like
    * SPACE, LEFT, RIGHT, UP, and DOWN.
    */
   private String getKeyDisplayText(KeyCode keyCode) {
@@ -146,21 +202,40 @@ public class SettingsController {
     }
   }
 
+  /**
+   * Retrieves the action associated with a given button. Maps each button to its
+   * corresponding game
+   * action.
+   *
+   * @param button the button whose associated action is to be returned
+   * @return the action corresponding to the button, or {@code null} if no action
+   *         is found
+   */
   private Action getActionForButton(Button button) {
-    if (button == Down) return Action.MOVE_DOWN;
-    if (button == Right) return Action.MOVE_RIGHT;
-    if (button == Left) return Action.MOVE_LEFT;
-    if (button == rotateR) return Action.ROTATE_CLOCKWISE;
-    if (button == rotateL) return Action.ROTATE_COUNTERCLOCKWISE;
-    if (button == Hold) return Action.HOLD;
-    if (button == Drop) return Action.HARD_DROP;
-    if (button == Pause) return Action.PAUSE;
+    if (button == Down)
+      return Action.MOVE_DOWN;
+    if (button == Right)
+      return Action.MOVE_RIGHT;
+    if (button == Left)
+      return Action.MOVE_LEFT;
+    if (button == rotateR)
+      return Action.ROTATE_CLOCKWISE;
+    if (button == rotateL)
+      return Action.ROTATE_COUNTERCLOCKWISE;
+    if (button == Hold)
+      return Action.HOLD;
+    if (button == Drop)
+      return Action.HARD_DROP;
+    if (button == Pause)
+      return Action.PAUSE;
     return null;
   }
 
   /**
-   * This method closes the tutorial screen and returns the user to their game when the user clicks
-   * on the exit cross. If appearing before the first game, we have to create the game here to stop
+   * This method closes the tutorial screen and returns the user to their game
+   * when the user clicks
+   * on the exit cross. If appearing before the first game, we have to create the
+   * game here to stop
    * it starting in the background
    *
    * @param event the action of clicking the exit xross
@@ -179,7 +254,8 @@ public class SettingsController {
   }
 
   /**
-   * This method expands the size of the exit cross when it is hovered over to help users recognise
+   * This method expands the size of the exit cross when it is hovered over to
+   * help users recognise
    * that it is a clickable object
    *
    * @param event the action of the user hovering their mouse over the exit cross
@@ -191,7 +267,8 @@ public class SettingsController {
   }
 
   /**
-   * Retruns the size of the exit cross to its original size when the user is no longer hovering
+   * Retruns the size of the exit cross to its original size when the user is no
+   * longer hovering
    * over it
    *
    * @param event the users mouse being moved away from the exit cross
@@ -202,6 +279,11 @@ public class SettingsController {
     exitBtn.scaleYProperty().set(1);
   }
 
+  /**
+   * Displays a warning alert when there is a conflict in key bindings.
+   *
+   * @param message the conflict message to be displayed in the alert
+   */
   private void showConflictAlert(String message) {
     Alert alert = new Alert(Alert.AlertType.WARNING);
     alert.setTitle("Key Conflict");
@@ -210,6 +292,13 @@ public class SettingsController {
     alert.showAndWait();
   }
 
+  /**
+   * Saves the current key bindings to a file when the save button is clicked.
+   * Displays a
+   * confirmation alert once the key bindings have been saved.
+   *
+   * @param event the mouse event triggered by clicking the save button
+   */
   @FXML
   private void onSave(MouseEvent event) {
     String filePath = "controls.txt";
@@ -223,6 +312,15 @@ public class SettingsController {
     alert.showAndWait();
   }
 
+  /**
+   * Reverts the key bindings to the last saved state when the revert button is
+   * clicked. Loads the
+   * key bindings from the file and updates the button labels to reflect the
+   * changes. Displays a
+   * confirmation alert after the key bindings have been reverted.
+   *
+   * @param event the mouse event triggered by clicking the revert button
+   */
   @FXML
   private void onRevert(MouseEvent event) {
     String filePath = "controls.txt";
@@ -237,6 +335,16 @@ public class SettingsController {
     alert.showAndWait();
   }
 
+  /**
+   * Resets the key bindings to their default settings when the default button is
+   * clicked. Loads the
+   * default key bindings from a file, updates the button labels, and saves the
+   * default bindings.
+   * Displays a confirmation alert after the key bindings have been reset to
+   * default.
+   *
+   * @param event the mouse event triggered by clicking the default button
+   */
   @FXML
   private void onDefault(MouseEvent event) {
     String defaultFilePath = "factoryControls.txt";

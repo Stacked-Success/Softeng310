@@ -20,7 +20,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -44,11 +43,9 @@ public class HomeScreenController {
   @FXML RadioButton basicBtn;
   @FXML ImageView marathonScoreImageView;
   @FXML ImageView basicScoreImageView;
- 
 
   @FXML Rectangle clickMarathon;
   @FXML Rectangle clickBasic;
-
 
   private TutorialController tutorialController;
   private SkinShopController skinShopController;
@@ -65,9 +62,9 @@ public class HomeScreenController {
   public void initialize() {
     difficultySlider.requestFocus();
     // Optionally load scores during initialization
-    loadBasicModeScores();    // Load and set scores for Basic Mode
+    loadBasicModeScores(); // Load and set scores for Basic Mode
     loadMarathonModeScores(); // Load and set scores for Marathon Mode
-   
+
     pastScoresButton.setFocusTraversable(false);
     tutorialController = new TutorialController();
     tutorialController.setDestinationAppUI(AppUI.MAIN_MENU);
@@ -197,6 +194,9 @@ public class HomeScreenController {
     System.exit(0);
   }
 
+  /**
+   * Methods to toggle menus for Sound and Difficulty settings. Also includes past scores and past scores table.
+   */
   public void onSettings() {
     settingsPane.setVisible(true);
     mainPane.setDisable(true);
@@ -217,7 +217,7 @@ public class HomeScreenController {
     mainPane.setDisable(false);
   }
 
-  public void onPastScoreBack(){
+  public void onPastScoreBack() {
     pastScorePane.setVisible(false);
     mainPane.setDisable(false);
   }
@@ -354,14 +354,12 @@ public class HomeScreenController {
    * so that the player can check their high scores in the game
    */
   @FXML
-public void showPastScores() { 
-        mainPane.setDisable(true);
-        pastScorePane.setVisible(true);
-        MarathonPastScores.setVisible(true);
-        basicPastScores.setVisible(true); 
-    
-}
-
+  public void showPastScores() {
+    mainPane.setDisable(true);
+    pastScorePane.setVisible(true);
+    MarathonPastScores.setVisible(true);
+    basicPastScores.setVisible(true);
+  }
 
   /**
    * Opens the tutorial screen when the tutorial button is clicked
@@ -390,114 +388,114 @@ public void showPastScores() {
     return difficultyLevel
         + 1; // Adjust the multiplier as needed, e.g., 10 lines per difficulty level.
   }
-/**
-     * Handles the click event for showing Basic Mode scores.
-     *
-     * Loads the past scores for Basic Mode and displays them in the ListView.
-     */
-    @FXML
-    public void onClickBasicMode() {
-      
-        // Hide the Marathon Mode scores and related image, show Basic Mode scores and related image
-        MarathonPastScores.setVisible(false);
-        marathonScoreImageView.setVisible(true);
-       
-        
 
-        basicPastScores.setVisible(true);
-        
-        basicScoreImageView.setVisible(true);
-        basicScoreImageView.toFront();
-        basicPastScores.toFront();
-        basicPastScores.getItems().clear();
-        clickBasic.toFront();
-        clickMarathon.toFront();
+  /**
+   * Handles the click event for showing Basic Mode scores.
+   *
+   * <p>Loads the past scores for Basic Mode and displays them in the ListView.
+   */
+  @FXML
+  public void onClickBasicMode() {
 
-        // Load and display Basic Mode scores
-        loadBasicModeScores();
-    }
+    // Hide the Marathon Mode scores and related image, show Basic Mode scores and related image
+    MarathonPastScores.setVisible(false);
+    marathonScoreImageView.setVisible(true);
 
-    /**
-     * Handles the click event for showing Marathon Mode scores.
-     *
-     * Loads the past scores for Marathon Mode and displays them in the ListView.
-     */
-    @FXML
-    public void onClickMarathonMode() {
+    basicPastScores.setVisible(true);
 
-      System.out.println("Marathon Mode clicked");
-        // Hide the Basic Mode scores and related image, show Marathon Mode scores and related image
-        basicPastScores.setVisible(false);
-        basicScoreImageView.setVisible(true);
+    basicScoreImageView.setVisible(true);
+    basicScoreImageView.toFront();
+    basicPastScores.toFront();
+    basicPastScores.getItems().clear();
+    clickBasic.toFront();
+    clickMarathon.toFront();
 
-        basicScoreImageView.toBack();
-       
-        MarathonPastScores.setVisible(true);
-        marathonScoreImageView.setVisible(true);
-        MarathonPastScores.getItems().clear();
-        clickBasic.toFront();
-        clickMarathon.toFront();
+    // Load and display Basic Mode scores
+    loadBasicModeScores();
+  }
 
-        // Load and display Marathon Mode scores
-        loadMarathonModeScores();
-    }
+  /**
+   * Handles the click event for showing Marathon Mode scores.
+   *
+   * <p>Loads the past scores for Marathon Mode and displays them in the ListView.
+   */
+  @FXML
+  public void onClickMarathonMode() {
 
-    /**
-     * Loads scores for Basic Mode into the corresponding ListView.
-     */
-    private void loadBasicModeScores() {
-        try {
-            List<Integer> basicScores = ScoreRecorder.getAllScores();
-            if (!basicScores.isEmpty()) {
-                for (int score : basicScores) {
-                  basicPastScores.getItems().add(""+ score);
-                }
-            } else {
-              basicPastScores.getItems().add("No scores available.");
-            }
-        } catch (IOException e) {
-          basicPastScores.getItems().add("Failed to load scores.");
-           
+    System.out.println("Marathon Mode clicked");
+    // Hide the Basic Mode scores and related image, show Marathon Mode scores and related image
+    basicPastScores.setVisible(false);
+    basicScoreImageView.setVisible(true);
+
+    basicScoreImageView.toBack();
+
+    MarathonPastScores.setVisible(true);
+    marathonScoreImageView.setVisible(true);
+    MarathonPastScores.getItems().clear();
+    clickBasic.toFront();
+    clickMarathon.toFront();
+
+    // Load and display Marathon Mode scores
+    loadMarathonModeScores();
+  }
+
+  /** Loads scores for Basic Mode into the corresponding ListView. */
+  private void loadBasicModeScores() {
+    try {
+      List<Integer> basicScores = ScoreRecorder.getAllScores();
+      if (!basicScores.isEmpty()) {
+        for (int score : basicScores) {
+          basicPastScores.getItems().add("" + score);
         }
+      } else {
+        basicPastScores.getItems().add("No scores available.");
+      }
+    } catch (IOException e) {
+      basicPastScores.getItems().add("Failed to load scores.");
     }
+  }
 
-    /**
-     * Loads scores for Marathon Mode into the corresponding ListView.
-     */
-    private void loadMarathonModeScores() {
-        try {
-            List<String> marathonScores = ScoreRecorder.getAllMarathonScores();
-            if (!marathonScores.isEmpty()) {
-                for (String score : marathonScores) {
-                    String[] parts = score.split("\\|");
-                    if (parts.length == 3) {
-                        int linesCleared = Integer.parseInt(parts[0]);
-                        int targetLines = Integer.parseInt(parts[1]);
-                        int timeTakenInSeconds = Integer.parseInt(parts[2]);
-                        int minutes = timeTakenInSeconds / 60;
-                        int seconds = timeTakenInSeconds % 60;
-                        String formattedTime = String.format("%02d:%02d", minutes, seconds);
+  /** Loads scores for Marathon Mode into the corresponding ListView. */
+  private void loadMarathonModeScores() {
+    try {
+      List<String> marathonScores = ScoreRecorder.getAllMarathonScores();
+      if (!marathonScores.isEmpty()) {
+        for (String score : marathonScores) {
+          String[] parts = score.split("\\|");
+          if (parts.length == 3) {
+            int linesCleared = Integer.parseInt(parts[0]);
+            int targetLines = Integer.parseInt(parts[1]);
+            int timeTakenInSeconds = Integer.parseInt(parts[2]);
+            int minutes = timeTakenInSeconds / 60;
+            int seconds = timeTakenInSeconds % 60;
+            String formattedTime = String.format("%02d:%02d", minutes, seconds);
 
-                        MarathonPastScores.getItems().add(String.format("%d/%d                                                                %s", linesCleared, targetLines, formattedTime));
-                    }
-                }
-            } else {
-              MarathonPastScores.getItems().add("No scores available.");
-            }
-        } catch (IOException e) {
-          MarathonPastScores.getItems().add("Failed to load scores.");
-            
+            MarathonPastScores.getItems()
+                .add(
+                    String.format(
+                        "%d/%d                                                                %s",
+                        linesCleared, targetLines, formattedTime));
+          }
         }
+      } else {
+        MarathonPastScores.getItems().add("No scores available.");
+      }
+    } catch (IOException e) {
+      MarathonPastScores.getItems().add("Failed to load scores.");
     }
- 
+  }
 
-
-  @FXML 
-  public void goKeyBinds() throws IOException{
+  /**
+   * Navigates to the key bindings settings screen. Loads the FXML file for the settings UI and sets
+   * it in the scene manager.
+   *
+   * @throws IOException if an error occurs while loading the FXML file
+   */
+  @FXML
+  public void goKeyBinds() throws IOException {
     FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Settings.fxml"));
     Parent root = loader.load();
     SceneManager.addScene(AppUI.SETTINGS, root);
     Main.setUi(AppUI.SETTINGS);
   }
-
 }

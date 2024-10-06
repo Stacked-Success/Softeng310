@@ -88,6 +88,14 @@ public class GameControls {
     return controls.get(action);
   }
 
+  /**
+ * Saves the current key bindings to a specified file.
+ * Each control action is saved along with its corresponding key code, 
+ * separated by a comma, in the format: Action,KeyCode.
+ * 
+ * @param filePath the path of the file where controls will be saved
+ * @throws IOException if an I/O error occurs while writing to the file
+ */
   public void saveControls(String filePath) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
       for (Map.Entry<Action, KeyCode> entry : controls.entrySet()) {
@@ -98,6 +106,15 @@ public class GameControls {
     }
   }
 
+  /**
+ * Loads key bindings from a specified file.
+ * Each line in the file should be in the format: Action,KeyCode.
+ * The method reads the file and sets the controls accordingly.
+ * 
+ * @param filePath the path of the file to load controls from
+ * @throws IOException if an I/O error occurs while reading the file
+ * @throws IllegalArgumentException if the action or key code is invalid
+ */
   public void loadControls(String filePath) {
     try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
       String line;
