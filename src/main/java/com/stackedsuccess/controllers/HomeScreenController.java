@@ -365,4 +365,13 @@ public class HomeScreenController {
     return difficultyLevel
         + 10; // Adjust the multiplier as needed, e.g., 10 lines per difficulty level.
   }
+
+
+  @FXML 
+  public void goKeyBinds() throws IOException{
+    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Settings.fxml"));
+    Parent root = loader.load();
+    SceneManager.addScene(AppUI.SETTINGS, root);
+    Main.setUi(AppUI.SETTINGS);
+  }
 }
