@@ -240,7 +240,7 @@ public class GameBoardController implements GameStateManager {
 
       }
   } catch (IOException e) {
-      e.printStackTrace();
+      // If there is an issue saving the score, throw an exception
   }
 
 

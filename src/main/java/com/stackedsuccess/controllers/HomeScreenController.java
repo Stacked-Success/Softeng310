@@ -457,7 +457,7 @@ public void showPastScores() {
             }
         } catch (IOException e) {
           basicPastScores.getItems().add("Failed to load scores.");
-            e.printStackTrace();
+           
         }
     }
 
@@ -486,7 +486,7 @@ public void showPastScores() {
             }
         } catch (IOException e) {
           MarathonPastScores.getItems().add("Failed to load scores.");
-            e.printStackTrace();
+            
         }
     }
  
