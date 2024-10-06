@@ -95,7 +95,6 @@ public class GameControls {
         writer.newLine();
       }
     } catch (IOException e) {
-      e.printStackTrace();
     }
   }
 
@@ -113,7 +112,6 @@ public class GameControls {
         }
       }
     } catch (IOException e) {
-      e.printStackTrace();
     }
   }
 }
