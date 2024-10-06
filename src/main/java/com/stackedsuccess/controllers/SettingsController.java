@@ -40,6 +40,10 @@ public class SettingsController {
     updateButtonLabels();
   }
 
+  /**
+   * Updates the text labels of all key binding buttons to reflect the currently assigned keys. Each
+   * button's label is set based on the action it corresponds to.
+   */
   public void updateButtonLabels() {
     setButtonLabel(Down, Action.MOVE_DOWN);
     setButtonLabel(Right, Action.MOVE_RIGHT);
@@ -51,6 +55,13 @@ public class SettingsController {
     setButtonLabel(Pause, Action.PAUSE);
   }
 
+  /**
+   * Sets the label text of a button based on the key assigned to a specific action. If a key is
+   * assigned to the action, its display name is shown; otherwise, "N/A" is displayed.
+   *
+   * @param button the button whose label is being updated
+   * @param action the action associated with the button
+   */
   private void setButtonLabel(Button button, Action action) {
     KeyCode keyCode = gameControls.getKeyFromAction(action);
     if (keyCode != null) {
@@ -60,6 +71,13 @@ public class SettingsController {
     }
   }
 
+  /**
+   * Handles the event when a key binding button is clicked. Changes the style of the clicked
+   * button, sets it as the active button, disables other buttons, and listens for a key press to
+   * rebind the action.
+   *
+   * @param event the mouse event triggered by clicking the button
+   */
   @FXML
   public void onKeyBindClicked(MouseEvent event) {
     Button clickedButton = (Button) event.getSource();
@@ -76,6 +94,11 @@ public class SettingsController {
     change = true;
   }
 
+  /**
+   * Disables all key binding buttons except the one that was clicked.
+   *
+   * @param clickedButton the button that was clicked
+   */
   private void disableOtherButtons(Button clickedButton) {
     for (Button button : new Button[] {Down, Right, Left, rotateR, rotateL, Hold, Drop, Pause}) {
       if (button != clickedButton) {
@@ -84,12 +107,21 @@ public class SettingsController {
     }
   }
 
+  /** Enables all key binding buttons after a key has been successfully bound. */
   private void enableAllButtons() {
     for (Button button : new Button[] {Down, Right, Left, rotateR, rotateL, Hold, Drop, Pause}) {
       button.setDisable(false);
     }
   }
 
+  /**
+   * Handles the key press event when rebinding an action to a new key. If the new key is not
+   * already bound to another action, it binds the key to the action and updates the button's label.
+   * If the key is already bound, it shows a conflict alert.
+   *
+   * @param clickedButton the button representing the action to be rebound
+   * @param event the key event triggered by pressing a key
+   */
   public void handleKeyPress(Button clickedButton, KeyEvent event) {
     KeyCode newKey = event.getCode();
 
@@ -202,6 +234,11 @@ public class SettingsController {
     exitBtn.scaleYProperty().set(1);
   }
 
+  /**
+   * Displays a warning alert when there is a conflict in key bindings.
+   *
+   * @param message the conflict message to be displayed in the alert
+   */
   private void showConflictAlert(String message) {
     Alert alert = new Alert(Alert.AlertType.WARNING);
     alert.setTitle("Key Conflict");
@@ -210,6 +247,12 @@ public class SettingsController {
     alert.showAndWait();
   }
 
+  /**
+   * Saves the current key bindings to a file when the save button is clicked. Displays a
+   * confirmation alert once the key bindings have been saved.
+   *
+   * @param event the mouse event triggered by clicking the save button
+   */
   @FXML
   private void onSave(MouseEvent event) {
     String filePath = "controls.txt";
@@ -223,6 +266,13 @@ public class SettingsController {
     alert.showAndWait();
   }
 
+  /**
+   * Reverts the key bindings to the last saved state when the revert button is clicked. Loads the
+   * key bindings from the file and updates the button labels to reflect the changes. Displays a
+   * confirmation alert after the key bindings have been reverted.
+   *
+   * @param event the mouse event triggered by clicking the revert button
+   */
   @FXML
   private void onRevert(MouseEvent event) {
     String filePath = "controls.txt";
@@ -237,6 +287,13 @@ public class SettingsController {
     alert.showAndWait();
   }
 
+  /**
+   * Resets the key bindings to their default settings when the default button is clicked. Loads the
+   * default key bindings from a file, updates the button labels, and saves the default bindings.
+   * Displays a confirmation alert after the key bindings have been reset to default.
+   *
+   * @param event the mouse event triggered by clicking the default button
+   */
   @FXML
   private void onDefault(MouseEvent event) {
     String defaultFilePath = "factoryControls.txt";
