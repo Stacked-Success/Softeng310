@@ -224,14 +224,36 @@ public class GameBoardController implements GameStateManager {
     if (gameTimer != null) {
       gameTimer.stop();
     }
+    int linesCleared = gameInstance.getGameBoard().getTotalLinesCleared();
 
-    gameInstance.stopGame(); // Make sure to stop the entire game instance
+    try {
+      if (gameInstance.isMarathonMode()) {
+          // Save Marathon Mode Score
+          int targetLines = gameInstance.getTargetLines();
+          int timeTakenInSeconds = elapsedSeconds; // Assuming elapsedSeconds is tracking the timer
+
+          ScoreRecorder.saveMarathonScore(linesCleared, targetLines, timeTakenInSeconds);
+      } else {
+          // Save Basic Mode Score
+          int finalScore = Integer.parseInt(scoreLabel.getText());
+          ScoreRecorder.saveScore(String.valueOf(finalScore));
+
+      }
+  } catch (IOException e) {
+      e.printStackTrace();
+  }
+
+
     gameInstance.setGameOver(true);
-
-    // Save the player's score
-    ScoreRecorder.saveScore(scoreLabel.getText());
+    
     playGameOverAnimation();
-    SoundManager.getInstance().playSoundEffect("gameover");
+    if(isMarathonMode && linesCleared >= targetLines) {
+      SoundManager.getInstance().playSoundEffect("victory");
+    } else {
+      SoundManager.getInstance().playSoundEffect("gameover");
+    }
+   
+    
   }
 
   /**
@@ -592,7 +614,12 @@ public class GameBoardController implements GameStateManager {
       }
     }
     animationTimeline.setOnFinished(event -> {
-      SoundManager.getInstance().playSoundEffect("secondgameover");
+      if(isMarathonMode && gameInstance.getGameBoard().getTotalLinesCleared() >= targetLines) {
+        SoundManager.getInstance().playSoundEffect("secondVictory");
+      } else {
+        SoundManager.getInstance().playSoundEffect("secondgameover");
+      }
+      
       mainMenuBtn.setVisible(true);
     });
 
@@ -618,11 +645,37 @@ public class GameBoardController implements GameStateManager {
     gameOverExitButton.setVisible(true);
     gameOverRestartButton.setVisible(true);
     gameOverScoreLabel.setText("Score: " + scoreLabel.getText());
-    try {
-      gameOverHighScoreLabel.setText("High Score: " + ScoreRecorder.getHighScore());
-    } catch (IOException e) {
-      throw new IllegalArgumentException("Issue regarding ScoreReader");
-    }
+   
+
+    if (gameInstance.isMarathonMode()) {
+      int linesCleared = gameInstance.getGameBoard().getTotalLinesCleared();
+      int targetLines = gameInstance.getTargetLines();
+
+      if (linesCleared >= targetLines) {
+          // Player won Marathon Mode
+          gameOverLabel.setText("Victory!");
+          gameOverScoreLabel.setText("Score: " + linesCleared + "/" + targetLines);
+          gameOverHighScoreLabel.setVisible(false); // Hide high score for winning Marathon Mode
+      } else {
+          // Player lost Marathon Mode
+          gameOverLabel.setText("Game Over");
+          gameOverScoreLabel.setText("Score: " + linesCleared + "/" + targetLines);
+          try {
+              gameOverHighScoreLabel.setText("High Score: " + ScoreRecorder.getHighScore());
+          } catch (IOException e) {
+              throw new IllegalArgumentException("Issue regarding ScoreReader");
+          }
+      }
+  } else {
+      // Basic Mode
+      gameOverLabel.setText("Game Over");
+      gameOverScoreLabel.setText("Score: " + scoreLabel.getText());
+      try {
+          gameOverHighScoreLabel.setText("High Score: " + ScoreRecorder.getHighScore());
+      } catch (IOException e) {
+          throw new IllegalArgumentException("Issue regarding ScoreReader");
+      }
+  }
   }
 
   /**

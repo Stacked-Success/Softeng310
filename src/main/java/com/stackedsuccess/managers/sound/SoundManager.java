@@ -63,6 +63,8 @@ public class SoundManager {
         soundEffects.put("hold", loadSoundEffect("hold"));
         soundEffects.put("layer", loadSoundEffect("layer"));
         soundEffects.put("secondgameover", loadSoundEffect("secondgameover"));
+        soundEffects.put("victory", loadSoundEffect("victory"));
+        soundEffects.put("secondVictory", loadSoundEffect("secondvictory"));
 
         mediaPlayers.keySet().forEach(key -> mediaStates.put(key, "stopped"));
     }
