@@ -16,7 +16,6 @@ public class ScoreRecorder {
 
   private static final String SCOREFILE = "score.txt";
   private static final int MAX_SCORES = 12;
-
   private static final String MARATHON_SCOREFILE = "marathon_score.txt";
 
   /**
@@ -55,18 +54,22 @@ public class ScoreRecorder {
    * @return a list of all scores
    * @throws IOException
    */
-  private static List<Integer> getAllScores() throws IOException {
+  public static List<Integer> getAllScores() throws IOException {
     List<Integer> scores = new ArrayList<>();
-    try (BufferedReader buffread = new BufferedReader(new FileReader(SCOREFILE))) {
-      String line;
-      while ((line = buffread.readLine()) != null) {
-        if (!line.trim().isEmpty()) { // Skip empty lines
-          scores.add(Integer.parseInt(line));
+    File file = new File(SCOREFILE);
+    if (!file.exists()) {
+        return scores;
+    }
+    try (BufferedReader reader = new BufferedReader(new FileReader(SCOREFILE))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if (!line.trim().isEmpty()) {
+                scores.add(Integer.parseInt(line));
+            }
         }
-      }
     }
     return scores;
-  }
+}
 
   /**
    * Write the scores to the file.
@@ -108,7 +111,111 @@ public class ScoreRecorder {
     }
   }
 
+  /**
+     * Save a Marathon Mode score to the file.
+     *
+     * @param linesCleared number of lines cleared
+     * @param targetLines target number of lines to clear
+     * @param timeTakenInSeconds time taken in seconds
+     * @throws IOException if an I/O error occurs
+     */
+    public static void saveMarathonScore(int linesCleared, int targetLines, int timeTakenInSeconds) throws IOException {
+      List<String> scores = getAllMarathonScores();
+      String newScore = linesCleared + "|" + targetLines + "|" + timeTakenInSeconds;
+      scores.add(newScore);
 
+      if (scores.size() > MAX_SCORES) {
+          scores.remove(scores.size() - 1); // Keep only the top MAX_SCORES entries
+      }
+      writeMarathonScores(scores);
+  }
+
+  /**
+   * Get all Marathon Mode scores from the file.
+   *
+   * @return a list of all scores as strings
+   * @throws IOException
+   */
+  public static List<String> getAllMarathonScores() throws IOException {
+    List<String> scores = new ArrayList<>();
+    File file = new File(MARATHON_SCOREFILE);
+    if (!file.exists()) {
+        return scores;
+    }
+    try (BufferedReader reader = new BufferedReader(new FileReader(MARATHON_SCOREFILE))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if (!line.trim().isEmpty()) {
+                scores.add(line);
+            }
+        }
+    }
+    return scores;
+}
+
+  /**
+   * Write the Marathon Mode scores to the file.
+   *
+   * @param scores the scores to write
+   * @throws IOException
+   */
+  private static void writeMarathonScores(List<String> scores) throws IOException {
+      try (BufferedWriter writer = new BufferedWriter(new FileWriter(MARATHON_SCOREFILE))) {
+          for (String score : scores) {
+              writer.write(score);
+              writer.newLine();
+          }
+      }
+  }
+
+  /**
+   * Creates a Marathon score file if it does not already exist.
+   */
+  public static void createMarathonScoreFile() {
+      File marathonScoreFile = new File(MARATHON_SCOREFILE);
+      if (!marathonScoreFile.exists()) {
+          try {
+              boolean isFileCreated = marathonScoreFile.createNewFile();
+              if (!isFileCreated) {
+                  // Retry creating the file
+                  isFileCreated = marathonScoreFile.createNewFile();
+                  if (!isFileCreated) {
+                      throw new IOException("Failed to create marathon score file after retrying.");
+                  }
+              }
+          } catch (IOException e) {
+              throw new IllegalArgumentException("Creating marathon score file", e);
+          }
+      }
+  }
+
+  /**
+   * Parse the marathon scores into a human-readable format.
+   *
+   * @return a list of formatted marathon scores
+   * @throws IOException
+   */
+  public static List<String> getFormattedMarathonScores() throws IOException {
+      List<String> rawScores = getAllMarathonScores();
+      List<String> formattedScores = new ArrayList<>();
+
+      for (String rawScore : rawScores) {
+          String[] parts = rawScore.split("\\|");
+          if (parts.length == 3) {
+              int linesCleared = Integer.parseInt(parts[0]);
+              int targetLines = Integer.parseInt(parts[1]);
+              int timeTakenInSeconds = Integer.parseInt(parts[2]);
+
+              int minutes = timeTakenInSeconds / 60;
+              int seconds = timeTakenInSeconds % 60;
+              String formattedTime = String.format("%02d:%02d", minutes, seconds);
+
+              formattedScores.add("Lines Cleared: " + linesCleared + "/" + targetLines + ", Time: " + formattedTime);
+          }
+      }
+
+      return formattedScores;
+  }
  
 
 }
