@@ -104,7 +104,10 @@ You will need the following software installed:
      git clone https://github.com/Stacked-Success/Softeng310.git
      ```
 
-3. **Navigate to the Project Directory**:
+2. **Navigate to the newly cloned directory Softeng310**:
+    <p>Create a new text file inside the Softeng310 folder and name it 'controls.txt'. Next copy the contents from 'factoryControls.txt' into the new 'controls.txt'. 
+
+3. **Navigate to the Project Directory using Terminal/Command Prompt**:
      ```sh
      cd Softeng310
      ```
