@@ -194,6 +194,9 @@ public class HomeScreenController {
     System.exit(0);
   }
 
+  /**
+   * Methods to toggle menus for Sound and Difficulty settings. Also includes past scores and past scores table.
+   */
   public void onSettings() {
     settingsPane.setVisible(true);
     mainPane.setDisable(true);

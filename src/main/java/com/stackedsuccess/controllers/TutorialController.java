@@ -68,6 +68,10 @@ public class TutorialController {
         }
     }
 
+    /**
+     * Getters/Setters to check if Tutorial has been viewed and completed, To create the game, to get the Destination scene.
+     * @return
+     */
     public boolean getHasTutorialBeenViewed() {
         return hasTutorialBeenViewed;
     }
