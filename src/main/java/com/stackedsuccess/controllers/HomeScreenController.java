@@ -490,4 +490,14 @@ public void showPastScores() {
         }
     }
  
+
+
+  @FXML 
+  public void goKeyBinds() throws IOException{
+    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Settings.fxml"));
+    Parent root = loader.load();
+    SceneManager.addScene(AppUI.SETTINGS, root);
+    Main.setUi(AppUI.SETTINGS);
+  }
+
 }

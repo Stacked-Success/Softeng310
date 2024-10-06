@@ -38,7 +38,8 @@
                   <Font size="30.0" />
                </font>
             </Text>
-            <Text id="difficultyText" fx:id="DifficultyLabel" layoutX="593.0" layoutY="635.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="gen-text" text="Difficulty">
+            <Text id="difficultyText" layoutX="453.0" layoutY="631.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="gen-text" text="Level Of Difficulty">
+
                <font>
                   <Font size="30.0" />
                </font>
@@ -48,17 +49,23 @@
                   <Font size="20.0" />
                </font>
             </Button>
+            <Button id="Keybinds" layoutX="893.0" layoutY="67.0" mnemonicParsing="false" onMouseClicked="#goKeyBinds" text="Keybinds">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
             <Button id="exitGame" focusTraversable="false" layoutX="1152.0" layoutY="68.0" mnemonicParsing="false" onAction="#exitGame" text="Exit Game">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button id="settings" focusTraversable="false" layoutX="1024.0" layoutY="68.0" mnemonicParsing="false" onAction="#onSettings" text="Settings">
+            <Button id="settings" focusTraversable="false" layoutX="1035.0" layoutY="68.0" mnemonicParsing="false" onAction="#onSettings" text="Music">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button id="difficulty" focusTraversable="false" layoutX="916.0" layoutY="68.0" mnemonicParsing="false" onAction="#onDifficulty" text="Mode">
+            <Button id="difficulty" focusTraversable="false" layoutX="726.0" layoutY="597.0" mnemonicParsing="false" onAction="#onDifficulty" text="Difficulty Mode">
+
                <font>
                   <Font size="20.0" />
                </font>
