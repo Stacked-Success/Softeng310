@@ -482,4 +482,12 @@ public void showPastScores() {
                     }
                 }
             } else {
-              MarathonPastScores.g
+              MarathonPastScores.getItems().add("No scores available.");
+            }
+        } catch (IOException e) {
+          MarathonPastScores.getItems().add("Failed to load scores.");
+            e.printStackTrace();
+        }
+    }
+ 
+}
