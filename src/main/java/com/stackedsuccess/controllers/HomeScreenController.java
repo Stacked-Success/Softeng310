@@ -11,7 +11,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -467,10 +469,11 @@ public class HomeScreenController {
 
   private void loadBasicModeScores() {
     try {
-        List<String> basicScores = ScoreRecorder.getAllScores();  // Now using List<String> instead of List<Integer>
+        HashMap<String, Integer> basicScores = ScoreRecorder.getAllScores();  // Now using HashMap<String, Integer>
         if (!basicScores.isEmpty()) {
-            for (String score : basicScores) {
-                basicPastScores.getItems().add(score);  // Directly add "Name Score" formatted string
+            for (HashMap.Entry<String, Integer> entry : basicScores.entrySet()) { // Using HashMap.Entry
+                String formattedScore = entry.getKey() + " " + entry.getValue(); // "Name Score" formatted string
+                basicPastScores.getItems().add(formattedScore);
             }
         } else {
             basicPastScores.getItems().add("No scores available.");
@@ -479,6 +482,7 @@ public class HomeScreenController {
         basicPastScores.getItems().add("Failed to load scores.");
     }
 }
+
 
   /** Loads scores for Marathon Mode into the corresponding ListView. */
   private void loadMarathonModeScores() {
