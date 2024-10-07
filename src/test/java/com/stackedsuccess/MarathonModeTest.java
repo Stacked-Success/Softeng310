@@ -29,7 +29,7 @@ public class MarathonModeTest {
 
     private GameInstance gameInstance;
 
-   private GameBoard gameBoard;
+    private GameBoard gameBoard;
     private GameStateManager gameStateManagerMock;
     private GameInstance gameInstanceMock;
 

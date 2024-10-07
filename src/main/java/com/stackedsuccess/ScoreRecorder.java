@@ -29,8 +29,8 @@ public class ScoreRecorder {
   public static void saveScore(String score) throws IOException {
     HashMap<String, Integer> scores = getAllScores(); // Get current scores as a HashMap
     String playerName;
-    if(NameEntryController.name == "" || NameEntryController.name == null){
-      playerName = "Unknown";
+    if(NameEntryController.name.equals("") || NameEntryController.name == null){
+      playerName = "Anonymous";
   } else {
       playerName = NameEntryController.name;
   }
