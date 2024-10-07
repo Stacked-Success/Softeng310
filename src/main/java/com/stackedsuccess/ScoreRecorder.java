@@ -28,8 +28,12 @@ public class ScoreRecorder {
    */
   public static void saveScore(String score) throws IOException {
     HashMap<String, Integer> scores = getAllScores(); // Get current scores as a HashMap
-    String playerName = NameEntryController.name.isEmpty() ? "Unknown" : NameEntryController.name;
-
+    String playerName;
+    if(NameEntryController.name == "" || NameEntryController.name == null){
+      playerName = "Unknown";
+  } else {
+      playerName = NameEntryController.name;
+  }
     // Add or update the score for the player
     scores.put(playerName, Integer.parseInt(score));
 
@@ -99,7 +103,7 @@ public class ScoreRecorder {
    * @param scores the scores to write
    * @throws IOException
    */
-  private static void writeScores(HashMap<String, Integer> scores) throws IOException {
+  static void writeScores(HashMap<String, Integer> scores) throws IOException {
       try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCOREFILE))) {
           for (HashMap.Entry<String, Integer> entry : scores.entrySet()) {
               writer.write(entry.getKey() + " " + entry.getValue());  // Write name and score
