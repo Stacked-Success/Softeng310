@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import com.stackedsuccess.controllers.GameBoardController;
+import com.stackedsuccess.controllers.NameEntryController;
 import com.stackedsuccess.managers.GameStateManager;
 import com.stackedsuccess.tetriminos.Tetrimino;
 
@@ -27,7 +29,7 @@ public class MarathonModeTest {
 
     private GameInstance gameInstance;
 
-   private GameBoard gameBoard;
+    private GameBoard gameBoard;
     private GameStateManager gameStateManagerMock;
     private GameInstance gameInstanceMock;
 
@@ -43,19 +45,20 @@ public class MarathonModeTest {
     }
 
     @Test
-void testSaveBasicScore() throws IOException {
-    // Clear existing scores
-    ScoreRecorder.writeScores(List.of());
+    public void testSaveBasicScore() throws IOException {
+        // Clear existing scores
+        ScoreRecorder.writeScores(new HashMap<>()); // Assuming writeScores accepts a HashMap
 
-    // Save a new score
-    String score = "15";
-    ScoreRecorder.saveScore(score);
+        // Save a new score
+        String score = "15";
+        ScoreRecorder.saveScore(score);
 
-    // Verify the score is saved correctly
-    List<Integer> scores = ScoreRecorder.getAllScores();
-    assertEquals(1, scores.size());
-    assertEquals(15, scores.get(0));
-}
+        // Verify the score is saved correctly
+        HashMap<String, Integer> scoresMap = ScoreRecorder.getAllScores();
+        assertEquals(1, scoresMap.size());
+        
+        assertEquals(15, scoresMap.get("Anonymous"));
+    }
 
 @Test
 void testSaveMarathonScore() throws IOException {
@@ -141,10 +144,14 @@ void testSaveMarathonScore() throws IOException {
     @Test
     public void testSaveAndRetrieveScore() throws IOException {
         ScoreRecorder.saveScore("1500");
-        List<Integer> scores = ScoreRecorder.getAllScores();
-
-        assertFalse(scores.isEmpty());
-        assertEquals(1500, (int) scores.get(0));
+        HashMap<String, Integer> scores = ScoreRecorder.getAllScores();
+        String playerName;
+        if(NameEntryController.name == "" || NameEntryController.name == null){
+            playerName = "Anonymous";
+        } else {
+            playerName = NameEntryController.name;
+        }
+        assertEquals(1500, scores.get(playerName));
     }
 
     @Test
@@ -153,7 +160,7 @@ void testSaveMarathonScore() throws IOException {
         ScoreRecorder.saveScore("2000");
 
         String highScore = ScoreRecorder.getHighScore();
-        assertEquals("2000", highScore);
+        assertEquals("Anonymous=2000", highScore);
     }
 
     
