@@ -20,7 +20,7 @@ public class SkinDisplayMaker {
     private final int paneHeight = 250;
     private final int imageWidth = 120;
     private final int imageHeight = 120;
-    
+
     private int pointsIncrement = 0;
 
     /**
@@ -31,10 +31,10 @@ public class SkinDisplayMaker {
      * @return the pane containing the skin preview, name, points label, and selection/locked button
      */
     public VBox createSkinPane(String themeName, EventHandler<ActionEvent> selectSkinHandler) {
-        VBox pane = new VBox(10);  // Add spacing between elements
+        VBox pane = new VBox(10);
         pane.setPrefSize(paneWidth, paneHeight);
         pane.setAlignment(Pos.CENTER);
-        
+
         ImageView skinImageView = createImageView(themeName);
 
         String displayName = themeName.replace("Skin", "");
@@ -48,8 +48,14 @@ public class SkinDisplayMaker {
 
         int highScore;
         try {
-            highScore = Integer.parseInt(ScoreRecorder.getHighScore());
-        } catch (IOException e) {
+            String highScoreStr = ScoreRecorder.getHighScore();
+
+            if (highScoreStr.equals("No high score available.")) {
+                highScore = 0;
+            } else {
+                highScore = Integer.parseInt(highScoreStr.split("=")[1].trim());
+            }
+        } catch (IOException | NumberFormatException e) {
             highScore = 0;
         }
 
@@ -67,7 +73,7 @@ public class SkinDisplayMaker {
 
         pane.getChildren().addAll(skinImageView, skinName, pointsLabel, skinButton);
         VBox.setVgrow(skinImageView, Priority.ALWAYS);
-        
+
         return pane;
     }
 
@@ -96,7 +102,7 @@ public class SkinDisplayMaker {
 
         Button lockedButton = new Button("Locked");
         lockedButton.setFont(new Font(16));
-        lockedButton.setDisable(true); 
+        lockedButton.setDisable(true);
 
         pane.getChildren().addAll(skinImageView, comingSoonText, pointsLabel, lockedButton);
         VBox.setVgrow(skinImageView, Priority.ALWAYS);
@@ -115,12 +121,12 @@ public class SkinDisplayMaker {
     private ImageView createImageView(String themeName) {
         String imagePath = "file:src/main/resources/images/" + themeName + "/block.png";
         Image image = new Image(imagePath, imageWidth, imageHeight, true, true);
-        
+
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(imageWidth);
         imageView.setFitHeight(imageHeight);
         imageView.setPreserveRatio(true);
-        
+
         return imageView;
     }
 }

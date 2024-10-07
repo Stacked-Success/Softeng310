@@ -87,11 +87,6 @@
                   <DropShadow />
                </effect>
             </ImageView>
-            <Button id="back" layoutX="223.0" layoutY="356.0" mnemonicParsing="false" onAction="#onSettingsBack" prefHeight="54.0" prefWidth="176.0" text="Go Back">
-               <font>
-                  <Font size="23.0" />
-               </font>
-            </Button>
             <RadioButton fx:id="soundBtn" layoutX="376.0" layoutY="168.0" mnemonicParsing="false" onAction="#toggleSound" selected="true" text="ON">
                <font>
                    <Font name="System Bold" size="25.0" />
@@ -102,6 +97,11 @@
                    <Font name="System Bold" size="25.0" />
                </font>
            </RadioButton>
+            <Button id="back" layoutX="223.0" layoutY="356.0" mnemonicParsing="false" onAction="#onSettingsBack" prefHeight="54.0" prefWidth="176.0" text="Go Back">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="difficultyPane" layoutX="370.0" layoutY="170.0" prefHeight="578.0" prefWidth="677.0" visible="false">

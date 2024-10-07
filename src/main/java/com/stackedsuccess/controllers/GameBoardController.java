@@ -89,14 +89,14 @@ public class GameBoardController implements GameStateManager {
 
   private static final int SOLID_BLOCK_VALUE = -2;
 
-  private int targetLines; // Stores the target number of lines in Marathon Mode
-  private boolean isMarathonMode; // Stores whether Marathon Mode is active
+  private int targetLines;
+  private boolean isMarathonMode;
 
   private GameInstance gameInstance;
   private final TetriminoImageManager imageManager;
 
-  private Timeline gameTimer; // JavaFX Timeline to schedule timer updates
-  private int elapsedSeconds; // Track the total number of elapsed seconds
+  private Timeline gameTimer;
+  private int elapsedSeconds;
 
   public GameBoardController() {
     imageManager = new TetriminoImageManager();
@@ -109,8 +109,8 @@ public class GameBoardController implements GameStateManager {
    */
   public void setGameInstance(GameInstance gameInstance) {
     this.gameInstance = gameInstance;
-    this.isMarathonMode = gameInstance.getIsMarathonMode(); // Store whether it is Marathon Mode
-    this.targetLines = gameInstance.getTargetLines(); // Get the target lines if Marathon Mode is active
+    this.isMarathonMode = gameInstance.getIsMarathonMode();
+    this.targetLines = gameInstance.getTargetLines();
   }
 
   private TutorialController tutorialController;
@@ -136,7 +136,6 @@ public class GameBoardController implements GameStateManager {
    */
   @FXML
   public void initialize() {
-    // resets score, line, and level to initial state
     resetLabels();
     basePane.requestFocus();
 
@@ -144,17 +143,12 @@ public class GameBoardController implements GameStateManager {
       if (gameInstance != null) {
         gameInstance.start();
 
-        // Update next piece view
         nextPieceView
             .setImage(imageManager.getTetriminoImage(gameInstance.getGameBoard().getNextTetrimino().getClass()));
 
-        // Set window close handler
         setWindowCloseHandler(getStage());
-
-        // Initialize lineLabel for Marathon Mode
         if (isMarathonMode) {
           lineLabel.setText("0/" + targetLines);
-          // start timer
           startTimer();
         } else {
           timerVbox.setVisible(false);
@@ -163,7 +157,6 @@ public class GameBoardController implements GameStateManager {
       } 
     });
 
-    //sets the tutorial controller to return to the game
     tutorialController = new TutorialController();
     tutorialController.setDestinationAppUI(AppUI.GAME);
     tutorialController.setHasTutorialBeenViewed(true);
@@ -225,7 +218,6 @@ public class GameBoardController implements GameStateManager {
   @FXML
   @Override
   public void gameOver() throws IOException {
-    // Stop the game timer if it is running
     if (gameTimer != null) {
       gameTimer.stop();
     }
@@ -233,19 +225,16 @@ public class GameBoardController implements GameStateManager {
 
     try {
       if (gameInstance.getIsMarathonMode()) {
-          // Save Marathon Mode Score
           int targetLines = gameInstance.getTargetLines();
-          int timeTakenInSeconds = elapsedSeconds; // Assuming elapsedSeconds is tracking the timer
+          int timeTakenInSeconds = elapsedSeconds; 
 
           ScoreRecorder.saveMarathonScore(linesCleared, targetLines, timeTakenInSeconds);
       } else {
-          // Save Basic Mode Score
           int finalScore = Integer.parseInt(scoreLabel.getText());
           ScoreRecorder.saveScore(String.valueOf(finalScore));
 
       }
   } catch (IOException e) {
-      // If there is an issue saving the score, throw an exception
   }
 
 
@@ -280,7 +269,6 @@ public class GameBoardController implements GameStateManager {
     if (action == Action.PAUSE) {
       togglePauseScreen();
   }
-    // otherwise passes the players input to the game instance
     gameInstance.handleInput(event);
   }
 
@@ -364,6 +352,7 @@ public class GameBoardController implements GameStateManager {
       elapsedSeconds = 0;
       updateTimerLabel();
     }
+    Platform.runLater(() -> SoundManager.getInstance().playBackgroundMusic("mainmenu"));
   }
 
   /**
@@ -604,7 +593,6 @@ public class GameBoardController implements GameStateManager {
         });
     animationTimeline.getKeyFrames().add(actionsKeyFrame);
 
-    // Remove solid blocks
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
         int delay = 2000 + (row * 50);
@@ -658,12 +646,10 @@ public class GameBoardController implements GameStateManager {
       int targetLines = gameInstance.getTargetLines();
 
       if (linesCleared >= targetLines) {
-          // Player won Marathon Mode
           gameOverLabel.setText("Victory!");
           gameOverScoreLabel.setText("Score: " + linesCleared + "/" + targetLines);
-          gameOverHighScoreLabel.setVisible(false); // Hide high score for winning Marathon Mode
+          gameOverHighScoreLabel.setVisible(false);
       } else {
-          // Player lost Marathon Mode
           gameOverLabel.setText("Game Over");
           gameOverScoreLabel.setText("Score: " + linesCleared + "/" + targetLines);
           try {
@@ -674,7 +660,6 @@ public class GameBoardController implements GameStateManager {
           }
       }
   } else {
-      // Basic Mode
       gameOverLabel.setText("Game Over");
       gameOverScoreLabel.setText("Score: " + scoreLabel.getText());
       try {

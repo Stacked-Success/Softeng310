@@ -15,8 +15,18 @@ public class NameEntryController {
   private Runnable onNameEntryCompleted;
   public static String name;
 
+  /**
+   * Initializes the controller after the FXML file has been loaded. Currently, this method does not 
+   * perform any actions.
+   */
   public void initialize() {}
 
+  /**
+   * Handles the event when the user clicks the advance button. Retrieves the entered name from the 
+   * text field and runs the callback (onNameEntryCompleted) to proceed in the game.
+   * 
+   * @throws IOException if an I/O error occurs during name entry processing
+   */
   @FXML
   private void onAdvance() throws IOException {
     name = textEntryField.getText();
@@ -25,6 +35,11 @@ public class NameEntryController {
     }
   }
 
+  /**
+   * Sets the callback to be executed when the name entry is completed.
+   * 
+   * @param onNameEntryCompleted a Runnable to execute when the name is entered and submitted
+   */
   public void setOnNameCompleted(Runnable onNameEntryCompleted) {
     this.onNameEntryCompleted = onNameEntryCompleted;
   }

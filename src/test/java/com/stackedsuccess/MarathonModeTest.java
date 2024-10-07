@@ -19,9 +19,6 @@ import com.stackedsuccess.controllers.NameEntryController;
 import com.stackedsuccess.managers.GameStateManager;
 import com.stackedsuccess.tetriminos.Tetrimino;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-
 
 public class MarathonModeTest {
      @Mock
@@ -46,32 +43,21 @@ public class MarathonModeTest {
 
     @Test
     public void testSaveBasicScore() throws IOException {
-        // Clear existing scores
-        ScoreRecorder.writeScores(new HashMap<>()); // Assuming writeScores accepts a HashMap
-
-        // Save a new score
+        ScoreRecorder.writeScores(new HashMap<>());
         String score = "15";
         ScoreRecorder.saveScore(score);
-
-        // Verify the score is saved correctly
         HashMap<String, Integer> scoresMap = ScoreRecorder.getAllScores();
         assertEquals(1, scoresMap.size());
-        
         assertEquals(15, scoresMap.get("Anonymous"));
     }
 
 @Test
 void testSaveMarathonScore() throws IOException {
-    // Clear existing scores
     ScoreRecorder.writeMarathonScores(List.of());
-
-    // Save a new Marathon Mode score
     int linesCleared = 10;
     int targetLines = 20;
-    int timeTaken = 300; // 5 minutes
+    int timeTaken = 300;
     ScoreRecorder.saveMarathonScore(linesCleared, targetLines, timeTaken);
-
-    // Verify the score is saved correctly
     List<String> marathonScores = ScoreRecorder.getAllMarathonScores();
     assertEquals(1, marathonScores.size());
     assertEquals("10|20|300", marathonScores.get(0));
@@ -87,7 +73,6 @@ void testSaveMarathonScore() throws IOException {
 
     @Test
     public void testCollisionDetection() {
-        // Test collision with the board boundaries
         assertTrue(gameBoard.isOutOfBounds(-1, 0));
         assertTrue(gameBoard.isOutOfBounds(10, 0));
         assertTrue(gameBoard.isOutOfBounds(0, 22));
@@ -106,7 +91,6 @@ void testSaveMarathonScore() throws IOException {
         Tetrimino currentTetrimino = gameBoard.getCurrentTetrimino();
         gameBoard.holdTetrimino();
         Tetrimino holdTetrimino = gameBoard.getHoldTetrimino();
-
         assertEquals(currentTetrimino, holdTetrimino);
         assertTrue(gameBoard.getHoldTetrimino() != null);
         assertFalse(gameBoard.getHoldTetrimino() == gameBoard.getCurrentTetrimino()); // Confirm swap
@@ -116,7 +100,6 @@ void testSaveMarathonScore() throws IOException {
     public void testPauseGame() {
         gameInstance.togglePause();
         assertTrue(gameInstance.isPaused());
-
         gameInstance.togglePause();
         assertFalse(gameInstance.isPaused());
     }
@@ -158,7 +141,6 @@ void testSaveMarathonScore() throws IOException {
     public void testHighScore() throws IOException {
         ScoreRecorder.saveScore("1000");
         ScoreRecorder.saveScore("2000");
-
         String highScore = ScoreRecorder.getHighScore();
         assertEquals("Anonymous=2000", highScore);
     }
