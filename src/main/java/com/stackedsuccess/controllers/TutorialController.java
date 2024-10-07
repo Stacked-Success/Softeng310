@@ -9,14 +9,14 @@ import javafx.scene.input.MouseEvent;
 public class TutorialController {
 
     @FXML
-    private ImageView exitBtn;
+    public ImageView exitBtn;
 
     //Used to check if the tutorial has been viewed
     //If not the tutorial will be displayed when the game is started
     private boolean hasTutorialBeenViewed = false;
     private boolean createGame = false;
     private AppUI destinationAppUI = AppUI.MAIN_MENU;
-    private Runnable onTutorialCompleted;
+    public Runnable onTutorialCompleted;
 
 
     public void initialize() {
@@ -30,7 +30,7 @@ public class TutorialController {
      * @param event the action of the user hovering their mouse over the exit cross
      */
     @FXML
-    private void onExitHoveredOver(MouseEvent event) {
+    public void onExitHoveredOver(MouseEvent event) {
         exitBtn.scaleXProperty().set(1.2);
         exitBtn.scaleYProperty().set(1.2);
     }
@@ -42,7 +42,7 @@ public class TutorialController {
      * @param event the users mouse being moved away from the exit cross
      */
     @FXML
-    private void onExitNotHoveredOver(MouseEvent event) {
+    public void onExitNotHoveredOver(MouseEvent event) {
         exitBtn.scaleXProperty().set(1);
         exitBtn.scaleYProperty().set(1);
     }
@@ -55,7 +55,7 @@ public class TutorialController {
      * @param event the action of clicking the exit xross
      */
     @FXML
-    private void onClickExit(MouseEvent event) {
+    public void onClickExit(MouseEvent event) {
 
         hasTutorialBeenViewed = true;
 

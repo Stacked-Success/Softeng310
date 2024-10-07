@@ -25,6 +25,7 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -72,9 +73,11 @@ public class GameBoardController implements GameStateManager {
   @FXML
   Button gameOverExitButton;
   @FXML
-  Button gameOverRestartButton;
+  Button mainMenuPauseButton;
   @FXML
   Button mainMenuBtn;
+  @FXML
+  Button restarButton;
 
   @FXML
   public VBox timerVbox;
@@ -106,7 +109,7 @@ public class GameBoardController implements GameStateManager {
    */
   public void setGameInstance(GameInstance gameInstance) {
     this.gameInstance = gameInstance;
-    this.isMarathonMode = gameInstance.isMarathonMode(); // Store whether it is Marathon Mode
+    this.isMarathonMode = gameInstance.getIsMarathonMode(); // Store whether it is Marathon Mode
     this.targetLines = gameInstance.getTargetLines(); // Get the target lines if Marathon Mode is active
   }
 
@@ -160,6 +163,7 @@ public class GameBoardController implements GameStateManager {
       } 
     });
 
+    //sets the tutorial controller to return to the game
     tutorialController = new TutorialController();
     tutorialController.setDestinationAppUI(AppUI.GAME);
     tutorialController.setHasTutorialBeenViewed(true);
@@ -228,7 +232,7 @@ public class GameBoardController implements GameStateManager {
     int linesCleared = gameInstance.getGameBoard().getTotalLinesCleared();
 
     try {
-      if (gameInstance.isMarathonMode()) {
+      if (gameInstance.getIsMarathonMode()) {
           // Save Marathon Mode Score
           int targetLines = gameInstance.getTargetLines();
           int timeTakenInSeconds = elapsedSeconds; // Assuming elapsedSeconds is tracking the timer
@@ -339,10 +343,10 @@ public class GameBoardController implements GameStateManager {
   }
 
   /**
-   * restarts the game when restart is clicked.
+   * Returns the user to the main menu when the main menu button is clicked.
    *
    * <p>
-   * When the restart button is clicked, it reloads the main menu scene,
+   * When the main menu button is clicked, it reloads the main menu scene,
    * effectively restarting the application's UI to its initial state.
    * </p>
    *
@@ -351,7 +355,7 @@ public class GameBoardController implements GameStateManager {
    *                     home screen.
    */
   @FXML
-  public void onClickRestart(ActionEvent event) throws IOException {
+  public void onClickMainMenu(ActionEvent event) throws IOException {
     SoundManager.getInstance().stopBackgroundMusic("ingame");
     Main.setUi(AppUI.MAIN_MENU);
     // Stop and reset the timer
@@ -643,13 +647,13 @@ public class GameBoardController implements GameStateManager {
     gameOverBox.setVisible(true);
     gameOverBox.setDisable(false);
     gameOverExitButton.setDisable(false);
-    gameOverRestartButton.setDisable(false);
+    mainMenuPauseButton.setDisable(false);
     gameOverExitButton.setVisible(true);
-    gameOverRestartButton.setVisible(true);
+    mainMenuPauseButton.setVisible(true);
     gameOverScoreLabel.setText("Score: " + scoreLabel.getText());
    
 
-    if (gameInstance.isMarathonMode()) {
+    if (gameInstance.getIsMarathonMode()) {
       int linesCleared = gameInstance.getGameBoard().getTotalLinesCleared();
       int targetLines = gameInstance.getTargetLines();
 
@@ -764,6 +768,18 @@ public class GameBoardController implements GameStateManager {
     int seconds = elapsedSeconds % 60;
     String timeFormatted = String.format("%02d:%02d", minutes, seconds);
     Platform.runLater(() -> timerLabel.setText(timeFormatted));
+  }
+
+  /**
+   * When the restart button is clicked, a new game will be created using the same settings.
+   * 
+   * @param event the action of clicking the restart button
+   * @throws IOException if there is an error while loading the game
+   */
+  @FXML
+  private void onClickRestart(MouseEvent event) throws IOException {
+    HomeScreenController homeScreenController = SceneManager.getHomeScreenController();
+    homeScreenController.loadGame();
   }
 
 }

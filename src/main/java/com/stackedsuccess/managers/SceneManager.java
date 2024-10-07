@@ -1,6 +1,9 @@
 package com.stackedsuccess.managers;
 
 import java.util.*;
+
+import com.stackedsuccess.controllers.HomeScreenController;
+
 import javafx.scene.Parent;
 
 public class SceneManager {
@@ -15,7 +18,9 @@ public class SceneManager {
   }
 
   private static HashMap<AppUI, Parent> sceneMap = new HashMap<AppUI, Parent>();
+  private static HomeScreenController homeScreenController; //Used to reference the home screen controller remotly
 
+  
   /**
    * Adds a scene and its associated parent node to the scene map
    *
@@ -25,7 +30,7 @@ public class SceneManager {
   public static void addScene(AppUI scene, Parent parent) {
     sceneMap.put(scene, parent);
   }
-
+  
   /**
    * Retrieves the parent node associated with a given scene.
    *
@@ -34,5 +39,23 @@ public class SceneManager {
    */
   public static Parent getScene(AppUI scene) {
     return sceneMap.get(scene);
+  }
+
+  /**
+   * Sets the HomeScreenController for the SceneManager
+   * 
+   * @param controller the instance of the home screen controller
+   */
+  public static void setHomeScreenController(HomeScreenController controller) {
+    homeScreenController = controller;
+  }
+  
+  /**
+   * Retrieves the HomeScreenController for the SceneManager
+   * 
+   * @return the instance of the home screen controller
+   */
+  public static HomeScreenController getHomeScreenController() {
+    return homeScreenController;
   }
 }
