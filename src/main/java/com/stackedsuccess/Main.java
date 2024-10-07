@@ -6,6 +6,7 @@ import com.stackedsuccess.managers.SceneManager;
 import com.stackedsuccess.managers.SceneManager.AppUI;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -60,7 +61,11 @@ public class Main extends Application {
   public void start(final Stage stage) throws IOException {
     ScoreRecorder.createScoreFile();
 
-    SceneManager.addScene(AppUI.MAIN_MENU, loadFxml("HomeScreen"));
+    //Configures the main menu scene and saves its controller for later referencing
+    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/HomeScreen.fxml"));
+    Parent root = loader.load();
+    SceneManager.setHomeScreenController(loader.getController());
+    SceneManager.addScene(AppUI.MAIN_MENU, root);
 
     scene = new Scene(SceneManager.getScene(AppUI.MAIN_MENU), 1300, 900);
     scene.getStylesheets().add(getClass().getResource("/css/homescreen.css").toExternalForm());

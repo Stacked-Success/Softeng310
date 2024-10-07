@@ -130,7 +130,7 @@ void testSaveMarathonScore() throws IOException {
 
     @Test
     public void testMarathonModeStatus() {
-        assertTrue(gameInstance.isMarathonMode());
+        assertTrue(gameInstance.getIsMarathonMode());
         assertEquals(40, gameInstance.getTargetLines());
     }
 

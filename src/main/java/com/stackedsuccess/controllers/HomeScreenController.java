@@ -54,6 +54,9 @@ public class HomeScreenController {
   private NameEntryController nameEntryController;
   private GameInstance gameInstance;
 
+  private int initialLevel;
+  private boolean isMarathonMode;
+
   /**
    * Initialises the Home Screen controller by setting up the home screen.
    *
@@ -267,6 +270,7 @@ public class HomeScreenController {
   private void runGame() throws IOException {
     if (tutorialController.getHasTutorialBeenViewed()) {
       // Start a new game
+      setGameConditions();
       loadGame();
     } else {
       // Tell the turorial that it needs to create a new game when the user is
@@ -280,6 +284,7 @@ public class HomeScreenController {
       Runnable onTutorialCompleted =
           () -> {
             try {
+              setGameConditions();
               loadGame();
             } catch (IOException e) {
               // Do nothing for now
@@ -287,6 +292,21 @@ public class HomeScreenController {
           };
       tutorialController.setOnTutorialCompleted(onTutorialCompleted);
     }
+  }
+
+  /**
+   * Sets the game conditions based on the selected difficulty level and mode.
+   *
+   * <p>This method retrieves the selected difficulty level from the slider and determines whether
+   * the player selected Marathon Mode or Basic Mode.
+   */
+  private void setGameConditions() {
+
+    // Get the level from the slider
+    initialLevel = (int) difficultySlider.getValue();
+
+    // Determine which mode the player selected
+    isMarathonMode = marathonBtn.isSelected();
   }
 
   /**
@@ -301,8 +321,6 @@ public class HomeScreenController {
    */
   @FXML
   public void loadGame() throws IOException {
-    // Get the level from the slider
-    int initialLevel = (int) difficultySlider.getValue();
 
     // Calculate target lines based on difficulty level (for Marathon Mode)
     int targetLines =
@@ -312,9 +330,6 @@ public class HomeScreenController {
     FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/GameBoard.fxml"));
     Parent root = loader.load();
     GameBoardController controller = loader.getController();
-
-    // Determine which mode the player selected
-    boolean isMarathonMode = marathonBtn.isSelected();
 
     // Create a GameStateManager implementation to handle the state updates
     GameStateManager gameStateManager = controller;

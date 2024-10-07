@@ -25,6 +25,7 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -108,7 +109,7 @@ public class GameBoardController implements GameStateManager {
    */
   public void setGameInstance(GameInstance gameInstance) {
     this.gameInstance = gameInstance;
-    this.isMarathonMode = gameInstance.isMarathonMode(); // Store whether it is Marathon Mode
+    this.isMarathonMode = gameInstance.getIsMarathonMode(); // Store whether it is Marathon Mode
     this.targetLines = gameInstance.getTargetLines(); // Get the target lines if Marathon Mode is active
   }
 
@@ -162,6 +163,7 @@ public class GameBoardController implements GameStateManager {
       } 
     });
 
+    //sets the tutorial controller to return to the game
     tutorialController = new TutorialController();
     tutorialController.setDestinationAppUI(AppUI.GAME);
     tutorialController.setHasTutorialBeenViewed(true);
@@ -230,7 +232,7 @@ public class GameBoardController implements GameStateManager {
     int linesCleared = gameInstance.getGameBoard().getTotalLinesCleared();
 
     try {
-      if (gameInstance.isMarathonMode()) {
+      if (gameInstance.getIsMarathonMode()) {
           // Save Marathon Mode Score
           int targetLines = gameInstance.getTargetLines();
           int timeTakenInSeconds = elapsedSeconds; // Assuming elapsedSeconds is tracking the timer
@@ -651,7 +653,7 @@ public class GameBoardController implements GameStateManager {
     gameOverScoreLabel.setText("Score: " + scoreLabel.getText());
    
 
-    if (gameInstance.isMarathonMode()) {
+    if (gameInstance.getIsMarathonMode()) {
       int linesCleared = gameInstance.getGameBoard().getTotalLinesCleared();
       int targetLines = gameInstance.getTargetLines();
 
@@ -768,13 +770,16 @@ public class GameBoardController implements GameStateManager {
     Platform.runLater(() -> timerLabel.setText(timeFormatted));
   }
 
+  /**
+   * When the restart button is clicked, a new game will be created using the same settings.
+   * 
+   * @param event the action of clicking the restart button
+   * @throws IOException if there is an error while loading the game
+   */
   @FXML
-  private void onClickRestart(ActionEvent event) {
-    try {
-      onClickMainMenu(event);
-    } catch (IOException e) {
-      throw new IllegalArgumentException("Issue regarding ScoreReader");
-    }
+  private void onClickRestart(MouseEvent event) throws IOException {
+    HomeScreenController homeScreenController = SceneManager.getHomeScreenController();
+    homeScreenController.loadGame();
   }
 
 }

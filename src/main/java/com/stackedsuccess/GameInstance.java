@@ -219,15 +219,6 @@ public class GameInstance {
   }
 
   /**
-   * Checks whether the game is in marathon mode.
-   *
-   * @return true if the game is in marathon mode, false otherwise
-   */
-  public boolean isMarathonMode() {
-    return isMarathonMode;
-  }
-
-  /**
    * Gets the target number of lines in marathon mode.
    *
    * @return the target number of lines
@@ -243,4 +234,14 @@ public class GameInstance {
     }
     setGameOver(true);
   }
+
+    /**
+   * Gets the weather or not the game is of type marathon.
+   *
+   * @return the boolen represeting if the game is of type marathon
+   */
+  public boolean getIsMarathonMode() {
+    return isMarathonMode;
+  }
+
 }
