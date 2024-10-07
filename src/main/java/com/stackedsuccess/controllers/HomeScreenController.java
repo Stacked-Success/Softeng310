@@ -370,7 +370,7 @@ public class HomeScreenController {
    */
   private int calculateTargetLines(int difficultyLevel) {
     return difficultyLevel
-        + 1; // Adjust the multiplier as needed, e.g., 10 lines per difficulty level.
+        + 10; // Adjust the multiplier as needed, e.g., 10 lines per difficulty level.
   }
 
   /**
