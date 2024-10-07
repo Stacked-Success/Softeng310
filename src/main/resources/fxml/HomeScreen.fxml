@@ -22,13 +22,13 @@
                </image>
             </ImageView>
             <Slider fx:id="difficultySlider" blockIncrement="1.0" layoutX="52.0" layoutY="665.0" majorTickUnit="1.0" max="20.0" min="1.0" minorTickCount="0" prefHeight="74.0" prefWidth="659.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="48.0" />
-            <Button id="tutorial" fx:id="tutorialBtn" layoutX="205.0" layoutY="68.0" mnemonicParsing="false" onMouseClicked="#onClickTutorial" text="Tutorial">
+            <Button id="tutorial" fx:id="tutorialBtn" layoutX="910.0" layoutY="67.0" mnemonicParsing="false" onMouseClicked="#onClickTutorial" text="Tutorial">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
       
-            <Button id="pastScores" fx:id="pastScoresButton" layoutX="40.0" layoutY="68.0" mnemonicParsing="false" onAction="#showPastScores" text="Past Scores">
+            <Button id="pastScores" fx:id="pastScoresButton" layoutX="31.0" layoutY="68.0" mnemonicParsing="false" onAction="#showPastScores" prefHeight="39.0" prefWidth="171.0" text="Past Scores">
                <font>
                   <Font size="20.0" />
                </font>
@@ -38,18 +38,18 @@
                   <Font size="30.0" />
                </font>
             </Text>
-            <Text id="difficultyText" layoutX="453.0" layoutY="650.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="gen-text" text="Level Of Difficulty">
+            <Text id="difficultyText" layoutX="566.0" layoutY="656.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="gen-text" text="Difficulty">
 
                <font>
                   <Font size="30.0" />
                </font>
             </Text>
-            <Button id="startGame" focusTraversable="false" layoutX="610.0" layoutY="783.0" mnemonicParsing="false" onAction="#startGame" text="START">
+            <Button id="startGame" focusTraversable="false" layoutX="577.0" layoutY="778.0" mnemonicParsing="false" onAction="#startGame" text="START">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button id="Keybinds" layoutX="893.0" layoutY="67.0" mnemonicParsing="false" onMouseClicked="#goKeyBinds" text="Keybinds">
+            <Button id="Keybinds" layoutX="31.0" layoutY="207.0" mnemonicParsing="false" onMouseClicked="#goKeyBinds" prefHeight="39.0" prefWidth="154.5" text="Keybinds">
                <font>
                   <Font size="20.0" />
                </font>
@@ -64,13 +64,13 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button id="difficulty" focusTraversable="false" layoutX="726.0" layoutY="610.0" mnemonicParsing="false" onAction="#onDifficulty" text="Difficulty Mode">
+            <Button id="difficulty" focusTraversable="false" layoutX="31.0" layoutY="277.0" mnemonicParsing="false" onAction="#onDifficulty" text="Difficulty Mode">
 
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button id="shop" focusTraversable="false" layoutX="340.0" layoutY="68.0" mnemonicParsing="false" onAction="#onShop" text="Shop">
+            <Button id="shop" focusTraversable="false" layoutX="31.0" layoutY="137.0" mnemonicParsing="false" onAction="#onShop" prefHeight="39.0" prefWidth="154.5" text="Shop">
                <font>
                   <Font size="20.0" />
                </font>
@@ -145,7 +145,7 @@
                </image>
             </ImageView>
             <ListView fx:id="basicPastScores" layoutX="66.0" layoutY="145.0" prefHeight="301.0" prefWidth="484.0" visible="false" />
-            <Button id="back" layoutX="223.0" layoutY="504.0" mnemonicParsing="false" onAction="#onPastScoreBack" prefHeight="60.0" prefWidth="222.0" text="Go Back">
+            <Button id="back" fx:id="goBackBtn" layoutX="223.0" layoutY="504.0" mnemonicParsing="false" onAction="#onPastScoreBack" prefHeight="60.0" prefWidth="222.0" text="Go Back">
                <font>
                   <Font size="23.0" />
                </font>
