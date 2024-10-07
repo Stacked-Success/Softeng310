@@ -27,28 +27,22 @@ public class ScoreRecorder {
    * @throws IOException if an I/O error occurs
    */
   public static void saveScore(String score) throws IOException {
-    HashMap<String, Integer> scores = getAllScores(); // Get current scores as a HashMap
+    HashMap<String, Integer> scores = getAllScores();
     String playerName;
     if(NameEntryController.name == null || NameEntryController.name.equals("")){
       playerName = "Anonymous";
   } else {
       playerName = NameEntryController.name;
   }
-    // Add or update the score for the player
     scores.put(playerName, Integer.parseInt(score));
 
-    // Sort the scores in descending order and keep only the top MAX_SCORES entries
     List<Map.Entry<String, Integer>> sortedScores = new ArrayList<>(scores.entrySet());
     sortedScores.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
-
-    // Clear the map and add back only the top scores
     scores.clear();
     for (int i = 0; i < Math.min(MAX_SCORES, sortedScores.size()); i++) {
         Map.Entry<String, Integer> entry = sortedScores.get(i);
         scores.put(entry.getKey(), entry.getValue());
     }
-
-    // Write the sorted scores back to the file
     writeScores(scores);
 }
 
@@ -64,8 +58,6 @@ public class ScoreRecorder {
       if (scores.isEmpty()) {
           return "No high score available.";
       }
-
-      // Find the player with the highest score
       return Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).toString();
   }
 
@@ -85,7 +77,7 @@ public class ScoreRecorder {
         String line;
         while ((line = reader.readLine()) != null) {
             if (!line.trim().isEmpty()) {
-                String[] parts = line.split(" "); // Assuming scores are formatted as "Name Score"
+                String[] parts = line.split(" ");
                 if (parts.length == 2) {
                     String playerName = parts[0];
                     Integer playerScore = Integer.parseInt(parts[1]);
@@ -106,7 +98,7 @@ public class ScoreRecorder {
   static void writeScores(HashMap<String, Integer> scores) throws IOException {
       try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCOREFILE))) {
           for (HashMap.Entry<String, Integer> entry : scores.entrySet()) {
-              writer.write(entry.getKey() + " " + entry.getValue());  // Write name and score
+              writer.write(entry.getKey() + " " + entry.getValue());
               writer.newLine();
           }
       }
@@ -125,7 +117,6 @@ public class ScoreRecorder {
       try {
         boolean isFileCreated = scoreFile.createNewFile();
         if (!isFileCreated) {
-          // Retry creating the file
           isFileCreated = scoreFile.createNewFile();
           if (!isFileCreated) {
             throw new IOException("Failed to create score file after retrying.");
@@ -151,7 +142,7 @@ public class ScoreRecorder {
       scores.add(newScore);
 
       if (scores.size() > MAX_SCORES) {
-          scores.remove(scores.size() - 1); // Keep only the top MAX_SCORES entries
+          scores.remove(scores.size() - 1);
       }
       writeMarathonScores(scores);
   }

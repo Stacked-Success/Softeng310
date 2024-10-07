@@ -3,9 +3,6 @@ package com.stackedsuccess;
 import com.stackedsuccess.managers.TetriminoImageManager;
 import com.stackedsuccess.tetriminos.*;
 import javafx.scene.image.Image;
-import javafx.application.Platform;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -8,10 +8,7 @@ import com.stackedsuccess.managers.SceneManager;
 import com.stackedsuccess.managers.SceneManager.AppUI;
 import com.stackedsuccess.managers.sound.SoundManager;
 import java.io.IOException;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-
 import java.util.List;
 
 import javafx.application.Platform;
@@ -68,9 +65,8 @@ public class HomeScreenController {
   @FXML
   public void initialize() throws IOException {
     difficultySlider.requestFocus();
-    // Optionally load scores during initialization
-    loadBasicModeScores(); // Load and set scores for Basic Mode
-    loadMarathonModeScores(); // Load and set scores for Marathon Mode
+    loadBasicModeScores(); 
+    loadMarathonModeScores();
 
     pastScoresButton.setFocusTraversable(false);
     tutorialController = new TutorialController();
@@ -82,18 +78,20 @@ public class HomeScreenController {
     basicBtn.setSelected(true);
     marathonBtn.setSelected(false);
 
-    // Ensure files exist
     ScoreRecorder.createMarathonScoreFile();
     ScoreRecorder.createScoreFile();
 
-    // Load the tutorial screen
     FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
     loader.setController(tutorialController);
     Parent root = loader.load();
     SceneManager.addScene(AppUI.HOME_TUTORIAL, root);
   }
 
-  // Method to set the GameInstance
+   /**
+   * Sets the game instance for this controller.
+   *
+   * @param gameInstance the GameInstance to be set.
+   */
   public void setGameInstance(GameInstance gameInstance) {
     this.gameInstance = gameInstance;
   }
@@ -166,12 +164,18 @@ public class HomeScreenController {
     }
   }
 
+   /**
+   * Sets Marathon mode as selected and disables Basic mode selection.
+   */
   @FXML
   public void toggleMarathon() {
     marathonBtn.setSelected(true);
     basicBtn.setSelected(false);
   }
 
+   /**
+   * Sets Basic mode as selected and disables Marathon mode selection.
+   */
   @FXML
   void toggleBasic() {
     basicBtn.setSelected(true);
@@ -196,21 +200,33 @@ public class HomeScreenController {
     mainPane.setDisable(true);
   }
 
+ /**
+   * Opens the difficulty settings by displaying the difficulty pane and disabling the main pane.
+   */
   public void onDifficulty() {
     difficultyPane.setVisible(true);
     mainPane.setDisable(true);
   }
 
+  /**
+   * Closes the settings menu and re-enables the main pane.
+   */
   public void onSettingsBack() {
     settingsPane.setVisible(false);
     mainPane.setDisable(false);
   }
 
+  /**
+   * Closes the difficulty settings pane and re-enables the main pane.
+   */
   public void onDifficultyBack() {
     difficultyPane.setVisible(false);
     mainPane.setDisable(false);
   }
 
+  /**
+   * Closes the past scores pane and re-enables the main pane.
+   */
   public void onPastScoreBack() {
     pastScorePane.setVisible(false);
     mainPane.setDisable(false);
@@ -273,21 +289,14 @@ public class HomeScreenController {
       setGameConditions();
       loadGame();
     } else {
-      // Tell the turorial that it needs to create a new game when the user is
-      // finished
       tutorialController.setCreateGame(true);
-
-      // Load the tutorial
       goToTutorial();
-
-      // Creates the game when the tutorial is completed
       Runnable onTutorialCompleted =
           () -> {
             try {
               setGameConditions();
               loadGame();
             } catch (IOException e) {
-              // Do nothing for now
             }
           };
       tutorialController.setOnTutorialCompleted(onTutorialCompleted);
@@ -301,11 +310,7 @@ public class HomeScreenController {
    * the player selected Marathon Mode or Basic Mode.
    */
   private void setGameConditions() {
-
-    // Get the level from the slider
     initialLevel = (int) difficultySlider.getValue();
-
-    // Determine which mode the player selected
     isMarathonMode = marathonBtn.isSelected();
   }
 
@@ -321,26 +326,17 @@ public class HomeScreenController {
    */
   @FXML
   public void loadGame() throws IOException {
-
-    // Calculate target lines based on difficulty level (for Marathon Mode)
     int targetLines =
-        calculateTargetLines(initialLevel); // Higher difficulty means more lines to clear
+        calculateTargetLines(initialLevel); 
 
-    // loads the game board fxml file
     FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/GameBoard.fxml"));
     Parent root = loader.load();
     GameBoardController controller = loader.getController();
-
-    // Create a GameStateManager implementation to handle the state updates
     GameStateManager gameStateManager = controller;
-
-    // Create a new GameInstance with the state manager
     this.gameInstance = new GameInstance(gameStateManager, isMarathonMode, targetLines);
-
-    // Pass the GameInstance to the controller for reference
     controller.setGameInstance(gameInstance);
 
-    // Set the initial level
+
     controller.updateLevel(initialLevel);
     SceneManager.addScene(AppUI.GAME, root);
     Main.setUi(AppUI.GAME);
@@ -380,6 +376,7 @@ public class HomeScreenController {
    */
   @FXML
   public void showPastScores() {
+
     mainPane.setDisable(true);
     pastScorePane.setVisible(true);
     MarathonPastScores.setVisible(true);
@@ -416,7 +413,7 @@ public class HomeScreenController {
    */
   private int calculateTargetLines(int difficultyLevel) {
     return difficultyLevel
-        + 10; // Adjust the multiplier as needed, e.g., 10 lines per difficulty level.
+        + 10;
   }
 
   /**
@@ -426,8 +423,6 @@ public class HomeScreenController {
    */
   @FXML
   public void onClickBasicMode() {
-
-    // Hide the Marathon Mode scores and related image, show Basic Mode scores and related image
     MarathonPastScores.setVisible(false);
     marathonScoreImageView.setVisible(true);
 
@@ -440,7 +435,6 @@ public class HomeScreenController {
     clickBasic.toFront();
     clickMarathon.toFront();
 
-    // Load and display Basic Mode scores
     loadBasicModeScores();
   }
 
@@ -453,7 +447,6 @@ public class HomeScreenController {
   public void onClickMarathonMode() {
 
     System.out.println("Marathon Mode clicked");
-    // Hide the Basic Mode scores and related image, show Marathon Mode scores and related image
     basicPastScores.setVisible(false);
     basicScoreImageView.setVisible(true);
 
@@ -465,16 +458,15 @@ public class HomeScreenController {
     clickBasic.toFront();
     clickMarathon.toFront();
 
-    // Load and display Marathon Mode scores
     loadMarathonModeScores();
   }
 
   private void loadBasicModeScores() {
     try {
-        HashMap<String, Integer> basicScores = ScoreRecorder.getAllScores();  // Now using HashMap<String, Integer>
+        HashMap<String, Integer> basicScores = ScoreRecorder.getAllScores(); 
         if (!basicScores.isEmpty()) {
-            for (HashMap.Entry<String, Integer> entry : basicScores.entrySet()) { // Using HashMap.Entry
-                String formattedScore = entry.getKey() + " " + entry.getValue(); // "Name Score" formatted string
+            for (HashMap.Entry<String, Integer> entry : basicScores.entrySet()) {
+                String formattedScore = entry.getKey() + " " + entry.getValue();
                 basicPastScores.getItems().add(formattedScore);
             }
         } else {

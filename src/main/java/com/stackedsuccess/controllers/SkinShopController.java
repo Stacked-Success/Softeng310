@@ -8,8 +8,6 @@ import com.stackedsuccess.managers.TetriminoImageManager;
 import java.io.IOException;
 import java.util.List;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -47,12 +45,28 @@ public class SkinShopController {
   /** Updates the high score label with the current high score. */
   private void updateHighScoreLabel() {
     try {
-      String highScore = ScoreRecorder.getHighScore();
-      highScoreLabel.setText("High Score: " + highScore);
+        String highScore = ScoreRecorder.getHighScore();
+
+        if (highScore.equals("No high score available.")) {
+            highScoreLabel.setText("High Score: 0");
+        } else {
+            String[] parts = highScore.split("=");
+
+            if (parts.length == 2) {
+                try {
+                    int parsedScore = Integer.parseInt(parts[1]);
+                    highScoreLabel.setText("High Score: " + parsedScore);
+                } catch (NumberFormatException e) {
+                    highScoreLabel.setText("High Score: 0");
+                }
+            } else {
+                highScoreLabel.setText("High Score: 0");
+            }
+        }
     } catch (IOException e) {
-      highScoreLabel.setText("High Score: 0");
+        highScoreLabel.setText("High Score: 0");
     }
-  }
+}
 
   /** Populates the skin selection display with available skins. */
   private void populateSkinDisplay() {
