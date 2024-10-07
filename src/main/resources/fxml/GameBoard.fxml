@@ -55,12 +55,23 @@
                   <Font name="Arial" size="84.0" />
                </font>
             </Label>
-            <Button fx:id="tutorialBtn" layoutX="585.0" layoutY="450.0" mnemonicParsing="false" onMouseClicked="#goToTutorial" prefHeight="49.0" prefWidth="180.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Tutorial" textAlignment="CENTER">
+            <Button fx:id="tutorialBtn" layoutX="564.0" layoutY="450.0" mnemonicParsing="false" onMouseClicked="#goToTutorial" prefHeight="40.0" prefWidth="222.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Tutorial" textAlignment="CENTER">
                <font>
                   <Font name="Arial Bold" size="24.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Button>
-            <Button fx:id="gameOverRestartButton" layoutX="564.0" layoutY="570.0" mnemonicParsing="false" onAction="#onClickRestart" prefHeight="40.0" prefWidth="222.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Restart / Main Menu" textFill="WHITE">
+            <Button fx:id="mainMenuPauseButton" layoutX="564.0" layoutY="550.0" mnemonicParsing="false" onAction="#onClickMainMenu" prefHeight="40.0" prefWidth="222.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Main Menu" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="restartBtn" layoutX="564.0" layoutY="650.0" mnemonicParsing="false" onMouseClicked="#onClickRestart" prefHeight="40.0" prefWidth="222.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Restart" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial Bold" size="24.0" />
+               </font>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -161,6 +172,9 @@
          <font>
             <Font name="Arial Bold" size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </Button>
       <Pane layoutX="432.0" layoutY="12.0" prefHeight="875.0" prefWidth="476.0" style="-fx-background-color: #2F2F2F; -fx-background-size: 555 705; -fx-border-color: DARKBLUE; -fx-border-style: SOLID; -fx-border-width: 10;">
          <cursor>
@@ -226,7 +240,7 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#484848" height="33.0" layoutX="12.0" layoutY="-3.0" stroke="TRANSPARENT" strokeType="INSIDE" width="491.0" />
          </children>
       </Pane>
-      <Button fx:id="mainMenuBtn" layoutX="563.0" layoutY="600.0" mnemonicParsing="false" onAction="#onClickRestart" prefHeight="40.0" prefWidth="222.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Main Menu" visible="false">
+      <Button fx:id="mainMenuBtn" layoutX="563.0" layoutY="600.0" mnemonicParsing="false" onAction="#onClickMainMenu" prefHeight="40.0" prefWidth="222.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 18 18 18 18; -fx-background-color: lightgray; -fx-background-radius: 18 18 18 18;" text="Main Menu" visible="false">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

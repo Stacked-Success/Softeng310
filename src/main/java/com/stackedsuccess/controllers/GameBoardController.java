@@ -72,9 +72,11 @@ public class GameBoardController implements GameStateManager {
   @FXML
   Button gameOverExitButton;
   @FXML
-  Button gameOverRestartButton;
+  Button mainMenuPauseButton;
   @FXML
   Button mainMenuBtn;
+  @FXML
+  Button restarButton;
 
   @FXML
   public VBox timerVbox;
@@ -339,10 +341,10 @@ public class GameBoardController implements GameStateManager {
   }
 
   /**
-   * restarts the game when restart is clicked.
+   * Returns the user to the main menu when the main menu button is clicked.
    *
    * <p>
-   * When the restart button is clicked, it reloads the main menu scene,
+   * When the main menu button is clicked, it reloads the main menu scene,
    * effectively restarting the application's UI to its initial state.
    * </p>
    *
@@ -351,7 +353,7 @@ public class GameBoardController implements GameStateManager {
    *                     home screen.
    */
   @FXML
-  public void onClickRestart(ActionEvent event) throws IOException {
+  public void onClickMainMenu(ActionEvent event) throws IOException {
     SoundManager.getInstance().stopBackgroundMusic("ingame");
     Main.setUi(AppUI.MAIN_MENU);
     // Stop and reset the timer
@@ -643,9 +645,9 @@ public class GameBoardController implements GameStateManager {
     gameOverBox.setVisible(true);
     gameOverBox.setDisable(false);
     gameOverExitButton.setDisable(false);
-    gameOverRestartButton.setDisable(false);
+    mainMenuPauseButton.setDisable(false);
     gameOverExitButton.setVisible(true);
-    gameOverRestartButton.setVisible(true);
+    mainMenuPauseButton.setVisible(true);
     gameOverScoreLabel.setText("Score: " + scoreLabel.getText());
    
 
@@ -764,6 +766,15 @@ public class GameBoardController implements GameStateManager {
     int seconds = elapsedSeconds % 60;
     String timeFormatted = String.format("%02d:%02d", minutes, seconds);
     Platform.runLater(() -> timerLabel.setText(timeFormatted));
+  }
+
+  @FXML
+  private void onClickRestart(ActionEvent event) {
+    try {
+      onClickMainMenu(event);
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Issue regarding ScoreReader");
+    }
   }
 
 }
