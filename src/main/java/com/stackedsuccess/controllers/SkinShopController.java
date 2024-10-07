@@ -123,9 +123,6 @@ public class SkinShopController {
   /** Navigates back to the main menu. */
   @FXML
   public void onBack(MouseEvent event) throws IOException {
-    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/HomeScreen.fxml"));
-    Parent root = loader.load();
-    SceneManager.addScene(SceneManager.AppUI.MAIN_MENU, root);
     Main.setUi(SceneManager.AppUI.MAIN_MENU);
   }
 }
