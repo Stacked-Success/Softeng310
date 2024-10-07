@@ -57,7 +57,7 @@ public class MarathonModeTest {
         HashMap<String, Integer> scoresMap = ScoreRecorder.getAllScores();
         assertEquals(1, scoresMap.size());
         
-        assertEquals(15, scoresMap.get("Unknown"));
+        assertEquals(15, scoresMap.get("Anonymous"));
     }
 
 @Test
@@ -147,7 +147,7 @@ void testSaveMarathonScore() throws IOException {
         HashMap<String, Integer> scores = ScoreRecorder.getAllScores();
         String playerName;
         if(NameEntryController.name == "" || NameEntryController.name == null){
-            playerName = "Unknown";
+            playerName = "Anonymous";
         } else {
             playerName = NameEntryController.name;
         }
@@ -160,7 +160,7 @@ void testSaveMarathonScore() throws IOException {
         ScoreRecorder.saveScore("2000");
 
         String highScore = ScoreRecorder.getHighScore();
-        assertEquals("Unknown=2000", highScore);
+        assertEquals("Anonymous=2000", highScore);
     }
 
     

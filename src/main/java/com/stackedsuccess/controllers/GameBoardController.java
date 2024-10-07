@@ -664,6 +664,7 @@ public class GameBoardController implements GameStateManager {
           gameOverScoreLabel.setText("Score: " + linesCleared + "/" + targetLines);
           try {
               gameOverHighScoreLabel.setText("High Score: " + ScoreRecorder.getHighScore());
+              gameOverHighScoreLabel.setStyle("-fx-font-size: 17px;");
           } catch (IOException e) {
               throw new IllegalArgumentException("Issue regarding ScoreReader");
           }
@@ -674,6 +675,7 @@ public class GameBoardController implements GameStateManager {
       gameOverScoreLabel.setText("Score: " + scoreLabel.getText());
       try {
           gameOverHighScoreLabel.setText("High Score: " + ScoreRecorder.getHighScore());
+          gameOverHighScoreLabel.setStyle("-fx-font-size: 16px;");
       } catch (IOException e) {
           throw new IllegalArgumentException("Issue regarding ScoreReader");
       }
