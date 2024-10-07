@@ -20,11 +20,7 @@ public class TetriminoImageManagerTest {
 
     private TetriminoImageManager imageManager;
 
-     @BeforeAll
-    public static void initToolkit() {
-        Platform.startup(() -> {});
-    }
-
+    
     @BeforeEach
     public void setUp() {
         imageManager = TetriminoImageManager.getInstance();
