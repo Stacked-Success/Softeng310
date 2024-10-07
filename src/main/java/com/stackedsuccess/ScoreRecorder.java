@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+import com.stackedsuccess.controllers.NameEntryController;
+
 public class ScoreRecorder {
 
   private ScoreRecorder() {
@@ -25,14 +27,20 @@ public class ScoreRecorder {
    * @throws IOException if an I/O error occurs
    */
   public static void saveScore(String score) throws IOException {
-    List<Integer> scores = getAllScores();
-    scores.add(Integer.parseInt(score));
-    Collections.sort(scores, Collections.reverseOrder());
-    if (scores.size() > MAX_SCORES) {
-      scores.remove(scores.size() - 1);
-    }
-    writeScores(scores);
+      List<String> scores = getAllScores();
+      String playerName = NameEntryController.name;  // Get the player's name
+      scores.add(playerName + " " + score);  // Combine name and score
+      Collections.sort(scores, (s1, s2) -> {
+          int score1 = Integer.parseInt(s1.split(" ")[1]);
+          int score2 = Integer.parseInt(s2.split(" ")[1]);
+          return Integer.compare(score2, score1);  // Sort in reverse order based on score
+      });
+      if (scores.size() > MAX_SCORES) {
+          scores.remove(scores.size() - 1);
+      }
+      writeScores(scores);
   }
+
 
   /**
    * Get the high score as a string.
@@ -41,12 +49,12 @@ public class ScoreRecorder {
    * @throws IOException
    */
   public static String getHighScore() throws IOException {
-    List<Integer> scores = getAllScores();
+    List<String> scores = getAllScores();
     if (scores.isEmpty()) {
-      return "0";
+        return "No high score available.";
     }
-    return String.valueOf(scores.get(0));
-  }
+    return scores.get(0); 
+}
 
   /**
    * Get all scores from the file.
@@ -54,8 +62,8 @@ public class ScoreRecorder {
    * @return a list of all scores
    * @throws IOException
    */
-  public static List<Integer> getAllScores() throws IOException {
-    List<Integer> scores = new ArrayList<>();
+  public static List<String> getAllScores() throws IOException {
+    List<String> scores = new ArrayList<>();
     File file = new File(SCOREFILE);
     if (!file.exists()) {
         return scores;
@@ -64,12 +72,12 @@ public class ScoreRecorder {
         String line;
         while ((line = reader.readLine()) != null) {
             if (!line.trim().isEmpty()) {
-                scores.add(Integer.parseInt(line));
+                scores.add(line);  // Read the name and score together
             }
         }
     }
     return scores;
-}
+  }
 
   /**
    * Write the scores to the file.
@@ -77,14 +85,14 @@ public class ScoreRecorder {
    * @param scores the scores to write
    * @throws IOException
    */
-  private static void writeScores(List<Integer> scores) throws IOException {
+  private static void writeScores(List<String> scores) throws IOException {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCOREFILE))) {
-      for (int score : scores) {
-        writer.write(String.valueOf(score));
-        writer.newLine();
-      }
+        for (String score : scores) {
+            writer.write(score);  // Write the name and score together
+            writer.newLine();
+        }
     }
-  }
+}
 
   /**
    * Creates a score file if it does not already exist.

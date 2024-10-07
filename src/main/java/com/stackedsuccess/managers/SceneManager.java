@@ -10,6 +10,7 @@ public class SceneManager {
     HOME_TUTORIAL,
     SKINSHOP,
     GAME_TUTORIAL,
+    NAME_ENTRY,
     SETTINGS;
   }
 

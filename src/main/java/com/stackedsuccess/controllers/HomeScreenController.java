@@ -49,6 +49,7 @@ public class HomeScreenController {
 
   private TutorialController tutorialController;
   private SkinShopController skinShopController;
+  private NameEntryController nameEntryController;
   private GameInstance gameInstance;
 
   /**
@@ -67,6 +68,7 @@ public class HomeScreenController {
 
     pastScoresButton.setFocusTraversable(false);
     tutorialController = new TutorialController();
+    nameEntryController = new NameEntryController();
     tutorialController.setDestinationAppUI(AppUI.MAIN_MENU);
     updateSoundButtonState();
     updateMusicButtonState();
@@ -240,6 +242,26 @@ public class HomeScreenController {
     Main.setUi(AppUI.SKINSHOP);
   }
 
+  private void loadNameEntry() throws IOException{
+    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/nameEntry.fxml"));
+    loader.setController(nameEntryController);
+    Parent root = loader.load();
+    SceneManager.addScene(AppUI.NAME_ENTRY, root);
+    Main.setUi(AppUI.NAME_ENTRY);
+
+    Runnable onNameEntered =
+          () -> {
+            try {
+              System.out.println("hi");
+              runGame();
+            } catch (IOException e) {
+              // Do nothing for now
+            }
+          };
+          System.out.println("hello");
+      nameEntryController.setOnNameCompleted(onNameEntered);
+  }
+
   /**
    * Starts a new game by loading the game board UI and initialising the game at the selected
    * difficulty level.
@@ -250,6 +272,10 @@ public class HomeScreenController {
    * @throws IOException
    */
   public void startGame() throws IOException {
+    loadNameEntry();
+  }
+
+  private void runGame() throws IOException {
     if (tutorialController.getHasTutorialBeenViewed()) {
       // Start a new game
       loadGame();
@@ -439,21 +465,20 @@ public class HomeScreenController {
     loadMarathonModeScores();
   }
 
-  /** Loads scores for Basic Mode into the corresponding ListView. */
   private void loadBasicModeScores() {
     try {
-      List<Integer> basicScores = ScoreRecorder.getAllScores();
-      if (!basicScores.isEmpty()) {
-        for (int score : basicScores) {
-          basicPastScores.getItems().add("" + score);
+        List<String> basicScores = ScoreRecorder.getAllScores();  // Now using List<String> instead of List<Integer>
+        if (!basicScores.isEmpty()) {
+            for (String score : basicScores) {
+                basicPastScores.getItems().add(score);  // Directly add "Name Score" formatted string
+            }
+        } else {
+            basicPastScores.getItems().add("No scores available.");
         }
-      } else {
-        basicPastScores.getItems().add("No scores available.");
-      }
     } catch (IOException e) {
-      basicPastScores.getItems().add("Failed to load scores.");
+        basicPastScores.getItems().add("Failed to load scores.");
     }
-  }
+}
 
   /** Loads scores for Marathon Mode into the corresponding ListView. */
   private void loadMarathonModeScores() {
