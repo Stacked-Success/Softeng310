@@ -103,13 +103,12 @@ You will need the following software installed:
      ```sh
      git clone https://github.com/Stacked-Success/Softeng310.git
      ```
-
-3. **Navigate to the Project Directory**:
+2. **Navigate to the Project Directory using Terminal/Command Prompt**:
      ```sh
      cd Softeng310
      ```
 
-4. **Run the Project**:
+3. **Run the Project**:
    ```sh
    ./mvnw clean javafx:run
    ```

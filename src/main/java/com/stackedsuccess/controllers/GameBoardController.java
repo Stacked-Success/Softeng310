@@ -24,7 +24,6 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -42,28 +41,28 @@ public class GameBoardController implements GameStateManager {
   GridPane displayGrid;
 
   @FXML
-  Label scoreLabel;
+  public Label scoreLabel;
   @FXML
-  Label levelLabel;
+  public Label levelLabel;
   @FXML
-  Label lineLabel;
+  public Label lineLabel;
 
   @FXML
-  ImageView holdPieceView;
+  public ImageView holdPieceView;
   @FXML
-  ImageView nextPieceView;
+  public ImageView nextPieceView;
 
   @FXML
   Button pauseButton;
   @FXML
-  Pane pauseBackground;
+  public Pane pauseBackground;
   @FXML
-  Pane pauseLabelBackground;
+  public Pane pauseLabelBackground;
   @FXML
   Label pauseLabel;
 
   @FXML
-  VBox gameOverBox;
+  public VBox gameOverBox;
   @FXML
   Label gameOverLabel;
   @FXML
@@ -78,7 +77,7 @@ public class GameBoardController implements GameStateManager {
   Button mainMenuBtn;
 
   @FXML
-  VBox timerVbox;
+  public VBox timerVbox;
   @FXML
   Label timerLabel;
 
@@ -292,7 +291,7 @@ public class GameBoardController implements GameStateManager {
    * paused, it sends the
    * pause screen elements to the back and makes them transparent.
    */
-  private void togglePauseScreen() {
+  public void togglePauseScreen() {
     if (gameInstance.isPaused()) {
       basePane.requestFocus();
       pauseBackground.toBack();
@@ -335,7 +334,7 @@ public class GameBoardController implements GameStateManager {
    * </p>
    */
   @FXML
-  void onClickExit(ActionEvent event) {
+  public void onClickExit(ActionEvent event) {
     System.exit(0);
   }
 
@@ -352,9 +351,8 @@ public class GameBoardController implements GameStateManager {
    *                     home screen.
    */
   @FXML
-  void onClickRestart(ActionEvent event) throws IOException {
+  public void onClickRestart(ActionEvent event) throws IOException {
     SoundManager.getInstance().stopBackgroundMusic("ingame");
-    SceneManager.addScene(AppUI.MAIN_MENU, loadFxml("HomeScreen"));
     Main.setUi(AppUI.MAIN_MENU);
     // Stop and reset the timer
     if (gameTimer != null) {

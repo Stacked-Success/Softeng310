@@ -40,10 +40,6 @@
     -fx-font-family: "Poppins", sans-serif;
 }
 
-.text{
-    -fx-font-family: "Poppins", sans-serif;
-}
-
 /* Hover effects for Buttons */
 .button:hover {
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0.5, 0, 1); /* Stronger shadow */

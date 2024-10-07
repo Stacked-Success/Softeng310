@@ -7,11 +7,11 @@ import com.stackedsuccess.managers.GameStateManager;
 import com.stackedsuccess.managers.SceneManager;
 import com.stackedsuccess.managers.SceneManager.AppUI;
 import com.stackedsuccess.managers.sound.SoundManager;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import java.util.List;
 
 import javafx.application.Platform;
@@ -60,9 +60,10 @@ public class HomeScreenController {
    * <p>This method sets the initial focus on the difficulty slider (1) and loads past scores from a
    * file into the list view component that displays previous game scores if the players clicks on
    * the past scores button
+   * @throws IOException 
    */
   @FXML
-  public void initialize() {
+  public void initialize() throws IOException {
     difficultySlider.requestFocus();
     // Optionally load scores during initialization
     loadBasicModeScores(); // Load and set scores for Basic Mode
@@ -81,6 +82,12 @@ public class HomeScreenController {
     // Ensure files exist
     ScoreRecorder.createMarathonScoreFile();
     ScoreRecorder.createScoreFile();
+
+    // Load the tutorial screen
+    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
+    loader.setController(tutorialController);
+    Parent root = loader.load();
+    SceneManager.addScene(AppUI.HOME_TUTORIAL, root);
   }
 
   // Method to set the GameInstance
@@ -166,26 +173,6 @@ public class HomeScreenController {
   void toggleBasic() {
     basicBtn.setSelected(true);
     marathonBtn.setSelected(false);
-  }
-
-  /**
-   * Reads scores from a file and returns them as a list of strings.
-   *
-   * @param filePath The path to the score file that will be read.
-   * @return A list of scores as strings, where each string represents one line from the file.
-   */
-  private List<String> loadScoresFromFile(String filePath) {
-    List<String> scores = new ArrayList<>();
-    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-      String line;
-      // reads each line from the file and adds to the score list
-      while ((line = reader.readLine()) != null) {
-        scores.add(line);
-      }
-    } catch (IOException e) {
-      throw new IllegalArgumentException("Issue regarding Score file", e);
-    }
-    return scores;
   }
 
   /**
@@ -282,17 +269,12 @@ public class HomeScreenController {
       // Start a new game
       loadGame();
     } else {
-
       // Tell the turorial that it needs to create a new game when the user is
       // finished
       tutorialController.setCreateGame(true);
 
       // Load the tutorial
-      FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
-      loader.setController(tutorialController);
-      Parent root = loader.load();
-      SceneManager.addScene(AppUI.HOME_TUTORIAL, root);
-      Main.setUi(AppUI.HOME_TUTORIAL);
+      goToTutorial();
 
       // Creates the game when the tutorial is completed
       Runnable onTutorialCompleted =
@@ -398,11 +380,16 @@ public class HomeScreenController {
    * @throws IOException
    */
   @FXML
-  public void goToTutorial() throws IOException {
-    FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/Tutorial.fxml"));
-    loader.setController(tutorialController);
-    Parent root = loader.load();
-    SceneManager.addScene(AppUI.HOME_TUTORIAL, root);
+  public void onClickTutorial() {
+    goToTutorial();
+  }
+
+  /**
+   * Navigates to the tutorial screen.
+   *
+   * <p>This method loads the tutorial screen and sets it as the current UI.
+   */
+  public void goToTutorial() {
     Main.setUi(AppUI.HOME_TUTORIAL);
   }
 
@@ -414,7 +401,7 @@ public class HomeScreenController {
    */
   private int calculateTargetLines(int difficultyLevel) {
     return difficultyLevel
-        + 1; // Adjust the multiplier as needed, e.g., 10 lines per difficulty level.
+        + 10; // Adjust the multiplier as needed, e.g., 10 lines per difficulty level.
   }
 
   /**

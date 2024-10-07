@@ -58,6 +58,7 @@ public class TutorialController {
     private void onClickExit(MouseEvent event) {
 
         hasTutorialBeenViewed = true;
+
         //If the tutorial is being displayed before the first game, create the game
         if (createGame) {
             onTutorialCompleted.run();
