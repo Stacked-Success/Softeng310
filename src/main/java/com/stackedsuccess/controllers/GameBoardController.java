@@ -353,7 +353,6 @@ public class GameBoardController implements GameStateManager {
   @FXML
   void onClickRestart(ActionEvent event) throws IOException {
     SoundManager.getInstance().stopBackgroundMusic("ingame");
-    SceneManager.addScene(AppUI.MAIN_MENU, loadFxml("HomeScreen"));
     Main.setUi(AppUI.MAIN_MENU);
     // Stop and reset the timer
     if (gameTimer != null) {

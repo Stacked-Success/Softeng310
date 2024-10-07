@@ -22,7 +22,7 @@
                </image>
             </ImageView>
             <Slider fx:id="difficultySlider" blockIncrement="1.0" layoutX="52.0" layoutY="665.0" majorTickUnit="1.0" max="20.0" min="1.0" minorTickCount="0" prefHeight="74.0" prefWidth="659.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="48.0" />
-            <Button id="tutorial" fx:id="tutorialBtn" layoutX="205.0" layoutY="68.0" mnemonicParsing="false" onMouseClicked="#goToTutorial" text="Tutorial">
+            <Button id="tutorial" fx:id="tutorialBtn" layoutX="205.0" layoutY="68.0" mnemonicParsing="false" onMouseClicked="#onClickTutorial" text="Tutorial">
                <font>
                   <Font size="20.0" />
                </font>
