@@ -64,7 +64,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button id="difficulty" focusTraversable="false" layoutX="726.0" layoutY="618.0" mnemonicParsing="false" onAction="#onDifficulty" text="Difficulty Mode">
+            <Button id="difficulty" focusTraversable="false" layoutX="726.0" layoutY="610.0" mnemonicParsing="false" onAction="#onDifficulty" text="Difficulty Mode">
 
                <font>
                   <Font size="20.0" />

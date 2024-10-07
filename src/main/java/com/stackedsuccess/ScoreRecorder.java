@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+import com.stackedsuccess.controllers.NameEntryController;
+
 public class ScoreRecorder {
 
   private ScoreRecorder() {
@@ -25,37 +27,52 @@ public class ScoreRecorder {
    * @throws IOException if an I/O error occurs
    */
   public static void saveScore(String score) throws IOException {
-    List<Integer> scores = getAllScores();
-    scores.add(Integer.parseInt(score));
-    Collections.sort(scores, Collections.reverseOrder());
-    if (scores.size() > MAX_SCORES) {
-      scores.remove(scores.size() - 1);
-    }
-    writeScores(scores);
-  }
+    HashMap<String, Integer> scores = getAllScores(); // Get current scores as a HashMap
+    String playerName = NameEntryController.name.isEmpty() ? "Unknown" : NameEntryController.name;
 
-  /**
-   * Get the high score as a string.
-   *
-   * @return the high score as a string
-   * @throws IOException
-   */
-  public static String getHighScore() throws IOException {
-    List<Integer> scores = getAllScores();
-    if (scores.isEmpty()) {
-      return "0";
+    // Add or update the score for the player
+    scores.put(playerName, Integer.parseInt(score));
+
+    // Sort the scores in descending order and keep only the top MAX_SCORES entries
+    List<Map.Entry<String, Integer>> sortedScores = new ArrayList<>(scores.entrySet());
+    sortedScores.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+
+    // Clear the map and add back only the top scores
+    scores.clear();
+    for (int i = 0; i < Math.min(MAX_SCORES, sortedScores.size()); i++) {
+        Map.Entry<String, Integer> entry = sortedScores.get(i);
+        scores.put(entry.getKey(), entry.getValue());
     }
-    return String.valueOf(scores.get(0));
+
+    // Write the sorted scores back to the file
+    writeScores(scores);
+}
+
+
+   /**
+     * Get the high score as a string.
+     *
+     * @return the high score as a string
+     * @throws IOException
+     */
+    public static String getHighScore() throws IOException {
+      Map<String, Integer> scores = getAllScores();
+      if (scores.isEmpty()) {
+          return "No high score available.";
+      }
+
+      // Find the player with the highest score
+      return Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).toString();
   }
 
   /**
    * Get all scores from the file.
    *
-   * @return a list of all scores
+   * @return a map of player names to their scores
    * @throws IOException
    */
-  public static List<Integer> getAllScores() throws IOException {
-    List<Integer> scores = new ArrayList<>();
+  public static HashMap<String, Integer> getAllScores() throws IOException {
+    HashMap<String, Integer> scores = new HashMap<>();
     File file = new File(SCOREFILE);
     if (!file.exists()) {
         return scores;
@@ -64,7 +81,12 @@ public class ScoreRecorder {
         String line;
         while ((line = reader.readLine()) != null) {
             if (!line.trim().isEmpty()) {
-                scores.add(Integer.parseInt(line));
+                String[] parts = line.split(" "); // Assuming scores are formatted as "Name Score"
+                if (parts.length == 2) {
+                    String playerName = parts[0];
+                    Integer playerScore = Integer.parseInt(parts[1]);
+                    scores.put(playerName, playerScore);
+                }
             }
         }
     }
@@ -77,13 +99,13 @@ public class ScoreRecorder {
    * @param scores the scores to write
    * @throws IOException
    */
-  public static void writeScores(List<Integer> scores) throws IOException {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCOREFILE))) {
-      for (int score : scores) {
-        writer.write(String.valueOf(score));
-        writer.newLine();
+  private static void writeScores(HashMap<String, Integer> scores) throws IOException {
+      try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCOREFILE))) {
+          for (HashMap.Entry<String, Integer> entry : scores.entrySet()) {
+              writer.write(entry.getKey() + " " + entry.getValue());  // Write name and score
+              writer.newLine();
+          }
       }
-    }
   }
 
   /**
