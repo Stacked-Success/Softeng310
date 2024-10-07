@@ -241,7 +241,7 @@ public class GameBoard {
    *         otherwise
    * @throws IOException if an error occurs while handling the game over condition
    */
-  private boolean checkGameOver() throws IOException {
+  public boolean checkGameOver() throws IOException {
     if(isMarathonMode && totalLinesCleared >= marathonTargetLines) {
       gameStateManager.gameOver();
       return true;
@@ -267,7 +267,7 @@ public class GameBoard {
    * </p>
       * @throws IOException 
       */
-      private void clearFullRows() throws IOException {
+      public void clearFullRows() throws IOException {
         int newLinesCleared = 0;
         for (int y = 0; y < board.length; y++) {
             if (isRowFull(y, board[y])) {

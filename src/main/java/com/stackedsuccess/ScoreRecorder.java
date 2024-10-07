@@ -77,7 +77,7 @@ public class ScoreRecorder {
    * @param scores the scores to write
    * @throws IOException
    */
-  private static void writeScores(List<Integer> scores) throws IOException {
+  public static void writeScores(List<Integer> scores) throws IOException {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCOREFILE))) {
       for (int score : scores) {
         writer.write(String.valueOf(score));
@@ -159,7 +159,7 @@ public class ScoreRecorder {
    * @param scores the scores to write
    * @throws IOException
    */
-  private static void writeMarathonScores(List<String> scores) throws IOException {
+  public static void writeMarathonScores(List<String> scores) throws IOException {
       try (BufferedWriter writer = new BufferedWriter(new FileWriter(MARATHON_SCOREFILE))) {
           for (String score : scores) {
               writer.write(score);
